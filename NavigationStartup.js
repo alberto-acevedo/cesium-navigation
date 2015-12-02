@@ -23,43 +23,46 @@ var baseTerriaNavigationUrl = getBaseTerriaNavigationUrl();
 
 
  require.config({
+	        baseUrl: baseTerriaNavigationUrl,
 			paths: {
-				'Knockout': baseTerriaNavigationUrl + 'lib/ThirdParty/knockout-3.3.0',
-				'knockoutes5': baseTerriaNavigationUrl +  'lib/ThirdParty/knockout-es5.min',
-				'Hammer': baseTerriaNavigationUrl +  'lib/ThirdParty/hammerjs',
-				'sanitizeCaja': baseTerriaNavigationUrl +  'lib/ThirdParty/sanitizer-bundle',
-				'MarkdownIt': baseTerriaNavigationUrl +  'lib/ThirdParty/markdown-it.min',
-				'text': baseTerriaNavigationUrl +  'lib/ThirdParty/text',
-				'navigatorTemplate': baseTerriaNavigationUrl +  'lib/Views/Navigation.html',
-				'distanceLegendTemplate': baseTerriaNavigationUrl +  'lib/Views/DistanceLegend.html',
-				'DistanceLegendViewModel': baseTerriaNavigationUrl +  'lib/ViewModels/DistanceLegendViewModel',
-				'createFragmentFromTemplate': baseTerriaNavigationUrl +  'lib/Core/createFragmentFromTemplate',
-				'loadView': baseTerriaNavigationUrl +  'lib/Core/loadView',
-				'inherit': baseTerriaNavigationUrl +  'lib/Core/inherit',
-				'svgReset': baseTerriaNavigationUrl +  'lib/SvgPaths/svgReset',
-				'UserInterfaceControl': baseTerriaNavigationUrl +  'lib/ViewModels/UserInterfaceControl',
-				'NavigationControl': baseTerriaNavigationUrl +  'lib/ViewModels/NavigationControl',
-				'ResetViewNavigationControl': baseTerriaNavigationUrl +  'lib/ViewModels/ResetViewNavigationControl',
-				'ZoomInNavigationControl': baseTerriaNavigationUrl +  'lib/ViewModels/ZoomInNavigationControl',
-				'ZoomOutNavigationControl': baseTerriaNavigationUrl +  'lib/ViewModels/ZoomOutNavigationControl',
-				'svgCompassOuterRing': baseTerriaNavigationUrl +  'lib/SvgPaths/svgCompassOuterRing',
-				'svgCompassGyro': baseTerriaNavigationUrl +  'lib/SvgPaths/svgCompassGyro',
-				'svgCompassRotationMarker': baseTerriaNavigationUrl +  'lib/SvgPaths/svgCompassRotationMarker',
-				'KnockoutMarkdownBinding': baseTerriaNavigationUrl +  'lib/Core/KnockoutMarkdownBinding',
-				'KnockoutHammerBinding': baseTerriaNavigationUrl +  'lib/Core/KnockoutHammerBinding',
-				'registerKnockoutBindings': baseTerriaNavigationUrl +  'lib/Core/registerKnockoutBindings',
-				'NavigationViewModel': baseTerriaNavigationUrl +  'lib/ViewModels/NavigationViewModel',
-				'Navigation': baseTerriaNavigationUrl +  'Navigation',
-				'CameraView': baseTerriaNavigationUrl +  'lib/Models/CameraView'
+				'Knockout': 'lib/ThirdParty\knockout-3.3.0',
+				'knockoutes5':  'lib/ThirdParty/knockout-es5.min',
+				'Hammer':   'lib/ThirdParty/hammerjs',
+				'sanitizeCaja':   'lib/ThirdParty/sanitizer-bundle',
+				'MarkdownIt':  'lib/ThirdParty/markdown-it.min',
+				'text':  'lib/ThirdParty/text',
+				'navigatorTemplate':  'lib/Views/Navigation.html',
+				'distanceLegendTemplate':   'lib/Views/DistanceLegend.html',
+				'DistanceLegendViewModel':   'lib/ViewModels/DistanceLegendViewModel',
+				'createFragmentFromTemplate':   'lib/Core/createFragmentFromTemplate',
+				'loadView':   'lib/Core/loadView',
+				'inherit':   'lib/Core/inherit',
+				'svgReset':   'lib/SvgPaths/svgReset',
+				'UserInterfaceControl':   'lib/ViewModels/UserInterfaceControl',
+				'NavigationControl':   'lib/ViewModels/NavigationControl',
+				'ResetViewNavigationControl':   'lib/ViewModels/ResetViewNavigationControl',
+				'ZoomInNavigationControl':   'lib/ViewModels/ZoomInNavigationControl',
+				'ZoomOutNavigationControl':   'lib/ViewModels/ZoomOutNavigationControl',
+				'svgCompassOuterRing':   'lib/SvgPaths/svgCompassOuterRing',
+				'svgCompassGyro':   'lib/SvgPaths/svgCompassGyro',
+				'svgCompassRotationMarker':   'lib/SvgPaths/svgCompassRotationMarker',
+				'KnockoutMarkdownBinding':   'lib/Core/KnockoutMarkdownBinding',
+				'KnockoutHammerBinding':   'lib/Core/KnockoutHammerBinding',
+				'registerKnockoutBindings':   'lib/Core/registerKnockoutBindings',
+				'NavigationViewModel':   'lib/ViewModels/NavigationViewModel',
+				'Navigation':   'Navigation',
+				'CameraView':   'lib/Models/CameraView'
 
 			}
        });
 
        function navigationInitialization(cesiumContainerId, viewer)
        {
-		   require(['Navigation'], function (navigation) {
-		   		navigation.initialize(document.getElementById(cesiumContainerId), viewer);
-		   		viewer.navigation = navigation;
-                });
+
+			   require(['Navigation'], function (navigation) {
+					navigation.initialize(document.getElementById(cesiumContainerId), viewer);
+					viewer.navigation = navigation;
+					});
+
 	   };
 
