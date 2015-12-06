@@ -17,7 +17,7 @@ How did you build it?
 This plugin is based on the compass, navigator (zoom in/out), and distance scale from the terriajs open source library 
 (https://github.com/TerriaJS). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium
 uses CommonJS modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just 
-copy the source files into Cesium and build.  I adapted the code to work within Cesium as a plugin as follows:
+copy the source files into Cesium and build.  My work consisted on adapting the code to work within Cesium as a plugin as follows:
 - extracted the minimum required modules from terriajs.
 - Converted all the modules from Browserify to requirejs.
 - Use gulpjs to compile and minify the less files, bundle and minify all the modules and open source dependencies 
