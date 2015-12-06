@@ -26,8 +26,8 @@ of the AMD loader used in the plugin. The almondjs library is also bundle inside
 as easy as plug and play with Cesium.
 
 How to use it?
-
-- This plugin was tested on Cesiumjs version 1.15.
+-
+This plugin was tested on Cesiumjs version 1.15.
 - add the cesium-navigation folder from the distribution (dist) folder into your Cesium map application. Or download the plugin from gitHub and build a release version of the plugin as follows:
 - 
     gulp defaut --> for the minified plugin (recommended)
