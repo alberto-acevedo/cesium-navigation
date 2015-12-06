@@ -36,7 +36,7 @@ This plugin was tested on Cesiumjs version 1.15.
 
 - Add the a script with the following src into your html file:
 -
-     src="<path>/cesium-navigation/cesium-navigation.js"  
+     <script src="<path>/cesium-navigation/cesium-navigation.js"  ></script>
      
 - In the style section add: 
 -
