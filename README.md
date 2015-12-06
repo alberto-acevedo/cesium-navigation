@@ -32,18 +32,14 @@ How to use it?
     gulp defaut --> for the minified plugin (recommended)
     or
     gulp release-unminified --> for the unminified plugin
-- Add the following to your html file:
-   <script src="<path>/cesium-navigation/cesium-navigation.js"></script>
-   <style>
+- Add the a script with the following src into your html file:
+     src="<path>/cesium-navigation/cesium-navigation.js"
+- In the style section add 
       @import url(<path>/cesium-navigation/cesium-navigation.css);
-   </style>
-
-   <script>
+- In the body section add:
        var viewer = new Cesium.Viewer('cesiumContainer'); 
-       navigationInitialization('cesiumContainer', viewer); //The function initializes the navigation plugin within the Cesium          viewer. This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigatioon).
-    </script>
-    
-    - To destroy and release the resources later on, use the following
+       navigationInitialization('cesiumContainer', viewer); //The function initializes the navigation plugin within the Cesium                viewer. This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigatioon).
+- To destroy and release the resources later on, use the following
         viewer.navigation.destroy();
         viewer.navigation = undefined;
 
