@@ -29,20 +29,23 @@ How to use it?
 
 - This plugin was tested on Cesiumjs version 1.15.
 - add the cesium-navigation folder from the distribution (dist) folder into your Cesium map application. Or download the plugin from gitHub and build a release version of the plugin as follows:
+- 
     gulp defaut --> for the minified plugin (recommended)
     or
     gulp release-unminified --> for the unminified plugin
 
 - Add the a script with the following src into your html file:
-
+-
      src="<path>/cesium-navigation/cesium-navigation.js"  
      
 - In the style section add: 
+-
 
       @import url(<path>/cesium-navigation/cesium-navigation.css);
 
 - In the body section add:
- 
+- 
+
        var viewer = new Cesium.Viewer('cesiumContainer'); 
        navigationInitialization('cesiumContainer', viewer); //The function initializes the navigation plugin within the Cesium                viewer. This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigatioon).
 
