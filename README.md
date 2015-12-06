@@ -25,39 +25,46 @@ copy the source files into Cesium and build.  My work consisted on adapting the 
     of the AMD loader used in the plugin. The almondjs library is also bundle inside the plugin to make the plugin 
     as easy as plug and play with Cesium.
 
-How to use it?
--
+How to use it
+
 This plugin was tested on Cesiumjs version 1.15.
 - add the cesium-navigation folder from the distribution (dist) folder into your Cesium map application. Or download the plugin from gitHub and build a release version of the plugin as follows:
 - 
+'''
     gulp defaut --> for the minified plugin (recommended)
     or
     gulp release-unminified --> for the unminified plugin
+'''
 
 - Add the a script with the following src into your html file:
 -
+'''
      <script src="<path>/cesium-navigation/cesium-navigation.js"  ></script>
+'''
      
 - In the style section add: 
 -
-
+'''
       @import url(<path>/cesium-navigation/cesium-navigation.css);
+'''
 
 - In the body section add:
 - 
-
+'''
        var viewer = new Cesium.Viewer('cesiumContainer'); 
        navigationInitialization('cesiumContainer', viewer); //The function initializes the navigation plugin within the Cesium                viewer. This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigatioon).
-
+'''
 - To destroy and release the resources later on, use the following:
 - 
+'''
         viewer.navigation.destroy();
         viewer.navigation = undefined;
+'''
 
 Is there a sample with  the plugin that runs out of the box?
 
 - There is a sample in the sample folder that is based on the HelloWorld.html that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
-     http://<server domain:port>/CesiumNavigation/Apps/HelloWorld.html
+    ( [http://<server domain:port>/CesiumNavigation/Apps/HelloWorld.html])
 - The compass, navigator, and distance scale will appear on the right side of te map.
 
 What version is this plugin?
