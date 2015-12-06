@@ -1,16 +1,19 @@
 # cesium-navigation
 
 What is this plugin for?
+
 This is a Cesium plugin that adds to the Cesium map a user friendly compass, navigator (zoom in/out), and 
 distance scale graphical user interface. 
 
 Why did you build it?
+
 First of all the Cesiumjs sdk does not includes a compass, navigator (zoom in/out), and distance scale. You can use the  
 mouse to navigate on the map, but this navigation plugin  offers more navigation control and 
 capabilities to the user. Some of the capabilities are: reset the compass to point to north, reset the orbit, and 
 reset the view to a default bound.
 
 How did you build it?
+
 This plugin is based on the compass, navigator (zoom in/out), and distance scale from the terriajs open source library 
 (https://github.com/TerriaJS). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium
 uses CommonJS modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just 
@@ -45,14 +48,17 @@ How to use it?
         viewer.navigation = undefined;
 
 Is there a demo?
+
 - There is a demo in the demo folder that is based on the HelloWorld.html that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
      http://<server domain:port>/CesiumNavigation/Apps/HelloWorld.html
 - The compass, navigator, and distance scale will appear on the right side of te map.
 
 What version is this plugin?
+
 - release Version 0.1. 
 
 What about the license?
+
  - The plugin is 100% based on open source. THe same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it. 
 
 
