@@ -14,7 +14,7 @@ reset the view to a default bound.
 
 How did you build it?
 
-This plugin is based on the compass, navigator (zoom in/out), and distance scale from the terriajs open source library 
+This plugin is based on the excellent compass, navigator (zoom in/out), and distance scale from the terriajs open source library 
 (https://github.com/TerriaJS). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium
 uses CommonJS modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just 
 copy the source files into Cesium and build.  My work consisted on adapting the code to work within Cesium as a plugin as follows:
@@ -47,9 +47,9 @@ How to use it?
         viewer.navigation.destroy();
         viewer.navigation = undefined;
 
-Is there a demo?
+Is there a sample with  the plugin that runs out of the box?
 
-- There is a demo in the demo folder that is based on the HelloWorld.html that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
+- There is a sample in the sample folder that is based on the HelloWorld.html that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
      http://<server domain:port>/CesiumNavigation/Apps/HelloWorld.html
 - The compass, navigator, and distance scale will appear on the right side of te map.
 
