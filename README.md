@@ -14,16 +14,45 @@ How did you build it?
 This plugin is based on the compass, navigator (zoom in/out), and distance scale from the terriajs open source library 
 (https://github.com/TerriaJS). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium
 uses CommonJS modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just 
-copy the source files into Cesium and build.  I adapted the code to work within Cesium as follows:
+copy the source files into Cesium and build.  I adapted the code to work within Cesium as a plugin as follows:
 - extracted the minimum required modules from terriajs.
 - Converted all the modules from Browserify to requirejs.
 - Use gulpjs to compile and minify the less files, bundle and minify all the modules and open source dependencies 
-into just one file. AS part of the build process I decided to replace requirejs with almondjs to reduce the footprint 
+into just one file. As part of the build process I decided to replace requirejs with almondjs to reduce the footprint 
 of the AMD loader used in the plugin. The almondjs library is also bundle inside the plugin to make the plugin 
-very easy to plug and play.
-- 
+as easy as plug and play with Cesium.
 
+How to use it?
 
- modules Only the depended modules were extracted from the terrriajs library 
+- This plugin was tested on Cesiumjs version 1.15.
+- add the cesium-navigation folder from the distribution (dist) folder into your Cesium map application. Or download the plugin from gitHub and build a release version of the plugin as follows:
+    gulp release-unminified --> for the unminified plugin
+    or
+    gulp release-minified --> for the minified plugin
+- Add the following to your html file:
+   <script src="<path>/cesium-navigation/cesium-navigation.js"></script>
+   <style>
+      @import url(<path>/cesium-navigation/cesium-navigation.css);
+   </style>
+
+   <script>
+       var viewer = new Cesium.Viewer('cesiumContainer'); 
+       navigationInitialization('cesiumContainer', viewer); //The function initializes the navigation plugin within the Cesium          viewer. This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigatioon).
+    </script>
+    
+    - To destroy and release the resources later on, use the following
+        viewer.navigation.destroy();
+        viewer.navigation = undefined;
+
+Is there a demo?
+- There is a demo in the demo folder that is based on the HelloWorld.html that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
+     http://<server domain:port>/CesiumNavigation/Apps/HelloWorld.html
+- The compass, navigator, and distance scale will appear on the right side of te map.
+
+What version is this plugin?
+- release Version 0.1. 
+
+What about the license?
+ - The plugin is 100% based on open source. THe same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it. 
 
 
