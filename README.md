@@ -29,9 +29,9 @@ How to use it?
 
 - This plugin was tested on Cesiumjs version 1.15.
 - add the cesium-navigation folder from the distribution (dist) folder into your Cesium map application. Or download the plugin from gitHub and build a release version of the plugin as follows:
-    gulp release-unminified --> for the unminified plugin
+    gulp defaut --> for the minified plugin (recommended)
     or
-    gulp release-minified --> for the minified plugin
+    gulp release-unminified --> for the unminified plugin
 - Add the following to your html file:
    <script src="<path>/cesium-navigation/cesium-navigation.js"></script>
    <style>
