@@ -6,58 +6,48 @@ var less = require('gulp-less');
 var minifyCSS = require('gulp-minify-css');
 var notify = require('gulp-notify');
 var gutil = require('gulp-util');
+var clean = require('gulp-clean');
+var watch = require('gulp-watch');
+var ername = require('gulp-rename');
+var eventStream = require('event-stream');
+var order = require('gulp-order');
+var gignore = require('gulp-ignore');
+var gjshint = require('gulp-jshint');
+var gfilter = require('gulp-filter');
 
-gulp.task('bundle', function ()
+gulp.task('bundle',['less'],  function ()
 {
-    return gulp.src('**/*.js')
+    var filter = gfilter(["*", "!gulpfile.js", "!NavigationStartup.js", "!lib/ThirdParty/almond.js", "!node_modules/*.*"]);
+    var almond = gulp.src("lib/ThirdParty/almond.js");
+    var cesiumNavigation = gulp.src('**/*.js')
+           // .pipe(jshint())
+            .pipe(filter)
             .pipe(amdOptimize('NavigationStartup',
-                    {
-                        paths: {
-                            'Knockout': 'lib/ThirdParty/knockout-3.3.0',
-                            'knockoutes5': 'lib/ThirdParty/knockout-es5.min',
-                            'Hammer': 'lib/ThirdParty/hammerjs',
-                            'sanitizeCaja': 'lib/ThirdParty/sanitizer-bundle',
-                            'MarkdownIt': 'lib/ThirdParty/markdown-it.min',
-                            'text': 'lib/ThirdParty/text',
-                            'navigatorTemplate': 'lib/Views/Navigation.html',
-                            'distanceLegendTemplate': 'lib/Views/DistanceLegend.html',
-                            'DistanceLegendViewModel': 'lib/ViewModels/DistanceLegendViewModel',
-                            'createFragmentFromTemplate': 'lib/Core/createFragmentFromTemplate',
-                            'loadView': 'lib/Core/loadView',
-                            'inherit': 'lib/Core/inherit',
-                            'svgReset': 'lib/SvgPaths/svgReset',
-                            'UserInterfaceControl': 'lib/ViewModels/UserInterfaceControl',
-                            'NavigationControl': 'lib/ViewModels/NavigationControl',
-                            'ResetViewNavigationControl': 'lib/ViewModels/ResetViewNavigationControl',
-                            'ZoomInNavigationControl': 'lib/ViewModels/ZoomInNavigationControl',
-                            'ZoomOutNavigationControl': 'lib/ViewModels/ZoomOutNavigationControl',
-                            'svgCompassOuterRing': 'lib/SvgPaths/svgCompassOuterRing',
-                            'svgCompassGyro': 'lib/SvgPaths/svgCompassGyro',
-                            'svgCompassRotationMarker': 'lib/SvgPaths/svgCompassRotationMarker',
-                            'KnockoutMarkdownBinding': 'lib/Core/KnockoutMarkdownBinding',
-                            'KnockoutHammerBinding': 'lib/Core/KnockoutHammerBinding',
-                            'registerKnockoutBindings': 'lib/Core/registerKnockoutBindings',
-                            'NavigationViewModel': 'lib/ViewModels/NavigationViewModel',
-                            'Navigation': 'Navigation',
-                            'CameraView': 'lib/Models/CameraView'
-                        }
-
-                    }
-            ))
-            .pipe(concat('cesium-navigation.js'))
-            .pipe(uglify())
-            .pipe(gulp.dest('dist'));
+            {
+                configFile: "NavigationStartup.js",
+                baseUrl: '../cesium-navigation/'
+            }
+    ));
+    return eventStream.merge(almond, cesiumNavigation)
+    .pipe(concat("cesium-navigation.js"))
+    .pipe(uglify())
+    .pipe(gulp.dest("dist/cesium-navigation"))
+    .pipe(notify('eventStream merging build completed'));
 });
 
-gulp.task('less', function ()
+gulp.task('less', ['cleanDist'], function ()
 {
-    gulp.src('lib/Styles/less/CesiumNavigation.less')
+    gulp.src('lib/Styles/less/cesium-navigation.less')
             .pipe(less({compress: true}).on('error', gutil.log))
             .pipe(minifyCSS({keepBreaks: false}))
-            .pipe(gulp.dest('dist'))
+            .pipe(gulp.dest('dist/cesium-navigation'))
             .pipe(notify('Less Compiled, compressed and moinified'));
 });
 
-gulp.task('default', ['less', 'bundle'], function () {
-    notify('bundled, and less tasks executed!');
+gulp.task('cleanDist', function () {
+    return gulp.src('dist', {read: false})
+            .pipe(clean({force: true}));
+});
+gulp.task('default', ['cleanDist', 'less', 'bundle'], function () {
+
 });

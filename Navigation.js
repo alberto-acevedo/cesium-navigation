@@ -26,13 +26,13 @@ define('Navigation', ['Knockout', 'NavigationViewModel', 'registerKnockoutBindin
 
 
             this.distanceLegendDiv = document.createElement('div');
-            this.navigationDiv.setAttribute("id", "distanceLegendDiv");
-            this.navigationDiv.style.display = "inline-block";
-            this.navigationDiv.style.margin = "2px";
-            this.navigationDiv.style.position = "absolute";
-            this.navigationDiv.style.right = "57px";
-            this.navigationDiv.style.top = "30px";
-            this.navigationDiv.style.zIndex = "300";
+//            this.navigationDiv.setAttribute("id", "distanceLegendDiv");
+//            this.navigationDiv.style.display = "inline-block";
+//            this.navigationDiv.style.margin = "2px";
+//            this.navigationDiv.style.position = "absolute";
+//            this.navigationDiv.style.right = "57px";
+//            this.navigationDiv.style.top = "30px";
+//            this.navigationDiv.style.zIndex = "300";
 
             //var mapContainer = document.getElementById(emp.map.container.get());
             mapContainer.appendChild(this.navigationDiv);
