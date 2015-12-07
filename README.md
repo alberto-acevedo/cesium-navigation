@@ -41,12 +41,6 @@ This function also assigns the instantiated plugin navigation object to the view
 		viewer.navigation.destroy();
 		viewer.navigation = undefined;
 
-**Is there a sample with  the plugin that runs out of the box?**
-
-There is a sample in the sample folder that is based on the HelloWorld that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
-
-	 	([http://server domain:port/CesiumNavigation/Apps/HelloWorld.html])
-
 
 **Is there a sample with  the plugin that runs out of the box?**
 
@@ -60,8 +54,3 @@ There is a sample in the sample folder that is based on the HelloWorld that come
 
 **What about the license?**
  - The plugin is 100% based on open source libraries. The same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it.
-
-
-
-
-
