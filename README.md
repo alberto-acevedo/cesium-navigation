@@ -42,7 +42,7 @@ This function also assigns the instantiated plugin navigation object to the view
 Is there a sample with  the plugin that runs out of the box?
 There is a sample in the sample folder that is based on the HelloWorld.html that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
 - 
-		([http://server domain:port/CesiumNavigation/Apps/HelloWorld.html])
+	
 - The compass, navigator, and distance scale will appear on the right side of te map.
 -  This plugin was successfully tested on Cesiumjs version 1.15. It works great with the Cesium in 3D mode. It needs some work when using the plugin in Culumbus and 2D modes.
 
