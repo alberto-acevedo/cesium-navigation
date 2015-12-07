@@ -42,6 +42,7 @@ This function also assigns the instantiated plugin navigation object to the view
 		viewer.navigation = undefined;
 
 **Is there a sample with  the plugin that runs out of the box?**
+
 There is a sample in the sample folder that is based on the HelloWorld that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
 - 	([http://server domain:port/CesiumNavigation/Apps/HelloWorld.html])
 	
