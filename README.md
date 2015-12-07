@@ -30,8 +30,9 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 
 
 - Inside the body of your page add the following:
-        var viewer = new Cesium.Viewer('cesiumContainer');
-        navigationInitialization('cesiumContainer', viewer);
+        
+		var viewer = new Cesium.Viewer('cesiumContainer');
+		navigationInitialization('cesiumContainer', viewer);
 The navigationInitialization function initializes the navigation plugin within the Cesium viewer. 
 This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigatioon).
 
