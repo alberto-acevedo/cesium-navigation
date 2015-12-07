@@ -30,6 +30,23 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 
 
 - Inside the body of your page add the following:
+        
+		var viewer = new Cesium.Viewer('cesiumContainer');
+		navigationInitialization('cesiumContainer', viewer);
+The navigationInitialization function initializes the navigation plugin within the Cesium viewer. 
+This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigation).
+
+- To destroy the navigation object and release the resources later on, use the following
+			
+		viewer.navigation.destroy();
+		viewer.navigation = undefined;
+
+**Is there a sample with  the plugin that runs out of the box?**
+
+There is a sample in the sample folder that is based on the HelloWorld that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:
+- 	
+- 	([http://server domain:port/CesiumNavigation/Apps/HelloWorld.html])
+	
 
 		var viewer = new Cesium.Viewer('cesiumContainer');
 		navigationInitialization('cesiumContainer', viewer);
@@ -51,6 +68,9 @@ There is a sample in the sample folder that is based on the HelloWorld that come
 - The compass, navigator, and distance scale will appear on the right side of te map.
 -  This plugin was successfully tested on Cesiumjs version 1.15. It works great with the Cesium in 3D mode. It needs some work when using the plugin in Culumbus and 2D modes.
 
+ - The plugin is 100% based on open source libraries. The same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it.
 **What about the license?**
 
- - The plugin is 100% based on open source libraries. The same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it.
+
+
+
