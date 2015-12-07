@@ -14,7 +14,7 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 - extracted the minimum required modules from terriajs.
 - Converted all the modules from Browserify to requirejs.
 - Use gulpjs to compile and minify the less files, bundle and minify all the modules and open source dependencies 
-- into just one file. As part of the build process I decided to replace requirejs with almondjs to reduce the footprint of the AMD loader used in the plugin. The almondjs library is also bundle inside the plugin to make the plugin as easy as plug and play within Cesium.
+  into just one file. As part of the build process I decided to replace requirejs with almondjs to reduce the footprint of the AMD loader used in the plugin. The almondjs library is also bundle inside the plugin to make the plugin as easy as plug and play within Cesium.
 
 **How to use it?**
 
