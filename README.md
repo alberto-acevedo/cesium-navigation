@@ -23,7 +23,7 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 		gulp release-unminified --> for the unminified plugin for debugging purposes.
 		gulp default --> for the minified plugin (recommended)
 
-- Add the cesium-navigation/cesium-navigation.js script  to your html file:
+- Add the cesium-navigation/cesium-navigation.js script  to your html file.
 - Add the style	as follows:
  
  		@import url(<path>/cesium-navigation/cesium-navigation.css);
