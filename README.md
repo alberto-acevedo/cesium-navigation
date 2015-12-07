@@ -34,7 +34,7 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 		var viewer = new Cesium.Viewer('cesiumContainer');
 		navigationInitialization('cesiumContainer', viewer);
 The navigationInitialization function initializes the navigation plugin within the Cesium viewer. 
-This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigatioon).
+This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigation).
 
 - To destroy the navigation object and release the resources later on, use the following
         viewer.navigation.destroy();
