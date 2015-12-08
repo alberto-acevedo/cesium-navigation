@@ -1,123 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+  <script src="./javascripts/Cesium.js"></script>
+   <script src="./javascripts/cesium-navigation/cesium-navigation.js"></script>
+  <style>
+      @import url(./Build/Cesium/Widgets/widgets.css);
+       @import url(./javascripts/cesium-navigation/cesium-navigation.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
 
-  <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Cesium-navigation : Cesium plugin that adds to the Cesium map a compass, navigator (zoom in/out), and distance scale.">
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+ var viewer = new Cesium.Viewer('cesiumContainer');
 
-    <title>Cesium-navigation</title>
-  </head>
+ navigationInitialization('cesiumContainer', viewer);
 
-  <body>
-
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/alberto-acevedo/cesium-navigation">View on GitHub</a>
-
-          <h1 id="project_title">Cesium-navigation</h1>
-          <h2 id="project_tagline">Cesium plugin that adds to the Cesium map a compass, navigator (zoom in/out), and distance scale.</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/alberto-acevedo/cesium-navigation/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/alberto-acevedo/cesium-navigation/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a id="cesium-navigation" class="anchor" href="#cesium-navigation" aria-hidden="true"><span class="octicon octicon-link"></span></a>cesium-navigation</h1>
-
-<p>This is a Cesium plugin that adds to the Cesium map a user friendly compass, navigator (zoom in/out), and
-distance scale graphical user interface.</p>
-
-<p><strong>Why did you build it?</strong></p>
-
-<p>First of all the Cesiumjs sdk does not includes a compass, navigator (zoom in/out), and distance scale. You can use the mouse to navigate on the map, but this navigation plugin  offers more navigation control and capabilities to the user. Some of the capabilities are: reset the compass to point to north, reset the orbit, and 
-reset the view to a default bound.</p>
-
-<p><strong>How did you build it?</strong></p>
-
-<p>This plugin is based on the excellent compass, navigator (zoom in/out), and distance scale from the terriajs open source library (<a href="https://github.com/TerriaJS">https://github.com/TerriaJS</a>). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium uses CommonJS modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just copy the source files into Cesium and build.  My work consisted on adapting the code to work within Cesium as a plugin as follows:</p>
-
-<ul>
-<li>extracted the minimum required modules from terriajs.</li>
-<li>Converted all the modules from Browserify to requirejs.</li>
-<li>Use gulpjs to compile and minify the less files, bundle and minify all the modules and open source dependencies 
-into just one file. As part of the build process I decided to replace requirejs with almondjs to reduce the footprint of the AMD loader used in the plugin. The almondjs library is also bundle inside the plugin to make the plugin as easy as plug and play within Cesium.</li>
-</ul>
-
-<p><strong>How to use it?</strong></p>
-
-<ul>
-<li>
-<p>add the cesium-navigation folder from the distribution (dist) folder into your Cesium map application. Or download the plugin from gitHub and build a release version of the plugin as follows:</p>
-
-<pre><code>gulp release-unminified --&gt; for the unminified plugin for debugging purposes.
-gulp default --&gt; for the minified plugin (recommended)
-</code></pre>
-</li>
-<li><p>Add the cesium-navigation/cesium-navigation.js script  to your html file.</p></li>
-<li>
-<p>Add the style as follows:</p>
-
-<pre><code>@import url(&lt;path&gt;/cesium-navigation/cesium-navigation.css);
-</code></pre>
-</li>
-<li>
-<p>Inside the body of your page add the following:</p>
-
-<pre><code>var viewer = new Cesium.Viewer('cesiumContainer');
-navigationInitialization('cesiumContainer', viewer);
-</code></pre>
-
-<p>The navigationInitialization function initializes the navigation plugin within the Cesium viewer. 
-This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigation).</p>
-</li>
-<li>
-<p>To destroy the navigation object and release the resources later on, use the following</p>
-
-<pre><code>viewer.navigation.destroy();
-viewer.navigation = undefined;
-</code></pre>
-</li>
-</ul>
-
-<p><strong>Is there a sample with  the plugin that runs out of the box?</strong></p>
-
-<p>There is a sample in the sample folder that is based on the HelloWorld that comes with the Cesiumjs sdk. Just deploy the CesiumNavigation folder into a web server like for example Apache Tomcat.Then open your browser with the following link:</p>
-
-<pre><code>    ([http://server domain:port/CesiumNavigation/Apps/HelloWorld.html])
-</code></pre>
-
-<ul>
-<li>The compass, navigator, and distance scale will appear on the right side of te map.</li>
-<li> This plugin was successfully tested on Cesiumjs version 1.15. It works great with the Cesium in 3D mode. It needs some work when using the plugin in Culumbus and 2D modes.</li>
-</ul>
-
-<p><strong>What about the license?</strong></p>
-
-<ul>
-<li>The plugin is 100% based on open source libraries. The same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it.</li>
-</ul>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Cesium-navigation maintained by <a href="https://github.com/alberto-acevedo">alberto-acevedo</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
+  </script>
+</body>
 </html>
