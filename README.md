@@ -46,7 +46,7 @@ This function also assigns the instantiated plugin navigation object to the view
 
 This is the demo:
 
-		(http://alberto-acevedo.github.io/cesium-navigation/)
+(http://alberto-acevedo.github.io/cesium-navigation/)
 
 - The compass, navigator, and distance scale will appear on the right side of te map.
 -  This plugin was successfully tested on Cesiumjs version 1.15. It works great with the Cesium in 3D mode. It needs some work when using the plugin in Culumbus and 2D modes.
