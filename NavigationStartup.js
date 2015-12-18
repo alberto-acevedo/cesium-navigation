@@ -18,7 +18,6 @@ function getBaseTerriaNavigationUrl()
     return undefined;
 }
 ;
-debugger;
 var baseTerriaNavigationUrl = '';
 if (typeof window !== 'undefined') {
     baseTerriaNavigationUrl = getBaseTerriaNavigationUrl();

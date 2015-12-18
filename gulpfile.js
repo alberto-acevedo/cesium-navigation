@@ -35,7 +35,7 @@ gulp.task('bundle-minified',['less'],  function ()
     .pipe(notify('eventStream merging build completed'));
 });
 
-gulp.task('bundle-unminified',['less'],  function ()
+gulp.task('bundle-unminified',['lessUnminified'],  function ()
 {
     var filter = gfilter(["*", "!gulpfile.js", "!NavigationStartup.js", "!lib/ThirdParty/almond.js", "!node_modules/*.*"]);
     var almond = gulp.src("lib/ThirdParty/almond.js");
@@ -65,6 +65,17 @@ gulp.task('less', ['cleanDist'], function ()
             .pipe(notify('Less Compiled, compressed and moinified'));
 });
 
+gulp.task('lessUnminified', ['cleanDist'], function ()
+{
+    gulp.src('lib/Styles/less/cesium-navigation.less')
+            .pipe(less({compress: false}).on('error', gutil.log))
+            //.pipe(minifyCSS({keepBreaks: false}))
+            .pipe(gulp.dest('dist/cesium-navigation'))
+            .pipe(notify('Less Compiled, uncompressed and unminified'));
+});
+
+
+
 gulp.task('cleanDist', function () {
     return gulp.src('dist', {read: false})
             .pipe(clean({force: true}));
@@ -73,5 +84,5 @@ gulp.task('default', ['cleanDist', 'less', 'bundle-minified'], function () {
     });
 
     
-gulp.task('release-unminified', ['cleanDist', 'less', 'bundle-unminified'], function () {
+gulp.task('release-unminified', ['cleanDist', 'lessUnminified', 'bundle-unminified'], function () {
 });
