@@ -8,25 +8,24 @@ define('Navigation', ['Knockout', 'NavigationViewModel', 'registerKnockoutBindin
          navigationDiv : undefined,
          distanceLegendDiv : undefined,
          terria : undefined,
-        initialize: function (mapContainer, terria) {
-            this.terria = terria;
+        initialize: function (mapContainer, viewer) {
+            this.terria = viewer;
             this.terria.afterViewerChanged = new Cesium.Event();
-		    this.terria.beforeViewerChanged = new Cesium.Event();
-		    this.terria.currentViewer = viewer;
+            this.terria.beforeViewerChanged = new Cesium.Event();
             this.navigationDiv = document.createElement('div');
             this.navigationDiv.setAttribute("id", "navigationDiv");
-            this.navigationDiv.style.display = "inline-block";
-            this.navigationDiv.style.margin = "2px";
-            this.navigationDiv.style.position = "absolute";
-            this.navigationDiv.style.right = "0px";
-            this.navigationDiv.style.height = "45px";
-            this.navigationDiv.style.top = "34px";
-            this.navigationDiv.style.zIndex = "300";
+//            this.navigationDiv.style.display = "inline-block";
+//            this.navigationDiv.style.margin = "2px";
+//            this.navigationDiv.style.position = "absolute";
+//            this.navigationDiv.style.right = "0px";
+//            this.navigationDiv.style.height = "45px";
+//            this.navigationDiv.style.top = "34px";
+//            this.navigationDiv.style.zIndex = "300";
             //navigationDiv.style.border = "3px solid #8AC007";
 
 
             this.distanceLegendDiv = document.createElement('div');
-//            this.navigationDiv.setAttribute("id", "distanceLegendDiv");
+            this.navigationDiv.setAttribute("id", "distanceLegendDiv");
 //            this.navigationDiv.style.display = "inline-block";
 //            this.navigationDiv.style.margin = "2px";
 //            this.navigationDiv.style.position = "absolute";
