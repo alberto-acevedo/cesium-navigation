@@ -33,6 +33,17 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 
 		var viewer = new Cesium.Viewer('cesiumContainer');
 		navigationInitialization('cesiumContainer', viewer);
+		
+		if using the CesiumWidget:
+		
+		var widget = new Cesium.CesiumWidget('cesiumContainer',
+			{
+     				imageryProvider: new Cesium.TileMapServiceImageryProvider({
+                            		url:: 'javascript/Cesium/Assets/Texture/NaturalEarthII'
+             		})
+		});
+navigationInitialization('cesiumContainer', widget );
+
 The navigationInitialization function initializes the navigation plugin within the Cesium viewer. 
 This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigation).
 
@@ -40,6 +51,11 @@ This function also assigns the instantiated plugin navigation object to the view
 
 		viewer.navigation.destroy();
 		viewer.navigation = undefined;
+		
+		if using the CesiumWidget:
+		
+		widget.navigation.destroy();
+		widget.navigation = undefined;
 
 
 **Is there a demo using the plugin ?**
