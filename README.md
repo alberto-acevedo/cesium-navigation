@@ -65,7 +65,7 @@ This is the demo:
 (http://alberto-acevedo.github.io/cesium-navigation/)
 
 - The compass, navigator, and distance scale will appear on the right side of te map.
--  This plugin was successfully tested on Cesiumjs version 1.15. It works great with Cesium in 3D mode. Recently Larcius (https://github.com/Larcius) made a lot of improvements and fixed some issues in Culumbus and 2D modes. The next issue that needs improvement is the following:
+-  This plugin was successfully tested on Cesiumjs version 1.15. It works great with Cesium in 3D mode. Recently Larcius (https://github.com/Larcius) made a lot of improvements and fixed some issues in Columbus and 2D modes. The next issue that needs improvement is the following:
 - the compass is too sensitive when rotating and tilting the map in 2D and Columbus modes especially at high elevations.
 
 **What about the license?**
