@@ -42,7 +42,7 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
                             		url:: 'javascript/Cesium/Assets/Texture/NaturalEarthII'
              		})
 		});
-navigationInitialization('cesiumContainer', widget );
+		navigationInitialization('cesiumContainer', widget );
 
 The navigationInitialization function initializes the navigation plugin within the Cesium viewer. 
 This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigation).
@@ -65,7 +65,8 @@ This is the demo:
 (http://alberto-acevedo.github.io/cesium-navigation/)
 
 - The compass, navigator, and distance scale will appear on the right side of te map.
--  This plugin was successfully tested on Cesiumjs version 1.15. It works great with the Cesium in 3D mode. It needs some work when using the plugin in Culumbus and 2D modes.
+-  This plugin was successfully tested on Cesiumjs version 1.15. It works great with Cesium in 3D mode. Recently Larcius (https://github.com/Larcius) made a lot of improvements and fixed some issues in Culumbus and 2D modes. The next issue that needs improvement is the following:
+- the compass is too sensitive when rotating and tilting the map in 2D and Columbus modes especially at high elevations.
 
 **What about the license?**
  - The plugin is 100% based on open source libraries. The same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it.
