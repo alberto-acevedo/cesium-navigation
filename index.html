@@ -1,39 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
-<!--     <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Cesium-navigation : Cesium plugin that adds to the Cesium map a compass, navigator (zoom in/out), and distance scale.">
-    -->
-    
-    
-  <!-- Use correct character set. -->
-  <meta charset="utf-8">
-  <!-- Tell IE to use the latest, best version. -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-  <title>Cesium Navigation Plugin Demo</title>
-  <script src="./javascripts/Cesium/Cesium.js"></script>
-   <script src="./javascripts/cesium-navigation/cesium-navigation.js"></script>
+  <title>Cesium-Navigation Examples</title>
   <style>
-      @import url(./javascripts/Cesium/Widgets/widgets.css);
-       @import url(./javascripts/cesium-navigation/cesium-navigation.css);
-      html, body, #cesiumContainer {
-          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
-
-      }
+	dl > dt {
+		margin-top: 1em;
+		margin-bottom: 0.3em;
+		font-weight: bold;
+		font-variant: small-caps;
+	}
   </style>
 </head>
 <body>
-  <div id="cesiumContainer"></div>
-  <script>
+<h1>Cesium-Navigation Examples</h1>
+<p>Three examples are available, one demonstrating the standalone, one the AMD compatible edition and one the combination of using AMD but with a global Cesium access</p>
+<dl>
+  <dt><a href="standalone.html">Standalone Example</a></dt>
+  <dd>No AMD loader is needed but Cesium has to be defined as global variable.</dd>
+  <dt><a href="amd.html">Asynchronous Module Definition (AMD) Example</a></dt>
+  <dd>When using the AMD compatible version make sure to set 'Cesium' to point to the Cesium source directory.</dd>
+  <dt><a href="amd_except_cesium.html">Using AMD except for Cesium Example</a></dt>
+  <dd>Using AMD except for Cesium (so Cesium is not accessed via AMD but is a global variable). In this case, of course, no path to Cesium has to be set and so one can use the standalone edition.</dd>
+</dl>
 
- var viewer = new Cesium.Viewer('cesiumContainer');
-
- navigationInitialization('cesiumContainer', viewer);
-
+  <script type="text/javascript">
+	// show info if accessed directly from disk
+	if (window.location.protocol === 'file:') {
+		document.body.innerHTML = ""
+		document.write('<p><b>This file must be hosted in a web server.</br>');
+		document.write('See our <a href="https://cesiumjs.org/tutorials/cesium-up-and-running/#setting-up-a-web-server">Getting Started</a> ');
+		document.write('tutorial for a step-by-step guide.</b></p>');
+	}
   </script>
 </body>
 </html>
