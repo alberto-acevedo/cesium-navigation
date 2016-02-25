@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Cesium-Navigation Examples</title>
+  <style>
+	dl > dt {
+		margin-top: 1em;
+		margin-bottom: 0.3em;
+		font-weight: bold;
+		font-variant: small-caps;
+	}
+  </style>
+</head>
+<body>
+<h1>Cesium-Navigation Examples</h1>
+<p>Three examples are available, one demonstrating the standalone, one the AMD compatible edition and one the combination of using AMD but with a global Cesium access</p>
+<dl>
+  <dt><a href="standalone.html">Standalone Example</a></dt>
+  <dd>No AMD loader is needed but Cesium has to be defined as global variable.</dd>
+  <dt><a href="amd.html">Asynchronous Module Definition (AMD) Example</a></dt>
+  <dd>When using the AMD compatible version make sure to set 'Cesium' to point to the Cesium source directory.</dd>
+  <dt><a href="amd_except_cesium.html">Using AMD except for Cesium Example</a></dt>
+  <dd>Using AMD except for Cesium (so Cesium is not accessed via AMD but is a global variable). In this case, of course, no path to Cesium has to be set and so one can use the standalone edition.</dd>
+</dl>
+
+  <script type="text/javascript">
+	// show info if accessed directly from disk
+	if (window.location.protocol === 'file:') {
+		document.body.innerHTML = ""
+		document.write('<p><b>This file must be hosted in a web server.</br>');
+		document.write('See our <a href="https://cesiumjs.org/tutorials/cesium-up-and-running/#setting-up-a-web-server">Getting Started</a> ');
+		document.write('tutorial for a step-by-step guide.</b></p>');
+	}
+  </script>
+</body>
+</html>
