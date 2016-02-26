@@ -119,6 +119,8 @@
 
     var copyrightHeader = fs.readFileSync(sourceDir + '/copyrightHeader.js').toString();
 
+
+    // <-- build standalone edition
     var rjsBasicConfig = {
         mainConfigFile: 'mainConfig.js',
         wrap: {
@@ -152,8 +154,6 @@
         logLevel: 0
     };
 
-
-    // <-- build standalone edition
     var rjsConfig = JSON.parse(JSON.stringify(rjsBasicConfig));
     rjsConfig.optimize = 'none';
     rjsConfig.out = path.join(buildDir, standaloneSubDir, buildName + '.js');
@@ -170,6 +170,7 @@
         });
     });
     // -->
+
 
     // <-- build amd compatible edition
     var rjsAMDBasicConfig = {
@@ -198,47 +199,5 @@
             console.log('Copied ' + minFile + ' to keep examples synchronized with build');
         });
     });
-
     // -->
-
-
-//    // Generate CSS from LESS
-//    var less = require('less');
-//
-//    var filename = 'cesium-navigation';
-//    var pathStyles = path.join(sourceDir, 'Styles');
-//
-//    var inputFile = filename + ".less";
-//    var outputFile = filename + ".css";
-//
-//    var contents = fs.readFileSync(path.join(pathStyles, inputFile)).toString();
-//
-//    var lessParser = new less.Parser({
-//        paths: [pathStyles],      // .less file search paths
-//        optimization: 1,                // optimization level, higher is better but more volatile - 1 is a good value
-//        filename: inputFile       // root .less file
-//    });
-//
-//    lessParser.parse(contents, function (error, tree) {
-//        console.log("Parsed " + inputFile);
-//
-//        if (error) {
-//            less.writeError(error);
-//            return;
-//        }
-//
-//        // Create the CSS from the cssTree
-//        var cssString = tree.toCSS();
-//        var cssMinString = tree.toCSS({
-//            compress: true,
-//            yuicompress: true
-//        });
-//
-//        // Write output
-//        fs.writeFileSync(path.join(buildDir, unminSubDir, outputFile), cssString, 'utf8');
-//        console.log("Generated unminified " + outputFile);
-//
-//        fs.writeFileSync(path.join(buildDir, minSubDir, outputFile), cssMinString, 'utf8');
-//        console.log("Generated minified " + outputFile);
-//    });
 })();

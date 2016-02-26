@@ -7,7 +7,7 @@ define([
     'Cesium/Core/defineProperties',
     'Cesium/Core/DeveloperError',
     'CesiumNavigation',
-    'less!Styles/cesium-navigation'
+    'require-less/less!Styles/cesium-navigation'
 ], function(
     defined,
     defineProperties,
