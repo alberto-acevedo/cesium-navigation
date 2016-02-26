@@ -20,10 +20,136 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 
 **How to use it?**
 
-- Checkout the examples for how to use this plugin
+There are two edition, a standalone edition and an AMD compatible edition:
 
-- To destroy the navigation object and release the resources later on, use the following
-		viewer.cesiumNavigation.destroy();
+*When to use which edition?*
+
+- If you are loading Cesium without requirejs (i.e. you have a global variable Cesium) then use the standalone edition. This edition is also suitable if you use requirejs (but not for Cesium).
+```HTML
+<head>
+  <!-- other stuff -->
+
+  <script src="path/to/Cesium.js"></script>
+  <!-- IMPORTANT: because the cesium navigation viewer mixin depends on Cesium be sure to load it after Cesium -->
+  <script src="path/to/standalone/viewerCesiumNavigationMixin.js"></script>
+
+  <!-- other stuff ... -->
+</head>
+```
+and then extend a viewer:
+
+```JavaScript
+    // create a viewer assuming there is a DIV element with id 'cesiumContainer'
+	var cesiumViewer = new Cesium.Viewer('cesiumContainer');
+
+	// extend our view by the cesium navigaton mixin
+	cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, {});
+```
+
+or a widget:
+
+```JavaScript
+    // create a widget assuming there is a DIV element with id 'cesiumContainer'
+    var cesiumWidget = new Cesium.CesiumWidget('cesiumContainer');
+
+	// extend our view by the cesium navigaton mixin
+	Cesium.viewerCesiumNavigationMixin.mixinWidget(cesiumWidget, {});
+```
+
+You can access the newly created instance via
+
+```
+    // if using a viewer
+	var cesiumNavigation = cesiumViewer.cesiumNavigation;
+
+	// if using a widget
+	var cesiumNavigation = cesiumWidget.cesiumNavigation;
+```
+
+Another example if your are using requirejs except for Cesium:
+```HTML
+<head>
+  <!-- other stuff... -->
+
+  <script src="path/to/Cesium.js"></script>
+  <!-- IMPORTANT: loading requirejs after Cesium ensures that when requiring -->
+  <!-- viewerCesiumNavigationMixin the global variable Cesium is already set -->
+  <script type="text/javascript" src="path/to/require.js"></script>
+  <script type="text/javascript">
+    require.config({
+      // your config...
+    });
+  </script>
+
+  <!-- other stuff... -->
+</head>
+```
+and code
+```JavaScript
+  // IMPORTANT: be sure that Cesium.js has already been loaded, e.g. by loading requirejs AFTER Cesium
+  require(['path/to/standalone/viewerCesiumNavigationMixin'], function(viewerCesiumNavigationMixin) {
+    // like above code but additionally one can directly access
+    // viewerCesiumNavigationMixin
+    // instead of
+    // Cesium.viewerCesiumNavigationMixin
+  }
+```
+
+- If you are using requirejs for your entire project, including Cesium, then you have to use the AMD compatible edition.
+
+```HTML
+<head>
+  <!-- other stuff... -->
+
+  <script type="text/javascript" src="path/to/require.js"></script>
+  <script type="text/javascript">
+    require.config({
+        // your config...
+		paths: {
+		    // your paths...
+		    // IMPORTANT: this path has to be set because
+		    //  viewerCesiumNavigationMixin uses 'Cesium/...' for dependencies
+			'Cesium': 'path/to/cesium/Source'
+		}
+    });
+  </script>
+
+  <!-- other stuff... -->
+</head>
+```
+and the code
+```JavaScript
+require([
+  'Cesium/Cesium',
+  'path/to/amd/viewerCesiumNavigationMixin'
+], function(
+  Cesium,
+  viewerCesiumNavigationMixin) {
+
+  // like above but now you cannot access Cesium.viewerCesiumNavigationMixin
+  // but use just viewerCesiumNavigationMixin
+});
+```
+or
+```JavaScript
+require([
+  'Cesium/Core/Viewer',
+  'path/to/amd/viewerCesiumNavigationMixin'
+], function(
+  CesiumViewer,
+  viewerCesiumNavigationMixin) {
+
+  // like above but now you cannot access Cesium.viewerCesiumNavigationMixin
+  // but use just viewerCesiumNavigationMixin
+});
+```
+
+- if there are still open questions checkout the examples
+
+- To destroy the navigation object and release the resources later on use the following
+```JavaScript
+  viewer.cesiumNavigation.destroy();
+```
 
 
 **How to build it?**
