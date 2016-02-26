@@ -3,7 +3,7 @@
     /*jshint node:true*/
 
     var sourceDir = 'Source';
-    var buildDir = 'Build',
+    var buildDir = 'dist',
         standaloneSubDir = 'standalone',
         amdSubDir = 'amd',
         buildName = 'viewerCesiumNavigationMixin';
