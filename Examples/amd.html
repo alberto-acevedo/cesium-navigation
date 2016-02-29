@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Cesium-Navigation Example (completely using AMD)</title>
-    <script type="text/javascript" src="node_modules/requirejs/require.js"></script>
-    <script type="text/javascript">
-    require.config({
-        baseUrl : '.',
-        waitSeconds : 60,
-		paths: {
-			'Cesium': 'node_modules/cesium/Source'
-		}
-    });
-    </script>
+  <title>Cesium-Navigation Example (using requirejs.optimize)</title>
+  <script type="text/javascript" src="node_modules/requirejs/require.js"></script>
+  <script type="text/javascript" src="Source/mainConfig.js"></script>
   <style>
       @import url(node_modules/cesium/Source/Widgets/widgets.css);
       html, body, #cesiumContainer {
@@ -20,41 +12,11 @@
   </style>
 </head>
 <body>
-<div id="cesiumContainer"></div>
-<script>
-require(['Cesium/Cesium', 'Widgets/amd/viewerCesiumNavigationMixin.min'], function(Cesium, viewerCesiumNavigationMixin) {
-    "use strict";
-
-	var cesiumViewer = new Cesium.Viewer('cesiumContainer');
-
-	// extend our view by the cesium navigaton mixin
-	cesiumViewer.extend(viewerCesiumNavigationMixin, {});
-	// you can access the cesium navigation by cesiumViewer.cesiumNavigation or cesiumViewer.cesiumWidget.cesiumNavigation
-
-	// just some entities
-	function createModel(url, longitude, latitude, height) {
-		var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height);
-		var heading = Cesium.Math.toRadians(135);
-		var pitch = 0;
-		var roll = 0;
-		var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, heading, pitch, roll);
-
-		var entity = cesiumViewer.entities.add({
-			name : url,
-			description: 'It is supposed to have a useful desciption here<br />but instead there is just a placeholder to get a larger info box',
-			position : position,
-			orientation : orientation,
-			model : {
-				uri : url,
-				minimumPixelSize : 96
-			}
-		});
-	}
-
-	createModel('models/Cesium_Air.glb', -100, 44, 10000.0);
-	createModel('models/Cesium_Ground.glb', -122, 45, 0);
-});
-</script>
+  <div id="cesiumContainer"></div>
+  <!-- This file was built with nodejs and requirejs.optimize -->
+  <!-- The main file was Source/AMD/main.js -->
+  <!-- To build this file on your own, simply run `node build.js` (first you might need to run `npm install` once) -->
+  <script type="text/javascript" src="Build/amd.min.js"></script>
 
   <script type="text/javascript">
 	// show info if accessed directly from disk
