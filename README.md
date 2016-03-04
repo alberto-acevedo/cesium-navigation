@@ -4,7 +4,7 @@ distance scale graphical user interface.
 
 **Why did you build it?**
 
-First of all the Cesiumjs sdk does not includes a compass, navigator (zoom in/out), and distance scale. You can use the mouse to navigate on the map, but this navigation plugin  offers more navigation control and capabilities to the user. Some of the capabilities are: reset the compass to point to north, reset the orbit, and 
+First of all the Cesiumjs sdk does not includes a compass, navigator (zoom in/out), and distance scale. You can use the mouse to navigate on the map, but this navigation plugin offers more navigation control and capabilities to the user. Some of the capabilities are: reset the compass to point to north, reset the orbit, and
 reset the view to a default bound.
 
 **How did you build it?**
@@ -13,59 +13,160 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 
 - extracted the minimum required modules from terriajs.
 - Converted all the modules from Browserify to requirejs.
-- Use gulpjs to compile and minify the less files, bundle and minify all the modules and open source dependencies 
+- Use gulpjs to compile and minify the less files, bundle and minify all the modules and open source dependencies
   into just one file. As part of the build process I decided to replace requirejs with almondjs to reduce the footprint of the AMD loader used in the plugin. The almondjs library is also bundle inside the plugin to make the plugin as easy as plug and play within Cesium.
+- Using nodejs and the requirejs optimizer as well as almond the whole plugin is built and bundled in a single file even the CSS style
+- This plugin can be used as a standalone script or via an AMD loader (tested with requirejs). Even in the special case where you use AMD but not for Cesium the plugin can be easily used.
 
 **How to use it?**
 
-- add the cesium-navigation folder from the distribution (dist) folder into your Cesium map application. Or download the plugin from gitHub and build a release version of the plugin as follows:
+There are two edition, a standalone edition and an AMD compatible edition:
 
-		gulp release-unminified --> for the unminified plugin for debugging purposes.
-		gulp default --> for the minified plugin (recommended)
+*When to use which edition?*
 
-- Add the cesium-navigation/cesium-navigation.js script  to your html file.
-- Add the style	as follows:
+- If you are loading Cesium without requirejs (i.e. you have a global variable Cesium) then use the standalone edition. This edition is also suitable if you use requirejs (but not for Cesium).
+```HTML
+<head>
+  <!-- other stuff -->
 
- 		@import url(<path>/cesium-navigation/cesium-navigation.css);
+  <script src="path/to/Cesium.js"></script>
+  <!-- IMPORTANT: because the cesium navigation viewer mixin depends on Cesium be sure to load it after Cesium -->
+  <script src="path/to/standalone/viewerCesiumNavigationMixin.js"></script>
+
+  <!-- other stuff ... -->
+</head>
+```
+and then extend a viewer:
+
+```JavaScript
+    // create a viewer assuming there is a DIV element with id 'cesiumContainer'
+	var cesiumViewer = new Cesium.Viewer('cesiumContainer');
+
+	// extend our view by the cesium navigaton mixin
+	cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, {});
+```
+
+or a widget:
+
+```JavaScript
+    // create a widget assuming there is a DIV element with id 'cesiumContainer'
+    var cesiumWidget = new Cesium.CesiumWidget('cesiumContainer');
+
+	// extend our view by the cesium navigaton mixin
+	Cesium.viewerCesiumNavigationMixin.mixinWidget(cesiumWidget, {});
+```
+
+You can access the newly created instance via
+
+```
+    // if using a viewer
+	var cesiumNavigation = cesiumViewer.cesiumNavigation;
+
+	// if using a widget
+	var cesiumNavigation = cesiumWidget.cesiumNavigation;
+```
+
+Another example if your are using requirejs except for Cesium:
+```HTML
+<head>
+  <!-- other stuff... -->
+
+  <script src="path/to/Cesium.js"></script>
+  <!-- IMPORTANT: loading requirejs after Cesium ensures that when requiring -->
+  <!-- viewerCesiumNavigationMixin the global variable Cesium is already set -->
+  <script type="text/javascript" src="path/to/require.js"></script>
+  <script type="text/javascript">
+    require.config({
+      // your config...
+    });
+  </script>
+
+  <!-- other stuff... -->
+</head>
+```
+and code
+```JavaScript
+  // IMPORTANT: be sure that Cesium.js has already been loaded, e.g. by loading requirejs AFTER Cesium
+  require(['path/to/standalone/viewerCesiumNavigationMixin'], function(viewerCesiumNavigationMixin) {
+    // like above code but additionally one can directly access
+    // viewerCesiumNavigationMixin
+    // instead of
+    // Cesium.viewerCesiumNavigationMixin
+  }
+```
+
+- If you are using requirejs for your entire project, including Cesium, then you have to use the AMD compatible edition.
+
+```HTML
+<head>
+  <!-- other stuff... -->
+
+  <script type="text/javascript" src="path/to/require.js"></script>
+  <script type="text/javascript">
+    require.config({
+        // your config...
+		paths: {
+		    // your paths...
+		    // IMPORTANT: this path has to be set because
+		    //  viewerCesiumNavigationMixin uses 'Cesium/...' for dependencies
+			'Cesium': 'path/to/cesium/Source'
+		}
+    });
+  </script>
+
+  <!-- other stuff... -->
+</head>
+```
+and the code
+```JavaScript
+require([
+  'Cesium/Cesium',
+  'path/to/amd/viewerCesiumNavigationMixin'
+], function(
+  Cesium,
+  viewerCesiumNavigationMixin) {
+
+  // like above but now you cannot access Cesium.viewerCesiumNavigationMixin
+  // but use just viewerCesiumNavigationMixin
+});
+```
+or
+```JavaScript
+require([
+  'Cesium/Core/Viewer',
+  'path/to/amd/viewerCesiumNavigationMixin'
+], function(
+  CesiumViewer,
+  viewerCesiumNavigationMixin) {
+
+  // like above but now you cannot access Cesium.viewerCesiumNavigationMixin
+  // but use just viewerCesiumNavigationMixin
+});
+```
+
+- if there are still open questions checkout the examples
+
+- To destroy the navigation object and release the resources later on use the following
+```JavaScript
+  viewer.cesiumNavigation.destroy();
+```
 
 
-- Inside the body of your page add the following:
+**How to build it?**
 
-		var viewer = new Cesium.Viewer('cesiumContainer');
-		navigationInitialization('cesiumContainer', viewer);
-		
-		if using the CesiumWidget:
-		
-		var widget = new Cesium.CesiumWidget('cesiumContainer',
-			{
-     				imageryProvider: new Cesium.TileMapServiceImageryProvider({
-                            		url:: 'javascript/Cesium/Assets/Texture/NaturalEarthII'
-             		})
-		});
-		navigationInitialization('cesiumContainer', widget );
-
-The navigationInitialization function initializes the navigation plugin within the Cesium viewer. 
-This function also assigns the instantiated plugin navigation object to the viewer (viewer.navigation).
-
-- To destroy the navigation object and release the resources later on, use the following
-
-		viewer.navigation.destroy();
-		viewer.navigation = undefined;
-		
-		if using the CesiumWidget:
-		
-		widget.navigation.destroy();
-		widget.navigation = undefined;
+- run `npm install`
+- run `node build.js`
+- The build process also copies the files to the Example folder in order to always keep them sync with your build
 
 
 **Is there a demo using the plugin ?**
 
 This is the demo:
 
-(http://alberto-acevedo.github.io/cesium-navigation/)
+(http://larcius.github.io/cesium-navigation/)
 
 - The compass, navigator, and distance scale will appear on the right side of te map.
--  This plugin was successfully tested on Cesiumjs version 1.15. It works great with Cesium in 3D mode. Recently Larcius (https://github.com/Larcius) made a lot of improvements and fixed some issues in Columbus and 2D modes.
+- This plugin was successfully tested on Cesium version 1.15. It works great with Cesium in 3D mode. Recently Larcius (https://github.com/Larcius) made a lot of improvements and fixed some issues in Columbus and 2D modes.
 
 **What about the license?**
  - The plugin is 100% based on open source libraries. The same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it.
