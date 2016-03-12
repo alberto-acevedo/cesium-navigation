@@ -55,7 +55,8 @@ requirejs.config({
         'Navigation': 'Navigation',
         'CameraView': 'lib/Models/CameraView'
 
-    }
+    },
+     wrap: true
 });
 
 function navigationInitialization(cesiumContainerId, viewer)
