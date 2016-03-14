@@ -1,0 +1,14 @@
+{
+    "name": "cesium-navigation-examples",
+    "version": "1.1.0",
+    "description": "Examples of cesium navigation",
+    "license": "Apache-2.0",
+    "dependencies": {
+        "express": "~4.9.x",
+        "compression": "1.0.8",
+        "request": "2.36.0",
+        "yargs": "1.2.6",
+        "requirejs": "^2.1.22",
+        "cesium": "^1.18.0"
+    }
+}
