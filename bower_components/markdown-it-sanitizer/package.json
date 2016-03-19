@@ -1,0 +1,46 @@
+{
+  "name": "markdown-it-sanitizer",
+  "version": "0.4.1",
+  "description": "sanitizer for markdown-it.",
+  "keywords": [
+    "markdown-it-plugin",
+    "markdown-it",
+    "markdown",
+    "sanitizer"
+  ],
+  "homepage": "https://github.com/svbergerem/markdown-it-sanitizer",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/svbergerem/markdown-it-sanitizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/svbergerem/markdown-it-sanitizer/issues"
+  },
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "devDependencies": {
+    "browserify": "*",
+    "chai": "^3.2.0",
+    "coveralls": "^2.11.2",
+    "eslint": "0.24.1",
+    "eslint-plugin-nodeca": "^1.0.3",
+    "istanbul": "*",
+    "markdown-it": "~5.0.0",
+    "markdown-it-testgen": "~0.1.4",
+    "markdown-it-diaspora-mention": "^0.4.0",
+    "markdown-it-for-inline": "^0.1.1",
+    "markdown-it-hashtag": "^0.4.0",
+    "markdown-it-sub": "^1.0.0",
+    "markdown-it-sup": "^1.0.0",
+    "markdown-it-video": "^0.2.1",
+    "mocha": "*",
+    "uglify-js": "*"
+  },
+  "dependencies": {},
+  "directories": {
+    "test": "test"
+  }
+}
