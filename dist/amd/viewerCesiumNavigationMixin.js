@@ -971,11 +971,11 @@ define('ViewModels/ResetViewNavigationControl',[
         var camera = this.terria.scene.camera;
 
         if(typeof camera.flyHome === "function") {
-            camera.flyHome({'duration': 1});
+            camera.flyHome(1);
 //        } else if(defined(this.terria.homeButton)) {
 //            this.terria.homeButton.viewModel.command();
         } else {
-            this.terria.camera.flyTo({'destination': Camera.DEFAULT_VIEW_RECTANGLE, 'duration': 1});
+            camera.flyTo({'destination': Camera.DEFAULT_VIEW_RECTANGLE, 'duration': 1});
         }
         this.isActive = false;
     };
@@ -1124,7 +1124,7 @@ define('ViewModels/ZoomOutNavigationControl',[
          * This property is observable.
          * @type {String}
          */
-        this.text = '–';
+        this.text = '-';
 
         /**
          * Gets or sets the CSS class of the control. This property is observable.
