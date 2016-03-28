@@ -34,7 +34,7 @@ define([
          * This property is observable.
          * @type {String}
          */
-        this.text = '–';
+        this.text = '-';
 
         /**
          * Gets or sets the CSS class of the control. This property is observable.

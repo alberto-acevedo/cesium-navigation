@@ -42,7 +42,7 @@
             var files = fs.readdirSync(absPath);
 
             files.forEach(function (subpath) {
-                findAllCesiumReferences(absPath + "\\" + subpath);
+                findAllCesiumReferences(path.join(absPath, subpath));
             });
             return;
         } else if (!fs.lstatSync(absPath).isFile()) {
