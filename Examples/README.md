@@ -10,11 +10,11 @@ Where are the dependencies from?
 
 The root directory of the server is `Examples` but some files from the parent/main directory are needed.
 This is achieved by internal redirects:
-`dist`                          ->      `../dist`
-`node_modules`                  ->      `../node_modules`
-`bower_components`              ->      `../bower_components`
-`cesiumNavigationSource`        ->      `../Source`
-`cesiumNavigationMainConfig`    ->      `../mainConfig.js`
+- `dist`                          ->      `../dist`
+- `node_modules`                  ->      `../node_modules`
+- `bower_components`              ->      `../bower_components`
+- `cesiumNavigationSource`        ->      `../Source`
+- `cesiumNavigationMainConfig`    ->      `../mainConfig.js`
 
 Using these redirects ensures that the examples are always running with the current build and/or sources of the main project.
 Furthermore it avoids redundant node modules and/or bower components
@@ -25,10 +25,7 @@ Local server
 
 A local HTTP server is required to run the app.
 
-Use Cesium's node.js server.
+Use the node.js server. To start it change to the `Examples` root directory and run
+`node server.js`
 
-* Install [node.js](http://nodejs.org/)
-* From the `Examples` root directory, run
-   * `node server.js`
-
-Browse to `http://localhost:8080/`
+Then browse to `http://localhost:8080/`
