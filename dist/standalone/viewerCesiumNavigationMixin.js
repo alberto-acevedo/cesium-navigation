@@ -1300,16 +1300,8 @@ define('ViewModels/UserInterfaceControl',[
 
 /*global require*/
 define('ViewModels/NavigationControl',[
-    'Cesium/Core/defined',
-    'Cesium/Core/Ray',
-    'Cesium/Core/IntersectionTests',
-    'Cesium/Core/Ellipsoid',
     'ViewModels/UserInterfaceControl'
 ], function (
-    defined,
-    Ray,
-    IntersectionTests,
-    Ellipsoid,
     UserInterfaceControl) {
     'use strict';
 
@@ -1328,17 +1320,6 @@ define('ViewModels/NavigationControl',[
 
     NavigationControl.prototype = Object.create(UserInterfaceControl.prototype);
 
-    NavigationControl.prototype.getCameraFocus = function (scene) {
-        var ray = new Ray(scene.camera.positionWC, scene.camera.directionWC);
-        var intersections = IntersectionTests.rayEllipsoid(ray, scene.globe.ellipsoid);
-        if (defined(intersections)) {
-            return Ray.getPoint(ray, intersections.start);
-        } else {
-            // Camera direction is not pointing at the globe, so use the ellipsoid horizon point as
-            // the focal point.
-            return IntersectionTests.grazingAltitudeLocation(ray, scene.globe.ellipsoid);
-        }
-    };
     return NavigationControl;
 });
 
@@ -1439,110 +1420,86 @@ define('ViewModels/ResetViewNavigationControl',[
 });
 
 /*global require*/
-define('ViewModels/ZoomInNavigationControl',[
+define('Core/Utils',[
     'Cesium/Core/defined',
+    'Cesium/Core/Ray',
     'Cesium/Core/Cartesian3',
-    'ViewModels/NavigationControl'
+    'Cesium/Core/Cartographic',
+    'Cesium/Scene/SceneMode'
 ], function (
     defined,
+    Ray,
     Cartesian3,
-    NavigationControl) {
+    Cartographic,
+    SceneMode) {
     'use strict';
 
-    /**
-     * The model for a zoom in control in the navigation control tool bar
-     *
-     * @alias ZoomInNavigationControl
-     * @constructor
-     * @abstract
-     *
-     * @param {Terria} terria The Terria instance.
-     */
-    var ZoomInNavigationControl = function (terria) {
-        NavigationControl.apply(this, arguments);
+    var Utils = {};
 
-        /**
-         * Gets or sets the name of the control which is set as the control's title.
-         * This property is observable.
-         * @type {String}
-         */
-        this.name = 'Zoom In';
-
-        /**
-         * Gets or sets the text to be displayed in the nav control. Controls that
-         * have text do not display the svgIcon.
-         * This property is observable.
-         * @type {String}
-         */
-        this.text = '+';
-
-        /**
-         * Gets or sets the CSS class of the control. This property is observable.
-         * @type {String}
-         */
-        this.cssClass = "navigation-control-icon-zoom-in";
-
-    };
-
-    ZoomInNavigationControl.prototype = Object.create(NavigationControl.prototype);
-
-    var cartesian3Scratch = new Cartesian3();
-
-    ZoomInNavigationControl.prototype.zoomIn = function () {
-        // this.terria.analytics.logEvent('navigation', 'click', 'zoomIn');
-
-        this.isActive = true;
-
-        if (defined(this.terria.leaflet)) {
-            this.terria.leaflet.map.zoomIn(1);
-        }
-
-//    if (defined(this.terria.cesium)) {
-//        var scene =  this.terria.cesium.scene;
-//        var camera = scene.camera;
-//        var focus = this.getCameraFocus(scene);
-//        var direction = Cartesian3.subtract(focus, camera.position, cartesian3Scratch);
-//        var movementVector = Cartesian3.multiplyByScalar(direction, 2.0 / 3.0, cartesian3Scratch);
-//        var endPosition = Cartesian3.add(camera.position, movementVector, cartesian3Scratch);
-//
-//        this.flyToPosition(scene, endPosition);
-//    }
-        if (defined(this.terria)) {
-            var scene = this.terria.scene;
-            var camera = scene.camera;
-            var focus = this.getCameraFocus(scene);
-            var direction = Cartesian3.subtract(focus, camera.position, cartesian3Scratch);
-            var movementVector = Cartesian3.multiplyByScalar(direction, 2.0 / 3.0, cartesian3Scratch);
-            var endPosition = Cartesian3.add(camera.position, movementVector, cartesian3Scratch);
-
-            this.terria.camera.flyTo({'destination': endPosition, 'duration': 1});
-        }
-
-        /// this.terria.notifyRepaintRequired();
-        this.isActive = false;
-    };
+    var unprojectedScratch = new Cartographic();
+    var rayScratch = new Ray();
 
     /**
-     * When implemented in a derived class, performs an action when the user clicks
-     * on this control
-     * @abstract
-     * @protected
+     * gets the focus point of the camera
+     * @param {Scene} scene The scene
+     * @param {boolean} inWorldCoordinates true to get the focus in world coordinates, otherwise get it in projection-specific map coordinates, in meters.
+     * @param {Cartesian3} [result] The object in which the result will be stored.
+     * @return {Cartesian3} The modified result parameter, a new instance if none was provided or undefined if there is no focus point.
      */
-    ZoomInNavigationControl.prototype.activate = function () {
-        this.zoomIn();
+    Utils.getCameraFocus = function (scene, inWorldCoordinates, result) {
+        if(scene.mode == SceneMode.MORPHING) {
+            return undefined;
+        }
+
+        if(!defined(result)) {
+            result = new Cartesian3();
+        }
+
+        var camera = scene.camera;
+
+        rayScratch.origin = camera.positionWC;
+        rayScratch.direction = camera.directionWC;
+        var center = scene.globe.pick(rayScratch, scene, result);
+
+        if (!defined(center)) {
+            return undefined;
+        }
+
+        if(scene.mode == SceneMode.SCENE2D || scene.mode == SceneMode.COLUMBUS_VIEW) {
+            center = camera.worldToCameraCoordinatesPoint(center, result);
+
+            if(inWorldCoordinates) {
+                center = scene.globe.ellipsoid.cartographicToCartesian(scene.mapProjection.unproject(center, unprojectedScratch), result);
+            }
+        } else {
+            if(!inWorldCoordinates) {
+                center = camera.worldToCameraCoordinatesPoint(center, result);
+            }
+        }
+
+        return center;
     };
-    return ZoomInNavigationControl;
+
+    return Utils;
 });
 
 /*global require*/
-define('ViewModels/ZoomOutNavigationControl',[
+define('ViewModels/ZoomNavigationControl',[
     'Cesium/Core/defined',
+    'Cesium/Core/Ray',
+    'Cesium/Core/IntersectionTests',
     'Cesium/Core/Cartesian3',
-    'ViewModels/NavigationControl'
+    'Cesium/Scene/SceneMode',
+    'ViewModels/NavigationControl',
+    'Core/Utils'
 ], function (
     defined,
+    Ray,
+    IntersectionTests,
     Cartesian3,
-    NavigationControl) {
+    SceneMode,
+    NavigationControl,
+    Utils) {
     'use strict';
 
     /**
@@ -1553,8 +1510,9 @@ define('ViewModels/ZoomOutNavigationControl',[
      * @abstract
      *
      * @param {Terria} terria The Terria instance.
+     * @param {boolean} zoomIn is used for zooming in (true) or out (false)
      */
-    var ZoomOutNavigationControl = function (terria) {
+    var ZoomNavigationControl = function (terria, zoomIn) {
         NavigationControl.apply(this, arguments);
 
         /**
@@ -1562,7 +1520,7 @@ define('ViewModels/ZoomOutNavigationControl',[
          * This property is observable.
          * @type {String}
          */
-        this.name = 'Zoom Out';
+        this.name = 'Zoom ' + (zoomIn ? 'In' : 'Out');
 
         /**
          * Gets or sets the text to be displayed in the nav control. Controls that
@@ -1570,54 +1528,26 @@ define('ViewModels/ZoomOutNavigationControl',[
          * This property is observable.
          * @type {String}
          */
-        this.text = '-';
+        this.text = zoomIn ? '+' : '-';
 
         /**
          * Gets or sets the CSS class of the control. This property is observable.
          * @type {String}
          */
-        this.cssClass = "navigation-control-icon-zoom-out";
+        this.cssClass = 'navigation-control-icon-zoom-' + (zoomIn ? 'in' : 'out');
 
+        this.relativeAmount = 2;
+
+        if(zoomIn) {
+            // this ensures that zooming in is the inverse of zooming out and vice versa
+            // e.g. the camera position remains when zooming in and out
+            this.relativeAmount = 1 / this.relativeAmount;
+        }
     };
 
-    ZoomOutNavigationControl.prototype = Object.create(NavigationControl.prototype);
+    ZoomNavigationControl.prototype.relativeAmount = 1;
 
-    var cartesian3Scratch = new Cartesian3();
-
-    ZoomOutNavigationControl.prototype.zoomOut = function () {
-        //this.terria.analytics.logEvent('navigation', 'click', 'zoomOut');
-
-        this.isActive = true;
-
-        if (defined(this.terria.leaflet)) {
-            this.terria.leaflet.map.zoomOut(1);
-        }
-
-//    if (defined( this.terria.cesium)) {
-//        var scene =  this.terria.cesium.scene;
-//        var camera = scene.camera;
-//        var focus = this.getCameraFocus(scene);
-//        var direction = Cartesian3.subtract(focus, camera.position, cartesian3Scratch);
-//        var movementVector = Cartesian3.multiplyByScalar(direction, -2.0, cartesian3Scratch);
-//        var endPosition = Cartesian3.add(camera.position, movementVector, cartesian3Scratch);
-//
-//        this.flyToPosition(scene, endPosition);
-//    }
-
-        if (defined(this.terria)) {
-            var scene = this.terria.scene;
-            var camera = scene.camera;
-            var focus = this.getCameraFocus(scene);
-            var direction = Cartesian3.subtract(focus, camera.position, cartesian3Scratch);
-            var movementVector = Cartesian3.multiplyByScalar(direction, -2.0, cartesian3Scratch);
-            var endPosition = Cartesian3.add(camera.position, movementVector, cartesian3Scratch);
-
-            this.terria.camera.flyTo({'destination': endPosition, 'duration': 1});
-        }
-
-        // this.terria.notifyRepaintRequired();
-        this.isActive = false;
-    };
+    ZoomNavigationControl.prototype = Object.create(NavigationControl.prototype);
 
     /**
      * When implemented in a derived class, performs an action when the user clicks
@@ -1625,11 +1555,67 @@ define('ViewModels/ZoomOutNavigationControl',[
      * @abstract
      * @protected
      */
-    ZoomOutNavigationControl.prototype.activate = function () {
-        this.zoomOut();
+    ZoomNavigationControl.prototype.activate = function () {
+        this.zoom(this.relativeAmount);
     };
 
-    return ZoomOutNavigationControl;
+    var cartesian3Scratch = new Cartesian3();
+
+    ZoomNavigationControl.prototype.zoom = function (relativeAmount) {
+        // this.terria.analytics.logEvent('navigation', 'click', 'zoomIn');
+
+        this.isActive = true;
+
+        if (defined(this.terria)) {
+            var scene = this.terria.scene;
+            var camera = scene.camera;
+            // var orientation;
+
+            if(scene.mode == SceneMode.MORPHING) {
+                return;
+            }
+
+            var focusWC = Utils.getCameraFocus(scene, false);
+
+            if (!defined(focusWC)) {
+                // Camera direction is not pointing at the globe, so use the ellipsoid horizon point as
+                // the focal point.
+                var ray = new Ray(camera.worldToCameraCoordinatesPoint(scene.globe.ellipsoid.cartographicToCartesian(camera.positionCartographic)), camera.directionWC);
+                focusWC = IntersectionTests.grazingAltitudeLocation(ray, scene.globe.ellipsoid);
+
+            //     orientation = {
+            //         heading: camera.heading,
+            //         pitch: camera.pitch,
+            //         roll: camera.roll
+            //     };
+            // } else {
+            //     orientation = {
+            //         direction: camera.direction,
+            //         up: camera.up
+            //     };
+            }
+
+            var direction = Cartesian3.subtract(camera.position, focusWC, cartesian3Scratch);
+            var movementVector = Cartesian3.multiplyByScalar(direction, relativeAmount, direction);
+            var endPosition = Cartesian3.add(focusWC, movementVector, focusWC);
+
+            // sometimes flyTo does not work (wrong position) so just set the position without any animation
+            camera.position = endPosition;
+
+            //     camera.flyTo({
+            //         destination: endPosition,
+            //         orientation: orientation,
+            //         duration: 1,
+            //         convert: false
+            //     });
+            // }
+        }
+
+        // this.terria.notifyRepaintRequired();
+        this.isActive = false;
+    };
+
+    return ZoomNavigationControl;
 });
 
 /*global define*/
@@ -1664,14 +1650,16 @@ define('ViewModels/NavigationViewModel',[
     'Cesium/Core/Cartesian2',
     'Cesium/Core/Cartesian3',
     'Cesium/Core/Matrix4',
+    'Cesium/Core/BoundingSphere',
+    'Cesium/Core/HeadingPitchRange',
     'KnockoutES5',
     'Core/loadView',
     'ViewModels/ResetViewNavigationControl',
-    'ViewModels/ZoomInNavigationControl',
-    'ViewModels/ZoomOutNavigationControl',
+    'ViewModels/ZoomNavigationControl',
     'SvgPaths/svgCompassOuterRing',
     'SvgPaths/svgCompassGyro',
-    'SvgPaths/svgCompassRotationMarker'
+    'SvgPaths/svgCompassRotationMarker',
+    'Core/Utils'
 ], function (
     defined,
     CesiumMath,
@@ -1682,14 +1670,16 @@ define('ViewModels/NavigationViewModel',[
     Cartesian2,
     Cartesian3,
     Matrix4,
+    BoundingSphere,
+    HeadingPitchRange,
     Knockout,
     loadView,
     ResetViewNavigationControl,
-    ZoomInNavigationControl,
-    ZoomOutNavigationControl,
+    ZoomNavigationControl,
     svgCompassOuterRing,
     svgCompassGyro,
-    svgCompassRotationMarker) {
+    svgCompassRotationMarker,
+    Utils) {
     'use strict';
 
     var NavigationViewModel = function (options) {
@@ -1700,9 +1690,9 @@ define('ViewModels/NavigationViewModel',[
         this.controls = options.controls;
         if (!defined(this.controls)) {
             this.controls = [
-                new ZoomInNavigationControl(this.terria),
+                new ZoomNavigationControl(this.terria, true),
                 new ResetViewNavigationControl(this.terria),
-                new ZoomOutNavigationControl(this.terria)
+                new ZoomNavigationControl(this.terria, false)
             ];
         }
 
@@ -1827,6 +1817,11 @@ define('ViewModels/NavigationViewModel',[
     var vectorScratch = new Cartesian2();
 
     NavigationViewModel.prototype.handleMouseDown = function (viewModel, e) {
+        var scene = this.terria.scene;
+        if (scene.mode == SceneMode.MORPHING) {
+            return true;
+        }
+
         var compassElement = e.currentTarget;
         var compassRectangle = e.currentTarget.getBoundingClientRect();
         var maxDistance = compassRectangle.width / 2.0;
@@ -1854,17 +1849,16 @@ define('ViewModels/NavigationViewModel',[
     var oldTransformScratch = new Matrix4();
     var newTransformScratch = new Matrix4();
     var centerScratch = new Cartesian3();
-    var windowPositionScratch = new Cartesian2();
 
     NavigationViewModel.prototype.handleDoubleClick = function (viewModel, e) {
         var scene = this.terria.scene;
         var camera = scene.camera;
 
-        var windowPosition = windowPositionScratch;
-        windowPosition.x = scene.canvas.clientWidth / 2;
-        windowPosition.y = scene.canvas.clientHeight / 2;
+        if (scene.mode == SceneMode.MORPHING || scene.mode == SceneMode.SCENE2D) {
+            return true;
+        }
 
-        var center = camera.pickEllipsoid(windowPosition, scene.globe.ellipsoid, centerScratch);
+        var center = Utils.getCameraFocus(scene, true, centerScratch);
 
         if (!defined(center)) {
             // Globe is barely visible, so reset to home view.
@@ -1873,15 +1867,15 @@ define('ViewModels/NavigationViewModel',[
             return;
         }
 
-        var rotateFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid);
-
+        // var rotateFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid);
+        //
         var cameraPosition = scene.globe.ellipsoid.cartographicToCartesian(camera.positionCartographic, new Cartesian3());
-        var lookVector = Cartesian3.subtract(center, cameraPosition, new Cartesian3());
+        // var lookVector = Cartesian3.subtract(center, cameraPosition, new Cartesian3());
+        //
+        // var destination = Matrix4.multiplyByPoint(rotateFrame, new Cartesian3(0, 0, Cartesian3.magnitude(lookVector)), new Cartesian3());
 
-        var destination = Matrix4.multiplyByPoint(rotateFrame, new Cartesian3(0, 0, Cartesian3.magnitude(lookVector)), new Cartesian3());
-
-        camera.flyTo({
-            destination: destination,
+        camera.flyToBoundingSphere(new BoundingSphere(center, 0), {
+            offset: new HeadingPitchRange(0, camera.pitch, Cartesian3.distance(cameraPosition, center)),
             duration: 1.5
         });
     };
@@ -1911,11 +1905,7 @@ define('ViewModels/NavigationViewModel',[
         var scene = viewModel.terria.scene;
         var camera = scene.camera;
 
-        var windowPosition = windowPositionScratch;
-        windowPosition.x = scene.canvas.clientWidth / 2;
-        windowPosition.y = scene.canvas.clientHeight / 2;
-
-        var center = camera.pickEllipsoid(windowPosition, scene.globe.ellipsoid, centerScratch);
+        var center = Utils.getCameraFocus(scene, true, centerScratch);
 
         if (!defined(center)) {
             viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
@@ -1935,25 +1925,19 @@ define('ViewModels/NavigationViewModel',[
             var x = Math.cos(angle) * distance;
             var y = Math.sin(angle) * distance;
 
-            var scene = viewModel.terria.scene;
-            var camera = scene.camera;
-
             var oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
 
             camera.lookAtTransform(viewModel.orbitFrame);
 
-            if (viewModel.orbitIsLook) {
-                camera.look(Cartesian3.UNIT_Z, -x);
-
-                // do not look up/down in 2D mode
-                if (scene.mode !== SceneMode.SCENE2D) {
-                    camera.look(camera.right, -y);
-                }
+            // do not look up/down or rotate in 2D mode
+            if (scene.mode == SceneMode.SCENE2D) {
+                camera.move(new Cartesian3(x, y, 0), Math.max(scene.canvas.clientWidth, scene.canvas.clientHeight) / 100 * camera.positionCartographic.height * distance);
             } else {
-                camera.rotateLeft(x);
-
-                // do not look up/down in 2D mode
-                if (scene.mode !== SceneMode.SCENE2D) {
+                if (viewModel.orbitIsLook) {
+                    camera.look(Cartesian3.UNIT_Z, -x);
+                    camera.look(camera.right, -y);
+                } else {
+                    camera.rotateLeft(x);
                     camera.rotateUp(y);
                 }
             }
@@ -2010,6 +1994,14 @@ define('ViewModels/NavigationViewModel',[
     }
 
     function rotate(viewModel, compassElement, cursorVector) {
+        var scene = viewModel.terria.scene;
+        var camera = scene.camera;
+
+        // do not look rotate in 2D mode
+        if (scene.mode == SceneMode.SCENE2D) {
+            return;
+        }
+
         // Remove existing event handlers, if any.
         document.removeEventListener('mousemove', viewModel.rotateMouseMoveFunction, false);
         document.removeEventListener('mouseup', viewModel.rotateMouseUpFunction, false);
@@ -2020,14 +2012,7 @@ define('ViewModels/NavigationViewModel',[
         viewModel.isRotating = true;
         viewModel.rotateInitialCursorAngle = Math.atan2(-cursorVector.y, cursorVector.x);
 
-        var scene = viewModel.terria.scene;
-        var camera = scene.camera;
-
-        var windowPosition = windowPositionScratch;
-        windowPosition.x = scene.canvas.clientWidth / 2;
-        windowPosition.y = scene.canvas.clientHeight / 2;
-
-        var viewCenter = camera.pickEllipsoid(windowPosition, scene.globe.ellipsoid, centerScratch);
+        var viewCenter = Utils.getCameraFocus(scene, true, centerScratch);
 
         if (!defined(viewCenter)) {
             viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
@@ -2310,7 +2295,7 @@ define('viewerCesiumNavigationMixin',[
 });
 
 (function(c){var d=document,a='appendChild',i='styleSheet',s=d.createElement('style');s.type='text/css';d.getElementsByTagName('head')[0][a](s);s[i]?s[i].cssText=c:s[a](d.createTextNode(c));})
-('.full-window{position:absolute;top:0;left:0;right:0;bottom:0;margin:0;overflow:hidden;padding:0;-webkit-transition:left .25s ease-out;-moz-transition:left .25s ease-out;-ms-transition:left .25s ease-out;-o-transition:left .25s ease-out;transition:left .25s ease-out}.transparent-to-input{pointer-events:none}.opaque-to-input{pointer-events:auto}.clickable{cursor:pointer}a:hover{text-decoration:underline}.modal,.modal-background{top:0;left:0;bottom:0;right:0}.modal-background{pointer-events:auto;background-color:rgba(0,0,0,.5);z-index:1000;position:fixed}.modal{position:absolute;margin:auto;background-color:#2f353c;max-height:100%;max-width:100%;font-family:\'Roboto\',sans-serif;color:#fff}.modal-header{background-color:rgba(0,0,0,.2);border-bottom:1px solid rgba(100,100,100,.6);font-size:15px;line-height:40px;margin:0}.modal-header h1{font-size:15px;color:#fff;margin-left:15px}.modal-content{margin-left:15px;margin-right:15px;margin-bottom:15px;padding-top:15px;overflow:auto}.modal-close-button{position:absolute;right:15px;cursor:pointer;font-size:18px;color:#fff}#ui{z-index:2100}@media print{.full-window{position:initial}}.markdown img{max-width:100%}.markdown svg{max-height:100%}.markdown fieldset,.markdown input,.markdown select,.markdown textarea{font-family:inherit;font-size:1rem;box-sizing:border-box;margin-top:0;margin-bottom:0}.markdown label{vertical-align:middle}.markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{font-family:inherit;font-weight:700;line-height:1.25;margin-top:1em;margin-bottom:.5em}.markdown h1{font-size:2rem}.markdown h2{font-size:1.5rem}.markdown h3{font-size:1.25rem}.markdown h4{font-size:1rem}.markdown h5{font-size:.875rem}.markdown h6{font-size:.75rem}.markdown dl,.markdown ol,.markdown p,.markdown ul{margin-top:0;margin-bottom:1rem}.markdown strong{font-weight:700}.markdown em{font-style:italic}.markdown small{font-size:80%}.markdown mark{color:#000;background:#ff0}.markdown a:hover,.markdown u{text-decoration:underline}.markdown s{text-decoration:line-through}.markdown ol{list-style:decimal inside}.markdown ul{list-style:disc inside}.markdown code,.markdown pre,.markdown samp{font-family:monospace;font-size:inherit}.markdown pre{margin-top:0;margin-bottom:1rem;overflow-x:scroll}.markdown a{color:#68adfe;text-decoration:none}.markdown code,.markdown pre{background-color:transparent;border-radius:3px}.markdown hr{border:0;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:rgba(0,0,0,.125)}.markdown .left-align{text-align:left}.markdown .center{text-align:center}.markdown .right-align{text-align:right}.markdown .justify{text-align:justify}.markdown .truncate{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.markdown ol.upper-roman{list-style-type:upper-roman}.markdown ol.lower-alpha{list-style-type:lower-alpha}.markdown ul.circle{list-style-type:circle}.markdown ul.square{list-style-type:square}.markdown .list-reset{list-style:none;padding-left:0}.floating,.floating-horizontal,.floating-vertical{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8)}.floating-horizontal{padding-left:5px;padding-right:5px}.floating-vertical{padding-top:5px;padding-bottom:5px}@media print{.floating{display:none}}.distance-legend{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8);padding-left:5px;padding-right:5px;right:25px;bottom:30px;height:30px;width:125px;border:1px solid rgba(255,255,255,.1);box-sizing:content-box}.distance-legend-label{display:inline-block;font-family:\'Roboto\',sans-serif;font-size:14px;font-weight:lighter;line-height:30px;color:#fff;width:125px;text-align:center}.distance-legend-scale-bar{border-left:1px solid #fff;border-right:1px solid #fff;border-bottom:1px solid #fff;position:absolute;height:10px;top:15px}@media print{.distance-legend{display:none}}@media screen and (max-width:700px),screen and (max-height:420px){.distance-legend{display:none}}.navigation-controls{position:absolute;right:30px;top:210px;width:30px;border:1px solid rgba(255,255,255,.1);font-weight:300;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.navigation-control{cursor:pointer;border-bottom:1px solid #555}.naviagation-control:active{color:#fff}.navigation-control-last{cursor:pointer;border-bottom:0}.navigation-control-icon-zoom-in{padding-bottom:4px}.navigation-control-icon-zoom-in,.navigation-control-icon-zoom-out{position:relative;text-align:center;font-size:20px;color:#fff}.navigation-control-icon-reset{position:relative;left:10px;width:10px;height:10px;fill:rgba(255,255,255,.8);padding-top:6px;padding-bottom:6px;box-sizing:content-box}.compass,.compass-outer-ring{position:absolute;width:95px;height:95px}.compass{pointer-events:auto;right:0;overflow:hidden;top:100px}.compass-outer-ring{top:0;fill:rgba(255,255,255,.5)}.compass-outer-ring-background{position:absolute;top:14px;left:14px;width:44px;height:44px;border-radius:44px;border:12px solid rgba(47,53,60,.8);box-sizing:content-box}.compass-gyro{pointer-events:none;position:absolute;top:0;width:95px;height:95px;fill:#ccc}.compass-gyro-active,.compass-gyro-background:hover+.compass-gyro{fill:#68adfe}.compass-gyro-background{position:absolute;top:30px;left:30px;width:33px;height:33px;border-radius:33px;background-color:rgba(47,53,60,.8);border:1px solid rgba(255,255,255,.2);box-sizing:content-box}.compass-rotation-marker{position:absolute;top:0;width:95px;height:95px;fill:#68adfe}@media screen and (max-width:700px),screen and (max-height:420px){.compass,.navigation-controls{display:none}}@media print{.compass,.navigation-controls{display:none}}');
+('.full-window{position:absolute;top:0;left:0;right:0;bottom:0;margin:0;overflow:hidden;padding:0;-webkit-transition:left .25s ease-out;-moz-transition:left .25s ease-out;-ms-transition:left .25s ease-out;-o-transition:left .25s ease-out;transition:left .25s ease-out}.transparent-to-input{pointer-events:none}.opaque-to-input{pointer-events:auto}.clickable{cursor:pointer}.markdown a:hover,.markdown u,a:hover{text-decoration:underline}.modal,.modal-background{top:0;left:0;bottom:0;right:0}.modal-background{pointer-events:auto;background-color:rgba(0,0,0,.5);z-index:1000;position:fixed}.modal{position:absolute;margin:auto;background-color:#2f353c;max-height:100%;max-width:100%;font-family:\'Roboto\',sans-serif;color:#fff}.modal-header{background-color:rgba(0,0,0,.2);border-bottom:1px solid rgba(100,100,100,.6);font-size:15px;line-height:40px;margin:0}.modal-header h1{font-size:15px;color:#fff;margin-left:15px}.modal-content{margin-left:15px;margin-right:15px;margin-bottom:15px;padding-top:15px;overflow:auto}.modal-close-button{position:absolute;right:15px;cursor:pointer;font-size:18px;color:#fff}#ui{z-index:2100}@media print{.full-window{position:initial}}.markdown img{max-width:100%}.markdown svg{max-height:100%}.markdown fieldset,.markdown input,.markdown select,.markdown textarea{font-family:inherit;font-size:1rem;box-sizing:border-box;margin-top:0;margin-bottom:0}.markdown label{vertical-align:middle}.markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{font-family:inherit;font-weight:700;line-height:1.25;margin-top:1em;margin-bottom:.5em}.markdown h1{font-size:2rem}.markdown h2{font-size:1.5rem}.markdown h3{font-size:1.25rem}.markdown h4{font-size:1rem}.markdown h5{font-size:.875rem}.markdown h6{font-size:.75rem}.markdown dl,.markdown ol,.markdown p,.markdown ul{margin-top:0;margin-bottom:1rem}.markdown strong{font-weight:700}.markdown em{font-style:italic}.markdown small{font-size:80%}.markdown mark{color:#000;background:#ff0}.markdown s{text-decoration:line-through}.markdown ol{list-style:decimal inside}.markdown ul{list-style:disc inside}.markdown code,.markdown pre,.markdown samp{font-family:monospace;font-size:inherit}.markdown pre{margin-top:0;margin-bottom:1rem;overflow-x:scroll}.markdown a{color:#68adfe;text-decoration:none}.markdown code,.markdown pre{background-color:transparent;border-radius:3px}.markdown hr{border:0;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:rgba(0,0,0,.125)}.markdown .left-align{text-align:left}.markdown .center{text-align:center}.markdown .right-align{text-align:right}.markdown .justify{text-align:justify}.markdown .truncate{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.markdown ol.upper-roman{list-style-type:upper-roman}.markdown ol.lower-alpha{list-style-type:lower-alpha}.markdown ul.circle{list-style-type:circle}.markdown ul.square{list-style-type:square}.markdown .list-reset{list-style:none;padding-left:0}.floating,.floating-horizontal,.floating-vertical{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8)}.floating-horizontal{padding-left:5px;padding-right:5px}.floating-vertical{padding-top:5px;padding-bottom:5px}@media print{.floating{display:none}}.distance-legend{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8);padding-left:5px;padding-right:5px;right:25px;bottom:30px;height:30px;width:125px;border:1px solid rgba(255,255,255,.1);box-sizing:content-box}.distance-legend-label{display:inline-block;font-family:\'Roboto\',sans-serif;font-size:14px;font-weight:lighter;line-height:30px;color:#fff;width:125px;text-align:center}.distance-legend-scale-bar{border-left:1px solid #fff;border-right:1px solid #fff;border-bottom:1px solid #fff;position:absolute;height:10px;top:15px}@media print{.distance-legend{display:none}}@media screen and (max-width:700px),screen and (max-height:420px){.distance-legend{display:none}}.navigation-controls{position:absolute;right:30px;top:210px;width:30px;border:1px solid rgba(255,255,255,.1);font-weight:300;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.navigation-control{cursor:pointer;border-bottom:1px solid #555}.naviagation-control:active{color:#fff}.navigation-control-last{cursor:pointer;border-bottom:0}.navigation-control-icon-zoom-in{padding-bottom:4px}.navigation-control-icon-zoom-in,.navigation-control-icon-zoom-out{position:relative;text-align:center;font-size:20px;color:#fff}.navigation-control-icon-reset{position:relative;left:10px;width:10px;height:10px;fill:rgba(255,255,255,.8);padding-top:6px;padding-bottom:6px;box-sizing:content-box}.compass,.compass-outer-ring{position:absolute;width:95px;height:95px}.compass{pointer-events:auto;right:0;overflow:hidden;top:100px}.compass-outer-ring{top:0;fill:rgba(255,255,255,.5)}.compass-outer-ring-background{position:absolute;top:14px;left:14px;width:44px;height:44px;border-radius:44px;border:12px solid rgba(47,53,60,.8);box-sizing:content-box}.compass-gyro{pointer-events:none;position:absolute;top:0;width:95px;height:95px;fill:#ccc}.compass-gyro-active,.compass-gyro-background:hover+.compass-gyro{fill:#68adfe}.compass-gyro-background{position:absolute;top:30px;left:30px;width:33px;height:33px;border-radius:33px;background-color:rgba(47,53,60,.8);border:1px solid rgba(255,255,255,.2);box-sizing:content-box}.compass-rotation-marker{position:absolute;top:0;width:95px;height:95px;fill:#68adfe}@media screen and (max-width:700px),screen and (max-height:420px){.compass,.navigation-controls{display:none}}@media print{.compass,.navigation-controls{display:none}}');
 
 
 // actual code -->
@@ -2323,20 +2308,22 @@ define('Cesium/Core/defaultValue', function() { return Cesium["defaultValue"]; }
 define('Cesium/Core/Event', function() { return Cesium["Event"]; });
 define('Cesium/Widgets/getElement', function() { return Cesium["getElement"]; });
 define('Cesium/Widgets/SvgPathBindingHandler', function() { return Cesium["SvgPathBindingHandler"]; });
+define('Cesium/Core/Ray', function() { return Cesium["Ray"]; });
+define('Cesium/Core/Cartesian3', function() { return Cesium["Cartesian3"]; });
+define('Cesium/Core/Cartographic', function() { return Cesium["Cartographic"]; });
+define('Cesium/Scene/SceneMode', function() { return Cesium["SceneMode"]; });
 define('Cesium/Core/DeveloperError', function() { return Cesium["DeveloperError"]; });
 define('Cesium/Core/EllipsoidGeodesic', function() { return Cesium["EllipsoidGeodesic"]; });
 define('Cesium/Core/Cartesian2', function() { return Cesium["Cartesian2"]; });
 define('Cesium/Core/getTimestamp', function() { return Cesium["getTimestamp"]; });
 define('Cesium/Core/EventHelper', function() { return Cesium["EventHelper"]; });
-define('Cesium/Core/Ray', function() { return Cesium["Ray"]; });
-define('Cesium/Core/IntersectionTests', function() { return Cesium["IntersectionTests"]; });
-define('Cesium/Core/Ellipsoid', function() { return Cesium["Ellipsoid"]; });
 define('Cesium/Core/Math', function() { return Cesium["Math"]; });
 define('Cesium/Core/Transforms', function() { return Cesium["Transforms"]; });
-define('Cesium/Scene/SceneMode', function() { return Cesium["SceneMode"]; });
-define('Cesium/Core/Cartesian3', function() { return Cesium["Cartesian3"]; });
 define('Cesium/Core/Matrix4', function() { return Cesium["Matrix4"]; });
+define('Cesium/Core/BoundingSphere', function() { return Cesium["BoundingSphere"]; });
+define('Cesium/Core/HeadingPitchRange', function() { return Cesium["HeadingPitchRange"]; });
 define('Cesium/Scene/Camera', function() { return Cesium["Camera"]; });
+define('Cesium/Core/IntersectionTests', function() { return Cesium["IntersectionTests"]; });
     
     return require('viewerCesiumNavigationMixin');
 }));
