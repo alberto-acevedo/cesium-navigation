@@ -40,7 +40,7 @@
     app.use(compression());
     app.use(express.static(__dirname));
     // don't forget to copy necessary files when preparing the gh-pages on github since there is no redirecting
-    app.use('/cesiumNavigationSource', express.static(path.join(__dirname, '..', 'Source')));
+    app.use(express.static(path.join(__dirname, '..', 'Source')));
     app.use('/cesiumNavigationMainConfig.js', express.static(path.join(__dirname, '..', 'mainConfig.js')));
     app.use('/node_modules', express.static(path.join(__dirname, '..', 'node_modules')));
     app.use('/bower_components', express.static(path.join(__dirname, '..', 'bower_components')));

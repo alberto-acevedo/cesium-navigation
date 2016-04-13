@@ -10,11 +10,11 @@ Where are the dependencies from?
 
 The root directory of the server is `Examples` but some files from the parent/main directory are needed.
 This is achieved by internal redirects:
-- `dist`                          ->      `../dist`
-- `node_modules`                  ->      `../node_modules`
-- `bower_components`              ->      `../bower_components`
-- `cesiumNavigationSource`        ->      `../Source`
-- `cesiumNavigationMainConfig`    ->      `../mainConfig.js`
+- `/`                              ->      `../Source`   (note that the mapping `/` -> `/` still exists)
+- `/dist`                          ->      `../dist`
+- `/node_modules`                  ->      `../node_modules`
+- `/bower_components`              ->      `../bower_components`
+- `/cesiumNavigationMainConfig`    ->      `../mainConfig.js`
 
 Using these redirects ensures that the examples are always running with the current build and/or sources of the main project.
 Furthermore it avoids redundant node modules and/or bower components
