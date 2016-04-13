@@ -1571,44 +1571,48 @@ define('ViewModels/ZoomNavigationControl',[
             var camera = scene.camera;
             // var orientation;
 
-            if(scene.mode == SceneMode.MORPHING) {
-                return;
+            switch(scene.mode) {
+                case SceneMode.MORPHING:
+                    break;
+                case SceneMode.SCENE2D:
+                        camera.zoomIn(camera.positionCartographic.height * (1 - this.relativeAmount));
+                    break;
+                default:
+                    var focus = Utils.getCameraFocus(scene, false);
+
+                    if (!defined(focus)) {
+                        // Camera direction is not pointing at the globe, so use the ellipsoid horizon point as
+                        // the focal point.
+                        var ray = new Ray(camera.worldToCameraCoordinatesPoint(scene.globe.ellipsoid.cartographicToCartesian(camera.positionCartographic)), camera.directionWC);
+                        focus = IntersectionTests.grazingAltitudeLocation(ray, scene.globe.ellipsoid);
+
+                        //     orientation = {
+                        //         heading: camera.heading,
+                        //         pitch: camera.pitch,
+                        //         roll: camera.roll
+                        //     };
+                        // } else {
+                        //     orientation = {
+                        //         direction: camera.direction,
+                        //         up: camera.up
+                        //     };
+                    }
+
+                    var direction = Cartesian3.subtract(camera.position, focus, cartesian3Scratch);
+                    var movementVector = Cartesian3.multiplyByScalar(direction, relativeAmount, direction);
+                    var endPosition = Cartesian3.add(focus, movementVector, focus);
+
+                    // sometimes flyTo does not work (wrong position) so just set the position without any animation
+                    camera.position = endPosition;
+
+                //     camera.flyTo({
+                //         destination: endPosition,
+                //         orientation: orientation,
+                //         duration: 1,
+                //         convert: false
+                //     });
+                // }
             }
-
-            var focusWC = Utils.getCameraFocus(scene, false);
-
-            if (!defined(focusWC)) {
-                // Camera direction is not pointing at the globe, so use the ellipsoid horizon point as
-                // the focal point.
-                var ray = new Ray(camera.worldToCameraCoordinatesPoint(scene.globe.ellipsoid.cartographicToCartesian(camera.positionCartographic)), camera.directionWC);
-                focusWC = IntersectionTests.grazingAltitudeLocation(ray, scene.globe.ellipsoid);
-
-            //     orientation = {
-            //         heading: camera.heading,
-            //         pitch: camera.pitch,
-            //         roll: camera.roll
-            //     };
-            // } else {
-            //     orientation = {
-            //         direction: camera.direction,
-            //         up: camera.up
-            //     };
-            }
-
-            var direction = Cartesian3.subtract(camera.position, focusWC, cartesian3Scratch);
-            var movementVector = Cartesian3.multiplyByScalar(direction, relativeAmount, direction);
-            var endPosition = Cartesian3.add(focusWC, movementVector, focusWC);
-
-            // sometimes flyTo does not work (wrong position) so just set the position without any animation
-            camera.position = endPosition;
-
-            //     camera.flyTo({
-            //         destination: endPosition,
-            //         orientation: orientation,
-            //         duration: 1,
-            //         convert: false
-            //     });
-            // }
         }
 
         // this.terria.notifyRepaintRequired();
