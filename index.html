@@ -1,31 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Cesium-Navigation Examples</title>
-    <style>
-        dl > dt {
-            margin-top: 1em;
-            margin-bottom: 0.3em;
-            font-weight: bold;
-            font-variant: small-caps;
-        }
-    </style>
+  <title>Cesium-Navigation Example (standalone)</title>
+  <script src="node_modules/cesium/Build/Cesium/Cesium.js"></script>
+  <!-- IMPORTANT: because the cesium navigation viewer mixin depends on Cesium be sure to load it after Cesium -->
+  <script src="dist/standalone/viewerCesiumNavigationMixin.min.js"></script>
+  <style>
+      @import url(node_modules/cesium/Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
 </head>
 <body>
-<h1>Cesium-Navigation Examples</h1>
+  <div id="cesiumContainer"></div>
+	<script>
+	'use strict';
+	
+	// You can access the cesium navigation viewer mixin via
+	// Cesium.viewerCesiumNavigationMixin;
 
-<p>Three examples are available, one demonstrating the standalone, one the AMD compatible edition and one the
-    combination of using AMD but with a global Cesium access</p>
-<dl>
-    <dt><a href="standalone.html">Standalone Example</a></dt>
-    <dd>No AMD loader is needed but Cesium has to be defined as global variable.</dd>
-    <dt><a href="amd_except_cesium.html">Using AMD except for Cesium Example</a></dt>
-    <dd>Using AMD except for Cesium (so Cesium is not accessed via AMD but is a global variable). In this case, of
-        course, no path to Cesium has to be set and so one can use the standalone edition.
-    </dd>
-    <dt><a href="amd.html">Asynchronous Module Definition (AMD) with requirejs.optimize Example (was built apriori)</a>
-    </dt>
-    <dd>When using the AMD compatible version make sure to set 'Cesium' to point to the Cesium source directory.</dd>
-</dl>
+	var cesiumViewer = new Cesium.Viewer('cesiumContainer');
+
+	// extend our view by the cesium navigaton mixin
+	cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, {});
+	// you can access the cesium navigation by cesiumViewer.cesiumNavigation or cesiumViewer.cesiumWidget.cesiumNavigation
+
+	// just some entities
+	function createModel(url, longitude, latitude, height) {
+		var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height);
+		var heading = Cesium.Math.toRadians(135);
+		var pitch = 0;
+		var roll = 0;
+		var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, heading, pitch, roll);
+
+		var entity = cesiumViewer.entities.add({
+			name : url,
+			description: 'It is supposed to have a useful desciption here<br />but instead there is just a placeholder to get a larger info box',
+			position : position,
+			orientation : orientation,
+			model : {
+				uri : url,
+				minimumPixelSize : 96
+			}
+		});
+	}
+
+	createModel('models/Cesium_Air.glb', -100, 44, 10000.0);
+	createModel('models/Cesium_Ground.glb', -122, 45, 0);
+</script>
+
+  <script type="text/javascript">
+	// show info if accessed directly from disk
+	if (window.location.protocol === 'file:') {
+		document.body.innerHTML = "";
+		document.write('<p><b>This file must be hosted in a web server.</br>');
+		document.write('See our <a href="https://cesiumjs.org/tutorials/cesium-up-and-running/#setting-up-a-web-server">Getting Started</a> ');
+		document.write('tutorial for a step-by-step guide.</b></p>');
+	}
+  </script>
 </body>
 </html>
