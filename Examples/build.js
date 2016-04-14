@@ -1,5 +1,5 @@
 // This only builds the sources for the example amd.html
-// all other examples does not need to be built.
+// all other examples do not need to be built.
 
 var requirejs = require('requirejs');
 

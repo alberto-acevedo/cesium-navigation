@@ -5,8 +5,7 @@
 
     var express = require('express');
     var compression = require('compression');
-    var url = require('url');
-    var request = require('request');
+    var path = require('path');
 
     var yargs = require('yargs').options({
         'port' : {
@@ -16,12 +15,6 @@
         'public' : {
             'type' : 'boolean',
             'description' : 'Run a public server that listens on all interfaces.'
-        },
-        'upstream-proxy' : {
-            'description' : 'A standard proxy server that will be used to retrieve data.  Specify a URL including port, e.g. "http://proxy:8000".'
-        },
-        'bypass-upstream-proxy-hosts' : {
-            'description' : 'A comma separated list of hosts that will bypass the specified upstream_proxy, e.g. "lanhost1,lanhost2"'
         },
         'help' : {
             'alias' : 'h',
@@ -46,90 +39,22 @@
     var app = express();
     app.use(compression());
     app.use(express.static(__dirname));
+    // don't forget to copy necessary files when preparing the gh-pages on github since there is no redirecting
+    app.use(express.static(path.join(__dirname, '..', 'Source')));
+    app.use('/cesiumNavigationMainConfig.js', express.static(path.join(__dirname, '..', 'mainConfig.js')));
+    app.use('/node_modules', express.static(path.join(__dirname, '..', 'node_modules')));
+    app.use('/bower_components', express.static(path.join(__dirname, '..', 'bower_components')));
+    app.use('/dist', express.static(path.join(__dirname, '..', 'dist')));
 
-    function getRemoteUrlFromParam(req) {
-        var remoteUrl = req.params[0];
-        if (remoteUrl) {
-            // add http:// to the URL if no protocol is present
-            if (!/^https?:\/\//.test(remoteUrl)) {
-                remoteUrl = 'http://' + remoteUrl;
-            }
-            remoteUrl = url.parse(remoteUrl);
-            // copy query string
-            remoteUrl.search = url.parse(req.url).search;
-        }
-        return remoteUrl;
-    }
-
-    var dontProxyHeaderRegex = /^(?:Host|Proxy-Connection|Connection|Keep-Alive|Transfer-Encoding|TE|Trailer|Proxy-Authorization|Proxy-Authenticate|Upgrade)$/i;
-
-    function filterHeaders(req, headers) {
-        var result = {};
-        // filter out headers that are listed in the regex above
-        Object.keys(headers).forEach(function(name) {
-            if (!dontProxyHeaderRegex.test(name)) {
-                result[name] = headers[name];
-            }
-        });
-        return result;
-    }
-
-    var upstreamProxy = argv['upstream-proxy'];
-    var bypassUpstreamProxyHosts = {};
-    if (argv['bypass-upstream-proxy-hosts']) {
-        argv['bypass-upstream-proxy-hosts'].split(',').forEach(function(host) {
-            bypassUpstreamProxyHosts[host.toLowerCase()] = true;
-        });
-    }
-
-    app.get('/proxy/*', function(req, res, next) {
-        // look for request like http://localhost:8080/proxy/http://example.com/file?query=1
-        var remoteUrl = getRemoteUrlFromParam(req);
-        if (!remoteUrl) {
-            // look for request like http://localhost:8080/proxy/?http%3A%2F%2Fexample.com%2Ffile%3Fquery%3D1
-            remoteUrl = Object.keys(req.query)[0];
-            if (remoteUrl) {
-                remoteUrl = url.parse(remoteUrl);
-            }
-        }
-
-        if (!remoteUrl) {
-            return res.send(400, 'No url specified.');
-        }
-
-        if (!remoteUrl.protocol) {
-            remoteUrl.protocol = 'http:';
-        }
-
-        var proxy;
-        if (upstreamProxy && !(remoteUrl.host in bypassUpstreamProxyHosts)) {
-            proxy = upstreamProxy;
-        }
-
-        // encoding : null means "body" passed to the callback will be raw bytes
-
-        request.get({
-            url : url.format(remoteUrl),
-            headers : filterHeaders(req, req.headers),
-            encoding : null,
-            proxy : proxy
-        }, function(error, response, body) {
-            var code = 500;
-
-            if (response) {
-                code = response.statusCode;
-                res.header(filterHeaders(req, response.headers));
-            }
-
-            res.send(code, body);
-        });
-    });
+    var serverName = 'Cesium navigation examples server';
 
     var server = app.listen(argv.port, argv.public ? undefined : 'localhost', function() {
         if (argv.public) {
-            console.log('Cesium development server running publicly.  Connect to http://localhost:%d/', server.address().port);
+            console.log(serverName + ' is running publicly.');
+            console.log('\tConnect to http://\<your_ip\>:%d, e.g. http://localhost:%d', server.address().port, server.address().port);
         } else {
-            console.log('Cesium development server running locally.  Connect to http://localhost:%d/', server.address().port);
+            console.log(serverName + ' is running locally.');
+            console.log('\tConnect to http://localhost:%d', server.address().port);
         }
     });
 
@@ -147,15 +72,33 @@
         process.exit(1);
     });
 
-    server.on('close', function() {
-        console.log('Cesium development server stopped.');
-    });
+    // Maintain an array of all connected sockets
+    var sockets = [];
+    server.on('connection', function (socket) {
+        // Add a newly connected socket
+        sockets.push(socket);
 
-    process.on('SIGINT', function() {
-        server.close(function() {
-            process.exit(0);
+        // Remove the socket when it closes
+        socket.on('close', function () {
+            sockets.splice(sockets.indexOf(socket), 1);
         });
     });
+
+    var shutdownSever = function() {
+        server.close();
+
+        for (var i = 0; i < sockets.length; i++) {
+            sockets[i].destroy();
+        }
+    };
+
+    server.once('close', function() {
+        console.log(serverName + ' has stopped.');
+        process.exit();
+    });
+
+    process.once('SIGTERM', shutdownSever);
+    process.once('SIGINT', shutdownSever);
 
 })();
 

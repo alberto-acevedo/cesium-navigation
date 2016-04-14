@@ -9,14 +9,16 @@ define([
     'Cesium/Core/Cartesian2',
     'Cesium/Core/Cartesian3',
     'Cesium/Core/Matrix4',
+    'Cesium/Core/BoundingSphere',
+    'Cesium/Core/HeadingPitchRange',
     'KnockoutES5',
     'Core/loadView',
     'ViewModels/ResetViewNavigationControl',
-    'ViewModels/ZoomInNavigationControl',
-    'ViewModels/ZoomOutNavigationControl',
+    'ViewModels/ZoomNavigationControl',
     'SvgPaths/svgCompassOuterRing',
     'SvgPaths/svgCompassGyro',
-    'SvgPaths/svgCompassRotationMarker'
+    'SvgPaths/svgCompassRotationMarker',
+    'Core/Utils'
 ], function (
     defined,
     CesiumMath,
@@ -27,14 +29,16 @@ define([
     Cartesian2,
     Cartesian3,
     Matrix4,
+    BoundingSphere,
+    HeadingPitchRange,
     Knockout,
     loadView,
     ResetViewNavigationControl,
-    ZoomInNavigationControl,
-    ZoomOutNavigationControl,
+    ZoomNavigationControl,
     svgCompassOuterRing,
     svgCompassGyro,
-    svgCompassRotationMarker) {
+    svgCompassRotationMarker,
+    Utils) {
     'use strict';
 
     var NavigationViewModel = function (options) {
@@ -45,9 +49,9 @@ define([
         this.controls = options.controls;
         if (!defined(this.controls)) {
             this.controls = [
-                new ZoomInNavigationControl(this.terria),
+                new ZoomNavigationControl(this.terria, true),
                 new ResetViewNavigationControl(this.terria),
-                new ZoomOutNavigationControl(this.terria)
+                new ZoomNavigationControl(this.terria, false)
             ];
         }
 
@@ -172,6 +176,11 @@ define([
     var vectorScratch = new Cartesian2();
 
     NavigationViewModel.prototype.handleMouseDown = function (viewModel, e) {
+        var scene = this.terria.scene;
+        if (scene.mode == SceneMode.MORPHING) {
+            return true;
+        }
+
         var compassElement = e.currentTarget;
         var compassRectangle = e.currentTarget.getBoundingClientRect();
         var maxDistance = compassRectangle.width / 2.0;
@@ -199,17 +208,16 @@ define([
     var oldTransformScratch = new Matrix4();
     var newTransformScratch = new Matrix4();
     var centerScratch = new Cartesian3();
-    var windowPositionScratch = new Cartesian2();
 
     NavigationViewModel.prototype.handleDoubleClick = function (viewModel, e) {
         var scene = this.terria.scene;
         var camera = scene.camera;
 
-        var windowPosition = windowPositionScratch;
-        windowPosition.x = scene.canvas.clientWidth / 2;
-        windowPosition.y = scene.canvas.clientHeight / 2;
+        if (scene.mode == SceneMode.MORPHING || scene.mode == SceneMode.SCENE2D) {
+            return true;
+        }
 
-        var center = camera.pickEllipsoid(windowPosition, scene.globe.ellipsoid, centerScratch);
+        var center = Utils.getCameraFocus(scene, true, centerScratch);
 
         if (!defined(center)) {
             // Globe is barely visible, so reset to home view.
@@ -218,15 +226,15 @@ define([
             return;
         }
 
-        var rotateFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid);
-
+        // var rotateFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid);
+        //
         var cameraPosition = scene.globe.ellipsoid.cartographicToCartesian(camera.positionCartographic, new Cartesian3());
-        var lookVector = Cartesian3.subtract(center, cameraPosition, new Cartesian3());
+        // var lookVector = Cartesian3.subtract(center, cameraPosition, new Cartesian3());
+        //
+        // var destination = Matrix4.multiplyByPoint(rotateFrame, new Cartesian3(0, 0, Cartesian3.magnitude(lookVector)), new Cartesian3());
 
-        var destination = Matrix4.multiplyByPoint(rotateFrame, new Cartesian3(0, 0, Cartesian3.magnitude(lookVector)), new Cartesian3());
-
-        camera.flyTo({
-            destination: destination,
+        camera.flyToBoundingSphere(new BoundingSphere(center, 0), {
+            offset: new HeadingPitchRange(0, camera.pitch, Cartesian3.distance(cameraPosition, center)),
             duration: 1.5
         });
     };
@@ -256,11 +264,7 @@ define([
         var scene = viewModel.terria.scene;
         var camera = scene.camera;
 
-        var windowPosition = windowPositionScratch;
-        windowPosition.x = scene.canvas.clientWidth / 2;
-        windowPosition.y = scene.canvas.clientHeight / 2;
-
-        var center = camera.pickEllipsoid(windowPosition, scene.globe.ellipsoid, centerScratch);
+        var center = Utils.getCameraFocus(scene, true, centerScratch);
 
         if (!defined(center)) {
             viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
@@ -280,25 +284,19 @@ define([
             var x = Math.cos(angle) * distance;
             var y = Math.sin(angle) * distance;
 
-            var scene = viewModel.terria.scene;
-            var camera = scene.camera;
-
             var oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
 
             camera.lookAtTransform(viewModel.orbitFrame);
 
-            if (viewModel.orbitIsLook) {
-                camera.look(Cartesian3.UNIT_Z, -x);
-
-                // do not look up/down in 2D mode
-                if (scene.mode !== SceneMode.SCENE2D) {
-                    camera.look(camera.right, -y);
-                }
+            // do not look up/down or rotate in 2D mode
+            if (scene.mode == SceneMode.SCENE2D) {
+                camera.move(new Cartesian3(x, y, 0), Math.max(scene.canvas.clientWidth, scene.canvas.clientHeight) / 100 * camera.positionCartographic.height * distance);
             } else {
-                camera.rotateLeft(x);
-
-                // do not look up/down in 2D mode
-                if (scene.mode !== SceneMode.SCENE2D) {
+                if (viewModel.orbitIsLook) {
+                    camera.look(Cartesian3.UNIT_Z, -x);
+                    camera.look(camera.right, -y);
+                } else {
+                    camera.rotateLeft(x);
                     camera.rotateUp(y);
                 }
             }
@@ -355,6 +353,14 @@ define([
     }
 
     function rotate(viewModel, compassElement, cursorVector) {
+        var scene = viewModel.terria.scene;
+        var camera = scene.camera;
+
+        // do not look rotate in 2D mode
+        if (scene.mode == SceneMode.SCENE2D) {
+            return;
+        }
+
         // Remove existing event handlers, if any.
         document.removeEventListener('mousemove', viewModel.rotateMouseMoveFunction, false);
         document.removeEventListener('mouseup', viewModel.rotateMouseUpFunction, false);
@@ -365,14 +371,7 @@ define([
         viewModel.isRotating = true;
         viewModel.rotateInitialCursorAngle = Math.atan2(-cursorVector.y, cursorVector.x);
 
-        var scene = viewModel.terria.scene;
-        var camera = scene.camera;
-
-        var windowPosition = windowPositionScratch;
-        windowPosition.x = scene.canvas.clientWidth / 2;
-        windowPosition.y = scene.canvas.clientHeight / 2;
-
-        var viewCenter = camera.pickEllipsoid(windowPosition, scene.globe.ellipsoid, centerScratch);
+        var viewCenter = Utils.getCameraFocus(scene, true, centerScratch);
 
         if (!defined(viewCenter)) {
             viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);

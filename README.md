@@ -159,6 +159,11 @@ require([
 - The build process also copies the files to the Example folder in order to always keep them sync with your build
 
 
+**Developers guide**
+
+For developing/debugging you should have a look at the "Source example". That example directly uses the source files and therefore it allows you to immediatley (only a page refresh is needed) see your changes without rebuilding anything. Furthermore due to working with the sources you can easily debug the project (e.g. via the developer console of the browser or via a debugger of your IDE like Webstorm)
+
+
 **Is there a demo using the plugin ?**
 
 This is the demo:

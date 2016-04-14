@@ -21,8 +21,8 @@
 <div id="cesiumContainer"></div>
 <script>
 // IMPORTANT: because the cesium navigation viewer mixin depends on Cesium be sure to load Cesium before the first attempt of using it
-require(['Widgets/standalone/viewerCesiumNavigationMixin.min'], function(viewerCesiumNavigationMixin) {
-    "use strict";
+require(['dist/standalone/viewerCesiumNavigationMixin.min'], function(viewerCesiumNavigationMixin) {
+    'use strict';
 	
 	// You can also access viewerCesiumNavigationMixin via
 	// Cesium.viewerCesiumNavigationMixin;
@@ -61,7 +61,7 @@ require(['Widgets/standalone/viewerCesiumNavigationMixin.min'], function(viewerC
   <script type="text/javascript">
 	// show info if accessed directly from disk
 	if (window.location.protocol === 'file:') {
-		document.body.innerHTML = ""
+		document.body.innerHTML = "";
 		document.write('<p><b>This file must be hosted in a web server.</br>');
 		document.write('See our <a href="https://cesiumjs.org/tutorials/cesium-up-and-running/#setting-up-a-web-server">Getting Started</a> ');
 		document.write('tutorial for a step-by-step guide.</b></p>');

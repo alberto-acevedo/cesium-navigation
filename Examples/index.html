@@ -15,6 +15,8 @@
 <h1>Cesium-Navigation Examples</h1>
 <p>Three examples are available, one demonstrating the standalone, one the AMD compatible edition and one the combination of using AMD but with a global Cesium access</p>
 <dl>
+  <dt><a href="sources.html">Sources Example</a></dt>
+  <dd>Using the sources without building anything. This is also great for developing/debugging the source since any changes are available on browser refresh.</dd>
   <dt><a href="standalone.html">Standalone Example</a></dt>
   <dd>No AMD loader is needed but Cesium has to be defined as global variable.</dd>
   <dt><a href="amd_except_cesium.html">Using AMD except for Cesium Example</a></dt>
@@ -26,7 +28,7 @@
   <script type="text/javascript">
 	// show info if accessed directly from disk
 	if (window.location.protocol === 'file:') {
-		document.body.innerHTML = ""
+		document.body.innerHTML = "";
 		document.write('<p><b>This file must be hosted in a web server.</br>');
 		document.write('See our <a href="https://cesiumjs.org/tutorials/cesium-up-and-running/#setting-up-a-web-server">Getting Started</a> ');
 		document.write('tutorial for a step-by-step guide.</b></p>');

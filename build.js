@@ -163,10 +163,6 @@
 
         minify(rjsConfig.out, function (minFile) {
             console.log('Generated minified ' + minFile);
-
-            // copy built file to keep examples up to date
-            fs.copySync(minFile, path.join(examplesDir, 'Widgets', 'standalone', 'viewerCesiumNavigationMixin.min.js'), {clobber: true});
-            console.log('Copied minified built file to keep examples synchronized with build');
         });
     });
     // -->
@@ -193,10 +189,6 @@
 
         minify(rjsAMDConfig.out, function (minFile) {
             console.log('Generated minified ' + minFile);
-
-            // copy built file to keep examples up to date
-            fs.copySync(minFile, path.join(examplesDir, 'Widgets', 'amd', 'viewerCesiumNavigationMixin.min.js'), {clobber: true});
-            console.log('Copied ' + minFile + ' to keep examples synchronized with build');
         });
     });
     // -->
