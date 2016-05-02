@@ -143,6 +143,19 @@ require([
   // but use just viewerCesiumNavigationMixin
 });
 ```
+- Setting the options for the plugin:
+```
+defaultResetView --> option used to set a default view when resetting the map view with the reset navigation control. Values 
+accepted are of type Cesium.Cartographic and Cesium.Rectangle.
+
+More options will be set in future releases of the plugin.
+```
+Example of using the options when  loading Cesium without requirejs: 
+```JavaScript
+var options = {};
+options.defaultResetView = Cesium.Rectangle.fromDegrees(71, 3, 90, 14);
+cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
+```
 
 - if there are still open questions checkout the examples
 

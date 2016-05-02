@@ -1351,7 +1351,6 @@ define('ViewModels/ResetViewNavigationControl',[
          */
         var ResetViewNavigationControl = function (terria)
             {
-                debugger;
                 NavigationControl.apply(this, arguments);
 
                 /**
@@ -1398,32 +1397,31 @@ define('ViewModels/ResetViewNavigationControl',[
                 var camera = this.terria.scene.camera;
 
                 //reset to a default position or view defined in  the options
-                if (this.terria.options.resetView)
+                if (this.terria.options.defaultResetView)
                     {
-                        if (this.terria.options.resetView && this.terria.options.resetView.location)
+                        if (this.terria.options.defaultResetView && this.terria.options.defaultResetView instanceof  Cesium.Cartographic)
                             {
-                                camera.setView({
-                                    destination: Cesium.Ellipsoid.WGS84.cartographicToCartesian(this.terria.options.resetView.location)// .05 to calibrate to scale
+                                camera.flyTo({
+                                    destination: Cesium.Ellipsoid.WGS84.cartographicToCartesian(this.terria.options.defaultResetView)
                                 });
-                            } else if (this.terria.options.resetView && this.terria.options.resetView.rectangle)
+                            } else   if (this.terria.options.defaultResetView && this.terria.options.defaultResetView instanceof  Cesium.Rectangle)
                             {
                                 try
                                     {
-                                        Cesium.Rectangle.validate(this.terria.options.resetView.rectangle);
-                                        camera.setView({
-                                            destination: this.terria.options.resetView.rectangle
+                                        Cesium.Rectangle.validate(this.terria.options.defaultResetView);
+                                        camera.flyTo({
+                                            destination: this.terria.options.defaultResetView
                                         });
                                     } catch (e)
                                     {
-                                        //do nothing
+                                        console.log("Cesium-navigation/ResetViewNavigationControl:   options.defaultResetView Cesium rectangle is  invalid!");
                                     }
                             }
                     } 
                     else if (typeof camera.flyHome === "function")
                     {
                         camera.flyHome(1);
-                    } 
-                    else
+                    } else
                     {
                         camera.flyTo({'destination': Camera.DEFAULT_VIEW_RECTANGLE, 'duration': 1});
                     }
