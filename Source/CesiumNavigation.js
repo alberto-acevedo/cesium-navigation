@@ -85,6 +85,7 @@ define([
         cesiumWidget.container.appendChild(container);
 
         this.terria = cesiumWidget;
+        this.terria.options = options;
         this.terria.afterWidgetChanged = new CesiumEvent();
         this.terria.beforeWidgetChanged = new CesiumEvent();
         this.container = container;
