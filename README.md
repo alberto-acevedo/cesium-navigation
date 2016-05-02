@@ -145,8 +145,8 @@ require([
 ```
 - Setting the options for the plugin:
 ```
-defaultResetView --> option used to set a default view when resetting the map view with the reset navigation control. Values 
-accepted are of type Cesium.Cartographic and Cesium.Rectangle.
+defaultResetView --> option used to set a default view when resetting the map view with the reset navigation 
+control. Values accepted are of type Cesium.Cartographic and Cesium.Rectangle.
 
 More options will be set in future releases of the plugin.
 ```
