@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
   <title>Cesium-Navigation Example (standalone)</title>
+  <script type="text/javascript">var CESIUM_BASE_URL = "node_modules/cesium/Build/Cesium";</script>
   <script src="node_modules/cesium/Build/Cesium/Cesium.js"></script>
   <!-- IMPORTANT: because the cesium navigation viewer mixin depends on Cesium be sure to load it after Cesium -->
   <script src="dist/standalone/viewerCesiumNavigationMixin.min.js"></script>
+  <script src="Source/SpirographPositionProperty.js"></script>
   <style>
       @import url(node_modules/cesium/Build/Cesium/Widgets/widgets.css);
       html, body, #cesiumContainer {
@@ -16,38 +18,38 @@
   <div id="cesiumContainer"></div>
 	<script>
 	'use strict';
-	
+
 	// You can access the cesium navigation viewer mixin via
 	// Cesium.viewerCesiumNavigationMixin;
 
 	var cesiumViewer = new Cesium.Viewer('cesiumContainer');
 
-	// extend our view by the cesium navigaton mixin
+	// extend our view by the cesium navigation mixin
 	cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, {});
 	// you can access the cesium navigation by cesiumViewer.cesiumNavigation or cesiumViewer.cesiumWidget.cesiumNavigation
 
-	// just some entities
-	function createModel(url, longitude, latitude, height) {
-		var position = Cesium.Cartesian3.fromDegrees(longitude, latitude, height);
-		var heading = Cesium.Math.toRadians(135);
-		var pitch = 0;
-		var roll = 0;
-		var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, heading, pitch, roll);
+    function createSpirographEntity(url, longitude, latitude, height, radiusMedian, radiusSubCircle,
+                                    durationMedianCircle, durationSubCircle) {
+        var centerPosition = Cesium.Cartographic.fromDegrees(longitude, latitude, height);
+        var spirographPositionProperty = new Cesium.SpirographPositionProperty(centerPosition, radiusMedian, radiusSubCircle,
+                durationMedianCircle, durationSubCircle, cesiumViewer.scene.globe.ellipsoid);
 
-		var entity = cesiumViewer.entities.add({
-			name : url,
-			description: 'It is supposed to have a useful desciption here<br />but instead there is just a placeholder to get a larger info box',
-			position : position,
-			orientation : orientation,
-			model : {
-				uri : url,
-				minimumPixelSize : 96
-			}
-		});
-	}
+        cesiumViewer.entities.add({
+            name : url,
+            description: 'It is supposed to have a useful desciption here<br />but instead there is just a placeholder to get a larger info box',
+            position: spirographPositionProperty,
+            orientation: new Cesium.VelocityOrientationProperty(spirographPositionProperty, cesiumViewer.scene.globe.ellipsoid),
+            model : {
+                uri : url,
+                minimumPixelSize : 96
+            }
+        });
+    }
 
-	createModel('models/Cesium_Air.glb', -100, 44, 10000.0);
-	createModel('models/Cesium_Ground.glb', -122, 45, 0);
+    createSpirographEntity('models/Cesium_Air.glb', -100, 44, 10000.0,
+            Cesium.Math.toRadians(0.5), Cesium.Math.toRadians(2), 1e6, 2e5);
+    createSpirographEntity('models/Cesium_Ground.glb', -122, 45, 0,
+            Cesium.Math.toRadians(0.1), Cesium.Math.toRadians(1), 5e6, 7e5);
 </script>
 
   <script type="text/javascript">

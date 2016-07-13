@@ -43,6 +43,7 @@
     app.use(express.static(path.join(__dirname, '..', 'Source')));
     app.use('/cesiumNavigationMainConfig.js', express.static(path.join(__dirname, '..', 'mainConfig.js')));
     app.use('/node_modules', express.static(path.join(__dirname, '..', 'node_modules')));
+    app.use('/Cesium', express.static(path.join(__dirname, '..', 'node_modules/cesium/Build/Cesium')));
     app.use('/bower_components', express.static(path.join(__dirname, '..', 'bower_components')));
     app.use('/dist', express.static(path.join(__dirname, '..', 'dist')));
 
