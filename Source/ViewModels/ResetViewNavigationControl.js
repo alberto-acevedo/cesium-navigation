@@ -2,11 +2,15 @@
 define([
     'Cesium/Core/defined',
     'Cesium/Scene/Camera',
+    'Cesium/Core/Rectangle',
+    'Cesium/Core/Cartographic',
     'ViewModels/NavigationControl',
     'SvgPaths/svgReset'
 ], function (
     defined,
     Camera,
+    Rectangle,
+    Cartographic,
     NavigationControl,
     svgReset) {
         'use strict';
@@ -80,13 +84,13 @@ define([
         } else {
             // reset to a default position or view defined in the options
             if (this.terria.options.defaultResetView) {
-                if (this.terria.options.defaultResetView && this.terria.options.defaultResetView instanceof Cesium.Cartographic) {
+                if (this.terria.options.defaultResetView && this.terria.options.defaultResetView instanceof Cartographic) {
                     camera.flyTo({
-                        destination: Cesium.Ellipsoid.WGS84.cartographicToCartesian(this.terria.options.defaultResetView)
+                        destination: scene.globe.ellipsoid.cartographicToCartesian(this.terria.options.defaultResetView)
                     });
-                } else if (this.terria.options.defaultResetView && this.terria.options.defaultResetView instanceof Cesium.Rectangle) {
+                } else if (this.terria.options.defaultResetView && this.terria.options.defaultResetView instanceof Rectangle) {
                     try {
-                        Cesium.Rectangle.validate(this.terria.options.defaultResetView);
+                        Rectangle.validate(this.terria.options.defaultResetView);
                         camera.flyTo({
                             destination: this.terria.options.defaultResetView
                         });
