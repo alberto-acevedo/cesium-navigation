@@ -3,15 +3,8 @@
 <head>
   <title>Cesium-Navigation Example (using requirejs.optimize)</title>
   <script type="text/javascript" src="node_modules/requirejs/require.js"></script>
-  <script type="text/javascript">
-      requirejs.config({
-          paths: {
-              Cesium: "node_modules/cesium/Source"
-          }
-      });
-  </script>
   <style>
-      @import url(node_modules/cesium/Source/Widgets/widgets.css);
+      @import url(node_modules/cesium/Build/Cesium/Widgets/widgets.css);
       html, body, #cesiumContainer {
           width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
       }
@@ -21,7 +14,7 @@
   <div id="cesiumContainer"></div>
   <!-- This file was built with nodejs and requirejs.optimize -->
   <!-- The main file was Source/amd/main.js -->
-  <!-- To build this file on your own, simply run `node build.js` (first you might need to run `npm install` once) -->
+  <!-- To build this file on your own, simply run `node build.js` (for the first time you might need to run `npm install`) -->
   <script type="text/javascript" src="Build/amd.min.js"></script>
 
   <script type="text/javascript">

@@ -4,12 +4,14 @@ define([
     'Cesium/Core/Ray',
     'Cesium/Core/Cartesian3',
     'Cesium/Core/Cartographic',
+    'Cesium/Core/ReferenceFrame',
     'Cesium/Scene/SceneMode'
 ], function (
     defined,
     Ray,
     Cartesian3,
     Cartographic,
+    ReferenceFrame,
     SceneMode) {
     'use strict';
 
@@ -20,12 +22,15 @@ define([
 
     /**
      * gets the focus point of the camera
-     * @param {Scene} scene The scene
+     * @param {Viewer|Widget} terria The terria
      * @param {boolean} inWorldCoordinates true to get the focus in world coordinates, otherwise get it in projection-specific map coordinates, in meters.
      * @param {Cartesian3} [result] The object in which the result will be stored.
      * @return {Cartesian3} The modified result parameter, a new instance if none was provided or undefined if there is no focus point.
      */
-    Utils.getCameraFocus = function (scene, inWorldCoordinates, result) {
+    Utils.getCameraFocus = function (terria, inWorldCoordinates, result) {
+        var scene = terria.scene;
+        var camera = scene.camera;
+
         if(scene.mode == SceneMode.MORPHING) {
             return undefined;
         }
@@ -34,29 +39,34 @@ define([
             result = new Cartesian3();
         }
 
-        var camera = scene.camera;
+        // TODO bug when tracking: if entity moves the current position should be used and not only the one when starting orbiting/rotating
+        // TODO bug when tracking: reset should reset to default view of tracked entity
 
-        rayScratch.origin = camera.positionWC;
-        rayScratch.direction = camera.directionWC;
-        var center = scene.globe.pick(rayScratch, scene, result);
+        if(defined(terria.trackedEntity)) {
+            result = terria.trackedEntity.position.getValue(terria.clock.currentTime, result);
+        } else {
+            rayScratch.origin = camera.positionWC;
+            rayScratch.direction = camera.directionWC;
+            result = scene.globe.pick(rayScratch, scene, result);
+        }
 
-        if (!defined(center)) {
+        if (!defined(result)) {
             return undefined;
         }
 
         if(scene.mode == SceneMode.SCENE2D || scene.mode == SceneMode.COLUMBUS_VIEW) {
-            center = camera.worldToCameraCoordinatesPoint(center, result);
+            result = camera.worldToCameraCoordinatesPoint(result, result);
 
             if(inWorldCoordinates) {
-                center = scene.globe.ellipsoid.cartographicToCartesian(scene.mapProjection.unproject(center, unprojectedScratch), result);
+                result = scene.globe.ellipsoid.cartographicToCartesian(scene.mapProjection.unproject(result, unprojectedScratch), result);
             }
         } else {
             if(!inWorldCoordinates) {
-                center = camera.worldToCameraCoordinatesPoint(center, result);
+                result = camera.worldToCameraCoordinatesPoint(result, result);
             }
         }
 
-        return center;
+        return result;
     };
 
     return Utils;

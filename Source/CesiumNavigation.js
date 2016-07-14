@@ -23,9 +23,9 @@ define([
      * @alias CesiumNavigation
      * @constructor
      *
-     * @param {CesiumWidget} cesiumWidget The CesiumWidget instance
+     * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance
      */
-    var CesiumNavigation = function (cesiumWidget) {
+    var CesiumNavigation = function (viewerCesiumWidget) {
         initialize.apply(this, arguments);
 
         this._onDestroyListeners = [];
@@ -73,18 +73,24 @@ define([
         }
     };
 
-    function initialize(cesiumWidget, options) {
-        if (!defined(cesiumWidget)) {
-            throw new DeveloperError('cesiumWidget is required.');
+    /**
+     * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance
+     * @param options
+     */
+    function initialize(viewerCesiumWidget, options) {
+        if (!defined(viewerCesiumWidget)) {
+            throw new DeveloperError('CesiumWidget or Viewer is required.');
         }
 
 //        options = defaultValue(options, defaultValue.EMPTY_OBJECT);
+
+        var cesiumWidget = defined(viewerCesiumWidget.cesiumWidget) ? viewerCesiumWidget.cesiumWidget : viewerCesiumWidget;
 
         var container = document.createElement('div');
         container.className = 'cesium-widget-cesiumNavigationContainer';
         cesiumWidget.container.appendChild(container);
 
-        this.terria = cesiumWidget;
+        this.terria = viewerCesiumWidget;
         this.terria.options = options;
         this.terria.afterWidgetChanged = new CesiumEvent();
         this.terria.beforeWidgetChanged = new CesiumEvent();

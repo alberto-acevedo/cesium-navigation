@@ -37,7 +37,7 @@ define([
             throw new DeveloperError('viewer is required.');
         }
 
-        var cesiumNavigation = init(viewer.cesiumWidget, options);
+        var cesiumNavigation = init(viewer, options);
 
         cesiumNavigation.addOnDestroyListener((function (viewer) {
             return function () {
@@ -64,8 +64,14 @@ define([
         return init.apply(undefined, arguments);
     };
 
-    var init = function (cesiumWidget, options) {
-        var cesiumNavigation = new CesiumNavigation(cesiumWidget, options);
+    /**
+     * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance
+     * @param {{}} options the options
+     */
+    var init = function (viewerCesiumWidget, options) {
+        var cesiumNavigation = new CesiumNavigation(viewerCesiumWidget, options);
+
+        var cesiumWidget = defined(viewerCesiumWidget.cesiumWidget) ? viewerCesiumWidget.cesiumWidget : viewerCesiumWidget;
 
         defineProperties(cesiumWidget, {
             cesiumNavigation: {
