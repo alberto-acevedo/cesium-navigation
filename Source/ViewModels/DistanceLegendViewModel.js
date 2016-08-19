@@ -33,6 +33,8 @@ define([
 
         this.distanceLabel = undefined;
         this.barWidth = undefined;
+        
+        this.enableDistanceLegend =  (defined(options.enableDistanceLegend))?options.enableDistanceLegend:true;
 
         Knockout.track(this, ['distanceLabel', 'barWidth']);
 
@@ -92,17 +94,28 @@ define([
     };
 
     DistanceLegendViewModel.prototype.show = function (container) {
-        var testing = '<div class="distance-legend" data-bind="visible: distanceLabel && barWidth">' +
-            '<div class="distance-legend-label" data-bind="text: distanceLabel"></div>' +
-            '<div class="distance-legend-scale-bar" data-bind="style: { width: barWidth + \'px\', left: (5 + (125 - barWidth) / 2) + \'px\' }"></div>' +
-            '</div>';
+        var testing ;
+        if ( this.enableDistanceLegend)
+        {
+             testing = '<div class="distance-legend" data-bind="visible: distanceLabel && barWidth">' +
+                '<div class="distance-legend-label" data-bind="text: distanceLabel"></div>' +
+                '<div class="distance-legend-scale-bar" data-bind="style: { width: barWidth + \'px\', left: (5 + (125 - barWidth) / 2) + \'px\' }"></div>' +
+                '</div>';
+        }
+        else
+        {
+             testing = '<div class="distance-legend"  style="display: none;" data-bind="visible: distanceLabel && barWidth">' +
+                '<div class="distance-legend-label"  data-bind="text: distanceLabel"></div>' +
+                '<div class="distance-legend-scale-bar"  data-bind="style: { width: barWidth + \'px\', left: (5 + (125 - barWidth) / 2) + \'px\' }"></div>' +
+                '</div>';
+        }
         loadView(testing, container, this);
         // loadView(distanceLegendTemplate, container, this);
         //loadView(require('fs').readFileSync(__dirname + '/../Views/DistanceLegend.html', 'utf8'), container, this);
     };
 
     DistanceLegendViewModel.create = function (options) {
-
+        options.enableDistanceLegend  = this.enableDistanceLegend;
         var result = new DistanceLegendViewModel(options);
         result.show(options.container);
         return result;
@@ -121,7 +134,12 @@ define([
         10000000, 20000000, 30000000, 50000000];
 
     function updateDistanceLegendCesium(viewModel, scene) {
-
+        if (!this.enableDistanceLegend)
+        {
+             viewModel.barWidth = undefined;
+            viewModel.distanceLabel = undefined;
+            return;
+        }
         var now = getTimestamp();
         if (now < viewModel._lastLegendUpdate + 250) {
             return;
