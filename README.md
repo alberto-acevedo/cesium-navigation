@@ -148,6 +148,12 @@ require([
 defaultResetView --> option used to set a default view when resetting the map view with the reset navigation 
 control. Values accepted are of type Cesium.Cartographic and Cesium.Rectangle.
 
+enableCompass --> option used to enable or disable the compass. Values accepted are true for enabling and false to disable. The default is true.
+
+enableZoomControls --> option used to enable or disable the zoom controls. Values accepted are true for enabling and false to disable. The default is true.
+
+enableDistanceLegend --> option used to enable or disable the distance legend. Values accepted are true for enabling and false to disable. The default is true.
+
 More options will be set in future releases of the plugin.
 ```
 Example of using the options when  loading Cesium without requirejs: 
