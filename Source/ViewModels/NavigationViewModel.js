@@ -350,8 +350,8 @@ define([
 
     NavigationViewModel.create = function (options)
     {
-        options.enableZoomControls = this.enableZoomControls;
-        options.enableCompass = this.enableCompass;
+        //options.enableZoomControls = this.enableZoomControls;
+        //options.enableCompass = this.enableCompass;
         var result = new NavigationViewModel(options);
         result.show(options.container);
         return result;

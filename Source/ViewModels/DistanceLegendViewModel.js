@@ -115,7 +115,6 @@ define([
     };
 
     DistanceLegendViewModel.create = function (options) {
-        options.enableDistanceLegend  = this.enableDistanceLegend;
         var result = new DistanceLegendViewModel(options);
         result.show(options.container);
         return result;
@@ -134,7 +133,7 @@ define([
         10000000, 20000000, 30000000, 50000000];
 
     function updateDistanceLegendCesium(viewModel, scene) {
-        if (!this.enableDistanceLegend)
+        if (!viewModel.enableDistanceLegend)
         {
              viewModel.barWidth = undefined;
             viewModel.distanceLabel = undefined;

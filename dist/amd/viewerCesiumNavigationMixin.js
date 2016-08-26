@@ -399,13 +399,13 @@ define('Core/KnockoutMarkdownBinding',[
 });
 
 
-/*! Hammer.JS - v2.0.6 - 2015-12-23
+/*! Hammer.JS - v2.0.7 - 2016-04-22
  * http://hammerjs.github.io/
  *
- * Copyright (c) 2015 Jorik Tangelder;
- * Licensed under the  license */
-!function(a,b,c,d){"use strict";function e(a,b,c){return setTimeout(j(a,c),b)}function f(a,b,c){return Array.isArray(a)?(g(a,c[b],c),!0):!1}function g(a,b,c){var e;if(a)if(a.forEach)a.forEach(b,c);else if(a.length!==d)for(e=0;e<a.length;)b.call(c,a[e],e,a),e++;else for(e in a)a.hasOwnProperty(e)&&b.call(c,a[e],e,a)}function h(b,c,d){var e="DEPRECATED METHOD: "+c+"\n"+d+" AT \n";return function(){var c=new Error("get-stack-trace"),d=c&&c.stack?c.stack.replace(/^[^\(]+?[\n$]/gm,"").replace(/^\s+at\s+/gm,"").replace(/^Object.<anonymous>\s*\(/gm,"{anonymous}()@"):"Unknown Stack Trace",f=a.console&&(a.console.warn||a.console.log);return f&&f.call(a.console,e,d),b.apply(this,arguments)}}function i(a,b,c){var d,e=b.prototype;d=a.prototype=Object.create(e),d.constructor=a,d._super=e,c&&hb(d,c)}function j(a,b){return function(){return a.apply(b,arguments)}}function k(a,b){return typeof a==kb?a.apply(b?b[0]||d:d,b):a}function l(a,b){return a===d?b:a}function m(a,b,c){g(q(b),function(b){a.addEventListener(b,c,!1)})}function n(a,b,c){g(q(b),function(b){a.removeEventListener(b,c,!1)})}function o(a,b){for(;a;){if(a==b)return!0;a=a.parentNode}return!1}function p(a,b){return a.indexOf(b)>-1}function q(a){return a.trim().split(/\s+/g)}function r(a,b,c){if(a.indexOf&&!c)return a.indexOf(b);for(var d=0;d<a.length;){if(c&&a[d][c]==b||!c&&a[d]===b)return d;d++}return-1}function s(a){return Array.prototype.slice.call(a,0)}function t(a,b,c){for(var d=[],e=[],f=0;f<a.length;){var g=b?a[f][b]:a[f];r(e,g)<0&&d.push(a[f]),e[f]=g,f++}return c&&(d=b?d.sort(function(a,c){return a[b]>c[b]}):d.sort()),d}function u(a,b){for(var c,e,f=b[0].toUpperCase()+b.slice(1),g=0;g<ib.length;){if(c=ib[g],e=c?c+f:b,e in a)return e;g++}return d}function v(){return qb++}function w(b){var c=b.ownerDocument||b;return c.defaultView||c.parentWindow||a}function x(a,b){var c=this;this.manager=a,this.callback=b,this.element=a.element,this.target=a.options.inputTarget,this.domHandler=function(b){k(a.options.enable,[a])&&c.handler(b)},this.init()}function y(a){var b,c=a.options.inputClass;return new(b=c?c:tb?M:ub?P:sb?R:L)(a,z)}function z(a,b,c){var d=c.pointers.length,e=c.changedPointers.length,f=b&Ab&&d-e===0,g=b&(Cb|Db)&&d-e===0;c.isFirst=!!f,c.isFinal=!!g,f&&(a.session={}),c.eventType=b,A(a,c),a.emit("hammer.input",c),a.recognize(c),a.session.prevInput=c}function A(a,b){var c=a.session,d=b.pointers,e=d.length;c.firstInput||(c.firstInput=D(b)),e>1&&!c.firstMultiple?c.firstMultiple=D(b):1===e&&(c.firstMultiple=!1);var f=c.firstInput,g=c.firstMultiple,h=g?g.center:f.center,i=b.center=E(d);b.timeStamp=nb(),b.deltaTime=b.timeStamp-f.timeStamp,b.angle=I(h,i),b.distance=H(h,i),B(c,b),b.offsetDirection=G(b.deltaX,b.deltaY);var j=F(b.deltaTime,b.deltaX,b.deltaY);b.overallVelocityX=j.x,b.overallVelocityY=j.y,b.overallVelocity=mb(j.x)>mb(j.y)?j.x:j.y,b.scale=g?K(g.pointers,d):1,b.rotation=g?J(g.pointers,d):0,b.maxPointers=c.prevInput?b.pointers.length>c.prevInput.maxPointers?b.pointers.length:c.prevInput.maxPointers:b.pointers.length,C(c,b);var k=a.element;o(b.srcEvent.target,k)&&(k=b.srcEvent.target),b.target=k}function B(a,b){var c=b.center,d=a.offsetDelta||{},e=a.prevDelta||{},f=a.prevInput||{};(b.eventType===Ab||f.eventType===Cb)&&(e=a.prevDelta={x:f.deltaX||0,y:f.deltaY||0},d=a.offsetDelta={x:c.x,y:c.y}),b.deltaX=e.x+(c.x-d.x),b.deltaY=e.y+(c.y-d.y)}function C(a,b){var c,e,f,g,h=a.lastInterval||b,i=b.timeStamp-h.timeStamp;if(b.eventType!=Db&&(i>zb||h.velocity===d)){var j=b.deltaX-h.deltaX,k=b.deltaY-h.deltaY,l=F(i,j,k);e=l.x,f=l.y,c=mb(l.x)>mb(l.y)?l.x:l.y,g=G(j,k),a.lastInterval=b}else c=h.velocity,e=h.velocityX,f=h.velocityY,g=h.direction;b.velocity=c,b.velocityX=e,b.velocityY=f,b.direction=g}function D(a){for(var b=[],c=0;c<a.pointers.length;)b[c]={clientX:lb(a.pointers[c].clientX),clientY:lb(a.pointers[c].clientY)},c++;return{timeStamp:nb(),pointers:b,center:E(b),deltaX:a.deltaX,deltaY:a.deltaY}}function E(a){var b=a.length;if(1===b)return{x:lb(a[0].clientX),y:lb(a[0].clientY)};for(var c=0,d=0,e=0;b>e;)c+=a[e].clientX,d+=a[e].clientY,e++;return{x:lb(c/b),y:lb(d/b)}}function F(a,b,c){return{x:b/a||0,y:c/a||0}}function G(a,b){return a===b?Eb:mb(a)>=mb(b)?0>a?Fb:Gb:0>b?Hb:Ib}function H(a,b,c){c||(c=Mb);var d=b[c[0]]-a[c[0]],e=b[c[1]]-a[c[1]];return Math.sqrt(d*d+e*e)}function I(a,b,c){c||(c=Mb);var d=b[c[0]]-a[c[0]],e=b[c[1]]-a[c[1]];return 180*Math.atan2(e,d)/Math.PI}function J(a,b){return I(b[1],b[0],Nb)+I(a[1],a[0],Nb)}function K(a,b){return H(b[0],b[1],Nb)/H(a[0],a[1],Nb)}function L(){this.evEl=Pb,this.evWin=Qb,this.allow=!0,this.pressed=!1,x.apply(this,arguments)}function M(){this.evEl=Tb,this.evWin=Ub,x.apply(this,arguments),this.store=this.manager.session.pointerEvents=[]}function N(){this.evTarget=Wb,this.evWin=Xb,this.started=!1,x.apply(this,arguments)}function O(a,b){var c=s(a.touches),d=s(a.changedTouches);return b&(Cb|Db)&&(c=t(c.concat(d),"identifier",!0)),[c,d]}function P(){this.evTarget=Zb,this.targetIds={},x.apply(this,arguments)}function Q(a,b){var c=s(a.touches),d=this.targetIds;if(b&(Ab|Bb)&&1===c.length)return d[c[0].identifier]=!0,[c,c];var e,f,g=s(a.changedTouches),h=[],i=this.target;if(f=c.filter(function(a){return o(a.target,i)}),b===Ab)for(e=0;e<f.length;)d[f[e].identifier]=!0,e++;for(e=0;e<g.length;)d[g[e].identifier]&&h.push(g[e]),b&(Cb|Db)&&delete d[g[e].identifier],e++;return h.length?[t(f.concat(h),"identifier",!0),h]:void 0}function R(){x.apply(this,arguments);var a=j(this.handler,this);this.touch=new P(this.manager,a),this.mouse=new L(this.manager,a)}function S(a,b){this.manager=a,this.set(b)}function T(a){if(p(a,dc))return dc;var b=p(a,ec),c=p(a,fc);return b&&c?dc:b||c?b?ec:fc:p(a,cc)?cc:bc}function U(a){this.options=hb({},this.defaults,a||{}),this.id=v(),this.manager=null,this.options.enable=l(this.options.enable,!0),this.state=gc,this.simultaneous={},this.requireFail=[]}function V(a){return a&lc?"cancel":a&jc?"end":a&ic?"move":a&hc?"start":""}function W(a){return a==Ib?"down":a==Hb?"up":a==Fb?"left":a==Gb?"right":""}function X(a,b){var c=b.manager;return c?c.get(a):a}function Y(){U.apply(this,arguments)}function Z(){Y.apply(this,arguments),this.pX=null,this.pY=null}function $(){Y.apply(this,arguments)}function _(){U.apply(this,arguments),this._timer=null,this._input=null}function ab(){Y.apply(this,arguments)}function bb(){Y.apply(this,arguments)}function cb(){U.apply(this,arguments),this.pTime=!1,this.pCenter=!1,this._timer=null,this._input=null,this.count=0}function db(a,b){return b=b||{},b.recognizers=l(b.recognizers,db.defaults.preset),new eb(a,b)}function eb(a,b){this.options=hb({},db.defaults,b||{}),this.options.inputTarget=this.options.inputTarget||a,this.handlers={},this.session={},this.recognizers=[],this.element=a,this.input=y(this),this.touchAction=new S(this,this.options.touchAction),fb(this,!0),g(this.options.recognizers,function(a){var b=this.add(new a[0](a[1]));a[2]&&b.recognizeWith(a[2]),a[3]&&b.requireFailure(a[3])},this)}function fb(a,b){var c=a.element;c.style&&g(a.options.cssProps,function(a,d){c.style[u(c.style,d)]=b?a:""})}function gb(a,c){var d=b.createEvent("Event");d.initEvent(a,!0,!0),d.gesture=c,c.target.dispatchEvent(d)}var hb,ib=["","webkit","Moz","MS","ms","o"],jb=b.createElement("div"),kb="function",lb=Math.round,mb=Math.abs,nb=Date.now;hb="function"!=typeof Object.assign?function(a){if(a===d||null===a)throw new TypeError("Cannot convert undefined or null to object");for(var b=Object(a),c=1;c<arguments.length;c++){var e=arguments[c];if(e!==d&&null!==e)for(var f in e)e.hasOwnProperty(f)&&(b[f]=e[f])}return b}:Object.assign;var ob=h(function(a,b,c){for(var e=Object.keys(b),f=0;f<e.length;)(!c||c&&a[e[f]]===d)&&(a[e[f]]=b[e[f]]),f++;return a},"extend","Use `assign`."),pb=h(function(a,b){return ob(a,b,!0)},"merge","Use `assign`."),qb=1,rb=/mobile|tablet|ip(ad|hone|od)|android/i,sb="ontouchstart"in a,tb=u(a,"PointerEvent")!==d,ub=sb&&rb.test(navigator.userAgent),vb="touch",wb="pen",xb="mouse",yb="kinect",zb=25,Ab=1,Bb=2,Cb=4,Db=8,Eb=1,Fb=2,Gb=4,Hb=8,Ib=16,Jb=Fb|Gb,Kb=Hb|Ib,Lb=Jb|Kb,Mb=["x","y"],Nb=["clientX","clientY"];x.prototype={handler:function(){},init:function(){this.evEl&&m(this.element,this.evEl,this.domHandler),this.evTarget&&m(this.target,this.evTarget,this.domHandler),this.evWin&&m(w(this.element),this.evWin,this.domHandler)},destroy:function(){this.evEl&&n(this.element,this.evEl,this.domHandler),this.evTarget&&n(this.target,this.evTarget,this.domHandler),this.evWin&&n(w(this.element),this.evWin,this.domHandler)}};var Ob={mousedown:Ab,mousemove:Bb,mouseup:Cb},Pb="mousedown",Qb="mousemove mouseup";i(L,x,{handler:function(a){var b=Ob[a.type];b&Ab&&0===a.button&&(this.pressed=!0),b&Bb&&1!==a.which&&(b=Cb),this.pressed&&this.allow&&(b&Cb&&(this.pressed=!1),this.callback(this.manager,b,{pointers:[a],changedPointers:[a],pointerType:xb,srcEvent:a}))}});var Rb={pointerdown:Ab,pointermove:Bb,pointerup:Cb,pointercancel:Db,pointerout:Db},Sb={2:vb,3:wb,4:xb,5:yb},Tb="pointerdown",Ub="pointermove pointerup pointercancel";a.MSPointerEvent&&!a.PointerEvent&&(Tb="MSPointerDown",Ub="MSPointerMove MSPointerUp MSPointerCancel"),i(M,x,{handler:function(a){var b=this.store,c=!1,d=a.type.toLowerCase().replace("ms",""),e=Rb[d],f=Sb[a.pointerType]||a.pointerType,g=f==vb,h=r(b,a.pointerId,"pointerId");e&Ab&&(0===a.button||g)?0>h&&(b.push(a),h=b.length-1):e&(Cb|Db)&&(c=!0),0>h||(b[h]=a,this.callback(this.manager,e,{pointers:b,changedPointers:[a],pointerType:f,srcEvent:a}),c&&b.splice(h,1))}});var Vb={touchstart:Ab,touchmove:Bb,touchend:Cb,touchcancel:Db},Wb="touchstart",Xb="touchstart touchmove touchend touchcancel";i(N,x,{handler:function(a){var b=Vb[a.type];if(b===Ab&&(this.started=!0),this.started){var c=O.call(this,a,b);b&(Cb|Db)&&c[0].length-c[1].length===0&&(this.started=!1),this.callback(this.manager,b,{pointers:c[0],changedPointers:c[1],pointerType:vb,srcEvent:a})}}});var Yb={touchstart:Ab,touchmove:Bb,touchend:Cb,touchcancel:Db},Zb="touchstart touchmove touchend touchcancel";i(P,x,{handler:function(a){var b=Yb[a.type],c=Q.call(this,a,b);c&&this.callback(this.manager,b,{pointers:c[0],changedPointers:c[1],pointerType:vb,srcEvent:a})}}),i(R,x,{handler:function(a,b,c){var d=c.pointerType==vb,e=c.pointerType==xb;if(d)this.mouse.allow=!1;else if(e&&!this.mouse.allow)return;b&(Cb|Db)&&(this.mouse.allow=!0),this.callback(a,b,c)},destroy:function(){this.touch.destroy(),this.mouse.destroy()}});var $b=u(jb.style,"touchAction"),_b=$b!==d,ac="compute",bc="auto",cc="manipulation",dc="none",ec="pan-x",fc="pan-y";S.prototype={set:function(a){a==ac&&(a=this.compute()),_b&&this.manager.element.style&&(this.manager.element.style[$b]=a),this.actions=a.toLowerCase().trim()},update:function(){this.set(this.manager.options.touchAction)},compute:function(){var a=[];return g(this.manager.recognizers,function(b){k(b.options.enable,[b])&&(a=a.concat(b.getTouchAction()))}),T(a.join(" "))},preventDefaults:function(a){if(!_b){var b=a.srcEvent,c=a.offsetDirection;if(this.manager.session.prevented)return void b.preventDefault();var d=this.actions,e=p(d,dc),f=p(d,fc),g=p(d,ec);if(e){var h=1===a.pointers.length,i=a.distance<2,j=a.deltaTime<250;if(h&&i&&j)return}if(!g||!f)return e||f&&c&Jb||g&&c&Kb?this.preventSrc(b):void 0}},preventSrc:function(a){this.manager.session.prevented=!0,a.preventDefault()}};var gc=1,hc=2,ic=4,jc=8,kc=jc,lc=16,mc=32;U.prototype={defaults:{},set:function(a){return hb(this.options,a),this.manager&&this.manager.touchAction.update(),this},recognizeWith:function(a){if(f(a,"recognizeWith",this))return this;var b=this.simultaneous;return a=X(a,this),b[a.id]||(b[a.id]=a,a.recognizeWith(this)),this},dropRecognizeWith:function(a){return f(a,"dropRecognizeWith",this)?this:(a=X(a,this),delete this.simultaneous[a.id],this)},requireFailure:function(a){if(f(a,"requireFailure",this))return this;var b=this.requireFail;return a=X(a,this),-1===r(b,a)&&(b.push(a),a.requireFailure(this)),this},dropRequireFailure:function(a){if(f(a,"dropRequireFailure",this))return this;a=X(a,this);var b=r(this.requireFail,a);return b>-1&&this.requireFail.splice(b,1),this},hasRequireFailures:function(){return this.requireFail.length>0},canRecognizeWith:function(a){return!!this.simultaneous[a.id]},emit:function(a){function b(b){c.manager.emit(b,a)}var c=this,d=this.state;jc>d&&b(c.options.event+V(d)),b(c.options.event),a.additionalEvent&&b(a.additionalEvent),d>=jc&&b(c.options.event+V(d))},tryEmit:function(a){return this.canEmit()?this.emit(a):void(this.state=mc)},canEmit:function(){for(var a=0;a<this.requireFail.length;){if(!(this.requireFail[a].state&(mc|gc)))return!1;a++}return!0},recognize:function(a){var b=hb({},a);return k(this.options.enable,[this,b])?(this.state&(kc|lc|mc)&&(this.state=gc),this.state=this.process(b),void(this.state&(hc|ic|jc|lc)&&this.tryEmit(b))):(this.reset(),void(this.state=mc))},process:function(){},getTouchAction:function(){},reset:function(){}},i(Y,U,{defaults:{pointers:1},attrTest:function(a){var b=this.options.pointers;return 0===b||a.pointers.length===b},process:function(a){var b=this.state,c=a.eventType,d=b&(hc|ic),e=this.attrTest(a);return d&&(c&Db||!e)?b|lc:d||e?c&Cb?b|jc:b&hc?b|ic:hc:mc}}),i(Z,Y,{defaults:{event:"pan",threshold:10,pointers:1,direction:Lb},getTouchAction:function(){var a=this.options.direction,b=[];return a&Jb&&b.push(fc),a&Kb&&b.push(ec),b},directionTest:function(a){var b=this.options,c=!0,d=a.distance,e=a.direction,f=a.deltaX,g=a.deltaY;return e&b.direction||(b.direction&Jb?(e=0===f?Eb:0>f?Fb:Gb,c=f!=this.pX,d=Math.abs(a.deltaX)):(e=0===g?Eb:0>g?Hb:Ib,c=g!=this.pY,d=Math.abs(a.deltaY))),a.direction=e,c&&d>b.threshold&&e&b.direction},attrTest:function(a){return Y.prototype.attrTest.call(this,a)&&(this.state&hc||!(this.state&hc)&&this.directionTest(a))},emit:function(a){this.pX=a.deltaX,this.pY=a.deltaY;var b=W(a.direction);b&&(a.additionalEvent=this.options.event+b),this._super.emit.call(this,a)}}),i($,Y,{defaults:{event:"pinch",threshold:0,pointers:2},getTouchAction:function(){return[dc]},attrTest:function(a){return this._super.attrTest.call(this,a)&&(Math.abs(a.scale-1)>this.options.threshold||this.state&hc)},emit:function(a){if(1!==a.scale){var b=a.scale<1?"in":"out";a.additionalEvent=this.options.event+b}this._super.emit.call(this,a)}}),i(_,U,{defaults:{event:"press",pointers:1,time:251,threshold:9},getTouchAction:function(){return[bc]},process:function(a){var b=this.options,c=a.pointers.length===b.pointers,d=a.distance<b.threshold,f=a.deltaTime>b.time;if(this._input=a,!d||!c||a.eventType&(Cb|Db)&&!f)this.reset();else if(a.eventType&Ab)this.reset(),this._timer=e(function(){this.state=kc,this.tryEmit()},b.time,this);else if(a.eventType&Cb)return kc;return mc},reset:function(){clearTimeout(this._timer)},emit:function(a){this.state===kc&&(a&&a.eventType&Cb?this.manager.emit(this.options.event+"up",a):(this._input.timeStamp=nb(),this.manager.emit(this.options.event,this._input)))}}),i(ab,Y,{defaults:{event:"rotate",threshold:0,pointers:2},getTouchAction:function(){return[dc]},attrTest:function(a){return this._super.attrTest.call(this,a)&&(Math.abs(a.rotation)>this.options.threshold||this.state&hc)}}),i(bb,Y,{defaults:{event:"swipe",threshold:10,velocity:.3,direction:Jb|Kb,pointers:1},getTouchAction:function(){return Z.prototype.getTouchAction.call(this)},attrTest:function(a){var b,c=this.options.direction;return c&(Jb|Kb)?b=a.overallVelocity:c&Jb?b=a.overallVelocityX:c&Kb&&(b=a.overallVelocityY),this._super.attrTest.call(this,a)&&c&a.offsetDirection&&a.distance>this.options.threshold&&a.maxPointers==this.options.pointers&&mb(b)>this.options.velocity&&a.eventType&Cb},emit:function(a){var b=W(a.offsetDirection);b&&this.manager.emit(this.options.event+b,a),this.manager.emit(this.options.event,a)}}),i(cb,U,{defaults:{event:"tap",pointers:1,taps:1,interval:300,time:250,threshold:9,posThreshold:10},getTouchAction:function(){return[cc]},process:function(a){var b=this.options,c=a.pointers.length===b.pointers,d=a.distance<b.threshold,f=a.deltaTime<b.time;if(this.reset(),a.eventType&Ab&&0===this.count)return this.failTimeout();if(d&&f&&c){if(a.eventType!=Cb)return this.failTimeout();var g=this.pTime?a.timeStamp-this.pTime<b.interval:!0,h=!this.pCenter||H(this.pCenter,a.center)<b.posThreshold;this.pTime=a.timeStamp,this.pCenter=a.center,h&&g?this.count+=1:this.count=1,this._input=a;var i=this.count%b.taps;if(0===i)return this.hasRequireFailures()?(this._timer=e(function(){this.state=kc,this.tryEmit()},b.interval,this),hc):kc}return mc},failTimeout:function(){return this._timer=e(function(){this.state=mc},this.options.interval,this),mc},reset:function(){clearTimeout(this._timer)},emit:function(){this.state==kc&&(this._input.tapCount=this.count,this.manager.emit(this.options.event,this._input))}}),db.VERSION="2.0.6",db.defaults={domEvents:!1,touchAction:ac,enable:!0,inputTarget:null,inputClass:null,preset:[[ab,{enable:!1}],[$,{enable:!1},["rotate"]],[bb,{direction:Jb}],[Z,{direction:Jb},["swipe"]],[cb],[cb,{event:"doubletap",taps:2},["tap"]],[_]],cssProps:{userSelect:"none",touchSelect:"none",touchCallout:"none",contentZooming:"none",userDrag:"none",tapHighlightColor:"rgba(0,0,0,0)"}};var nc=1,oc=2;eb.prototype={set:function(a){return hb(this.options,a),a.touchAction&&this.touchAction.update(),a.inputTarget&&(this.input.destroy(),this.input.target=a.inputTarget,this.input.init()),this},stop:function(a){this.session.stopped=a?oc:nc},recognize:function(a){var b=this.session;if(!b.stopped){this.touchAction.preventDefaults(a);var c,d=this.recognizers,e=b.curRecognizer;(!e||e&&e.state&kc)&&(e=b.curRecognizer=null);for(var f=0;f<d.length;)c=d[f],b.stopped===oc||e&&c!=e&&!c.canRecognizeWith(e)?c.reset():c.recognize(a),!e&&c.state&(hc|ic|jc)&&(e=b.curRecognizer=c),f++}},get:function(a){if(a instanceof U)return a;for(var b=this.recognizers,c=0;c<b.length;c++)if(b[c].options.event==a)return b[c];return null},add:function(a){if(f(a,"add",this))return this;var b=this.get(a.options.event);return b&&this.remove(b),this.recognizers.push(a),a.manager=this,this.touchAction.update(),a},remove:function(a){if(f(a,"remove",this))return this;if(a=this.get(a)){var b=this.recognizers,c=r(b,a);-1!==c&&(b.splice(c,1),this.touchAction.update())}return this},on:function(a,b){var c=this.handlers;return g(q(a),function(a){c[a]=c[a]||[],c[a].push(b)}),this},off:function(a,b){var c=this.handlers;return g(q(a),function(a){b?c[a]&&c[a].splice(r(c[a],b),1):delete c[a]}),this},emit:function(a,b){this.options.domEvents&&gb(a,b);var c=this.handlers[a]&&this.handlers[a].slice();if(c&&c.length){b.type=a,b.preventDefault=function(){b.srcEvent.preventDefault()};for(var d=0;d<c.length;)c[d](b),d++}},destroy:function(){this.element&&fb(this,!1),this.handlers={},this.session={},this.input.destroy(),this.element=null}},hb(db,{INPUT_START:Ab,INPUT_MOVE:Bb,INPUT_END:Cb,INPUT_CANCEL:Db,STATE_POSSIBLE:gc,STATE_BEGAN:hc,STATE_CHANGED:ic,STATE_ENDED:jc,STATE_RECOGNIZED:kc,STATE_CANCELLED:lc,STATE_FAILED:mc,DIRECTION_NONE:Eb,DIRECTION_LEFT:Fb,DIRECTION_RIGHT:Gb,DIRECTION_UP:Hb,DIRECTION_DOWN:Ib,DIRECTION_HORIZONTAL:Jb,DIRECTION_VERTICAL:Kb,DIRECTION_ALL:Lb,Manager:eb,Input:x,TouchAction:S,TouchInput:P,MouseInput:L,PointerEventInput:M,TouchMouseInput:R,SingleTouchInput:N,Recognizer:U,AttrRecognizer:Y,Tap:cb,Pan:Z,Swipe:bb,Pinch:$,Rotate:ab,Press:_,on:m,off:n,each:g,merge:pb,extend:ob,assign:hb,inherit:i,bindFn:j,prefixed:u});var pc="undefined"!=typeof a?a:"undefined"!=typeof self?self:{};pc.Hammer=db,"function"==typeof define&&define.amd?define('Hammer',[],function(){return db}):"undefined"!=typeof module&&module.exports?module.exports=db:a[c]=db}(window,document,"Hammer");
-//# sourceMappingURL=hammer.min.map;
+ * Copyright (c) 2016 Jorik Tangelder;
+ * Licensed under the MIT license */
+!function(a,b,c,d){"use strict";function e(a,b,c){return setTimeout(j(a,c),b)}function f(a,b,c){return Array.isArray(a)?(g(a,c[b],c),!0):!1}function g(a,b,c){var e;if(a)if(a.forEach)a.forEach(b,c);else if(a.length!==d)for(e=0;e<a.length;)b.call(c,a[e],e,a),e++;else for(e in a)a.hasOwnProperty(e)&&b.call(c,a[e],e,a)}function h(b,c,d){var e="DEPRECATED METHOD: "+c+"\n"+d+" AT \n";return function(){var c=new Error("get-stack-trace"),d=c&&c.stack?c.stack.replace(/^[^\(]+?[\n$]/gm,"").replace(/^\s+at\s+/gm,"").replace(/^Object.<anonymous>\s*\(/gm,"{anonymous}()@"):"Unknown Stack Trace",f=a.console&&(a.console.warn||a.console.log);return f&&f.call(a.console,e,d),b.apply(this,arguments)}}function i(a,b,c){var d,e=b.prototype;d=a.prototype=Object.create(e),d.constructor=a,d._super=e,c&&la(d,c)}function j(a,b){return function(){return a.apply(b,arguments)}}function k(a,b){return typeof a==oa?a.apply(b?b[0]||d:d,b):a}function l(a,b){return a===d?b:a}function m(a,b,c){g(q(b),function(b){a.addEventListener(b,c,!1)})}function n(a,b,c){g(q(b),function(b){a.removeEventListener(b,c,!1)})}function o(a,b){for(;a;){if(a==b)return!0;a=a.parentNode}return!1}function p(a,b){return a.indexOf(b)>-1}function q(a){return a.trim().split(/\s+/g)}function r(a,b,c){if(a.indexOf&&!c)return a.indexOf(b);for(var d=0;d<a.length;){if(c&&a[d][c]==b||!c&&a[d]===b)return d;d++}return-1}function s(a){return Array.prototype.slice.call(a,0)}function t(a,b,c){for(var d=[],e=[],f=0;f<a.length;){var g=b?a[f][b]:a[f];r(e,g)<0&&d.push(a[f]),e[f]=g,f++}return c&&(d=b?d.sort(function(a,c){return a[b]>c[b]}):d.sort()),d}function u(a,b){for(var c,e,f=b[0].toUpperCase()+b.slice(1),g=0;g<ma.length;){if(c=ma[g],e=c?c+f:b,e in a)return e;g++}return d}function v(){return ua++}function w(b){var c=b.ownerDocument||b;return c.defaultView||c.parentWindow||a}function x(a,b){var c=this;this.manager=a,this.callback=b,this.element=a.element,this.target=a.options.inputTarget,this.domHandler=function(b){k(a.options.enable,[a])&&c.handler(b)},this.init()}function y(a){var b,c=a.options.inputClass;return new(b=c?c:xa?M:ya?P:wa?R:L)(a,z)}function z(a,b,c){var d=c.pointers.length,e=c.changedPointers.length,f=b&Ea&&d-e===0,g=b&(Ga|Ha)&&d-e===0;c.isFirst=!!f,c.isFinal=!!g,f&&(a.session={}),c.eventType=b,A(a,c),a.emit("hammer.input",c),a.recognize(c),a.session.prevInput=c}function A(a,b){var c=a.session,d=b.pointers,e=d.length;c.firstInput||(c.firstInput=D(b)),e>1&&!c.firstMultiple?c.firstMultiple=D(b):1===e&&(c.firstMultiple=!1);var f=c.firstInput,g=c.firstMultiple,h=g?g.center:f.center,i=b.center=E(d);b.timeStamp=ra(),b.deltaTime=b.timeStamp-f.timeStamp,b.angle=I(h,i),b.distance=H(h,i),B(c,b),b.offsetDirection=G(b.deltaX,b.deltaY);var j=F(b.deltaTime,b.deltaX,b.deltaY);b.overallVelocityX=j.x,b.overallVelocityY=j.y,b.overallVelocity=qa(j.x)>qa(j.y)?j.x:j.y,b.scale=g?K(g.pointers,d):1,b.rotation=g?J(g.pointers,d):0,b.maxPointers=c.prevInput?b.pointers.length>c.prevInput.maxPointers?b.pointers.length:c.prevInput.maxPointers:b.pointers.length,C(c,b);var k=a.element;o(b.srcEvent.target,k)&&(k=b.srcEvent.target),b.target=k}function B(a,b){var c=b.center,d=a.offsetDelta||{},e=a.prevDelta||{},f=a.prevInput||{};b.eventType!==Ea&&f.eventType!==Ga||(e=a.prevDelta={x:f.deltaX||0,y:f.deltaY||0},d=a.offsetDelta={x:c.x,y:c.y}),b.deltaX=e.x+(c.x-d.x),b.deltaY=e.y+(c.y-d.y)}function C(a,b){var c,e,f,g,h=a.lastInterval||b,i=b.timeStamp-h.timeStamp;if(b.eventType!=Ha&&(i>Da||h.velocity===d)){var j=b.deltaX-h.deltaX,k=b.deltaY-h.deltaY,l=F(i,j,k);e=l.x,f=l.y,c=qa(l.x)>qa(l.y)?l.x:l.y,g=G(j,k),a.lastInterval=b}else c=h.velocity,e=h.velocityX,f=h.velocityY,g=h.direction;b.velocity=c,b.velocityX=e,b.velocityY=f,b.direction=g}function D(a){for(var b=[],c=0;c<a.pointers.length;)b[c]={clientX:pa(a.pointers[c].clientX),clientY:pa(a.pointers[c].clientY)},c++;return{timeStamp:ra(),pointers:b,center:E(b),deltaX:a.deltaX,deltaY:a.deltaY}}function E(a){var b=a.length;if(1===b)return{x:pa(a[0].clientX),y:pa(a[0].clientY)};for(var c=0,d=0,e=0;b>e;)c+=a[e].clientX,d+=a[e].clientY,e++;return{x:pa(c/b),y:pa(d/b)}}function F(a,b,c){return{x:b/a||0,y:c/a||0}}function G(a,b){return a===b?Ia:qa(a)>=qa(b)?0>a?Ja:Ka:0>b?La:Ma}function H(a,b,c){c||(c=Qa);var d=b[c[0]]-a[c[0]],e=b[c[1]]-a[c[1]];return Math.sqrt(d*d+e*e)}function I(a,b,c){c||(c=Qa);var d=b[c[0]]-a[c[0]],e=b[c[1]]-a[c[1]];return 180*Math.atan2(e,d)/Math.PI}function J(a,b){return I(b[1],b[0],Ra)+I(a[1],a[0],Ra)}function K(a,b){return H(b[0],b[1],Ra)/H(a[0],a[1],Ra)}function L(){this.evEl=Ta,this.evWin=Ua,this.pressed=!1,x.apply(this,arguments)}function M(){this.evEl=Xa,this.evWin=Ya,x.apply(this,arguments),this.store=this.manager.session.pointerEvents=[]}function N(){this.evTarget=$a,this.evWin=_a,this.started=!1,x.apply(this,arguments)}function O(a,b){var c=s(a.touches),d=s(a.changedTouches);return b&(Ga|Ha)&&(c=t(c.concat(d),"identifier",!0)),[c,d]}function P(){this.evTarget=bb,this.targetIds={},x.apply(this,arguments)}function Q(a,b){var c=s(a.touches),d=this.targetIds;if(b&(Ea|Fa)&&1===c.length)return d[c[0].identifier]=!0,[c,c];var e,f,g=s(a.changedTouches),h=[],i=this.target;if(f=c.filter(function(a){return o(a.target,i)}),b===Ea)for(e=0;e<f.length;)d[f[e].identifier]=!0,e++;for(e=0;e<g.length;)d[g[e].identifier]&&h.push(g[e]),b&(Ga|Ha)&&delete d[g[e].identifier],e++;return h.length?[t(f.concat(h),"identifier",!0),h]:void 0}function R(){x.apply(this,arguments);var a=j(this.handler,this);this.touch=new P(this.manager,a),this.mouse=new L(this.manager,a),this.primaryTouch=null,this.lastTouches=[]}function S(a,b){a&Ea?(this.primaryTouch=b.changedPointers[0].identifier,T.call(this,b)):a&(Ga|Ha)&&T.call(this,b)}function T(a){var b=a.changedPointers[0];if(b.identifier===this.primaryTouch){var c={x:b.clientX,y:b.clientY};this.lastTouches.push(c);var d=this.lastTouches,e=function(){var a=d.indexOf(c);a>-1&&d.splice(a,1)};setTimeout(e,cb)}}function U(a){for(var b=a.srcEvent.clientX,c=a.srcEvent.clientY,d=0;d<this.lastTouches.length;d++){var e=this.lastTouches[d],f=Math.abs(b-e.x),g=Math.abs(c-e.y);if(db>=f&&db>=g)return!0}return!1}function V(a,b){this.manager=a,this.set(b)}function W(a){if(p(a,jb))return jb;var b=p(a,kb),c=p(a,lb);return b&&c?jb:b||c?b?kb:lb:p(a,ib)?ib:hb}function X(){if(!fb)return!1;var b={},c=a.CSS&&a.CSS.supports;return["auto","manipulation","pan-y","pan-x","pan-x pan-y","none"].forEach(function(d){b[d]=c?a.CSS.supports("touch-action",d):!0}),b}function Y(a){this.options=la({},this.defaults,a||{}),this.id=v(),this.manager=null,this.options.enable=l(this.options.enable,!0),this.state=nb,this.simultaneous={},this.requireFail=[]}function Z(a){return a&sb?"cancel":a&qb?"end":a&pb?"move":a&ob?"start":""}function $(a){return a==Ma?"down":a==La?"up":a==Ja?"left":a==Ka?"right":""}function _(a,b){var c=b.manager;return c?c.get(a):a}function aa(){Y.apply(this,arguments)}function ba(){aa.apply(this,arguments),this.pX=null,this.pY=null}function ca(){aa.apply(this,arguments)}function da(){Y.apply(this,arguments),this._timer=null,this._input=null}function ea(){aa.apply(this,arguments)}function fa(){aa.apply(this,arguments)}function ga(){Y.apply(this,arguments),this.pTime=!1,this.pCenter=!1,this._timer=null,this._input=null,this.count=0}function ha(a,b){return b=b||{},b.recognizers=l(b.recognizers,ha.defaults.preset),new ia(a,b)}function ia(a,b){this.options=la({},ha.defaults,b||{}),this.options.inputTarget=this.options.inputTarget||a,this.handlers={},this.session={},this.recognizers=[],this.oldCssProps={},this.element=a,this.input=y(this),this.touchAction=new V(this,this.options.touchAction),ja(this,!0),g(this.options.recognizers,function(a){var b=this.add(new a[0](a[1]));a[2]&&b.recognizeWith(a[2]),a[3]&&b.requireFailure(a[3])},this)}function ja(a,b){var c=a.element;if(c.style){var d;g(a.options.cssProps,function(e,f){d=u(c.style,f),b?(a.oldCssProps[d]=c.style[d],c.style[d]=e):c.style[d]=a.oldCssProps[d]||""}),b||(a.oldCssProps={})}}function ka(a,c){var d=b.createEvent("Event");d.initEvent(a,!0,!0),d.gesture=c,c.target.dispatchEvent(d)}var la,ma=["","webkit","Moz","MS","ms","o"],na=b.createElement("div"),oa="function",pa=Math.round,qa=Math.abs,ra=Date.now;la="function"!=typeof Object.assign?function(a){if(a===d||null===a)throw new TypeError("Cannot convert undefined or null to object");for(var b=Object(a),c=1;c<arguments.length;c++){var e=arguments[c];if(e!==d&&null!==e)for(var f in e)e.hasOwnProperty(f)&&(b[f]=e[f])}return b}:Object.assign;var sa=h(function(a,b,c){for(var e=Object.keys(b),f=0;f<e.length;)(!c||c&&a[e[f]]===d)&&(a[e[f]]=b[e[f]]),f++;return a},"extend","Use `assign`."),ta=h(function(a,b){return sa(a,b,!0)},"merge","Use `assign`."),ua=1,va=/mobile|tablet|ip(ad|hone|od)|android/i,wa="ontouchstart"in a,xa=u(a,"PointerEvent")!==d,ya=wa&&va.test(navigator.userAgent),za="touch",Aa="pen",Ba="mouse",Ca="kinect",Da=25,Ea=1,Fa=2,Ga=4,Ha=8,Ia=1,Ja=2,Ka=4,La=8,Ma=16,Na=Ja|Ka,Oa=La|Ma,Pa=Na|Oa,Qa=["x","y"],Ra=["clientX","clientY"];x.prototype={handler:function(){},init:function(){this.evEl&&m(this.element,this.evEl,this.domHandler),this.evTarget&&m(this.target,this.evTarget,this.domHandler),this.evWin&&m(w(this.element),this.evWin,this.domHandler)},destroy:function(){this.evEl&&n(this.element,this.evEl,this.domHandler),this.evTarget&&n(this.target,this.evTarget,this.domHandler),this.evWin&&n(w(this.element),this.evWin,this.domHandler)}};var Sa={mousedown:Ea,mousemove:Fa,mouseup:Ga},Ta="mousedown",Ua="mousemove mouseup";i(L,x,{handler:function(a){var b=Sa[a.type];b&Ea&&0===a.button&&(this.pressed=!0),b&Fa&&1!==a.which&&(b=Ga),this.pressed&&(b&Ga&&(this.pressed=!1),this.callback(this.manager,b,{pointers:[a],changedPointers:[a],pointerType:Ba,srcEvent:a}))}});var Va={pointerdown:Ea,pointermove:Fa,pointerup:Ga,pointercancel:Ha,pointerout:Ha},Wa={2:za,3:Aa,4:Ba,5:Ca},Xa="pointerdown",Ya="pointermove pointerup pointercancel";a.MSPointerEvent&&!a.PointerEvent&&(Xa="MSPointerDown",Ya="MSPointerMove MSPointerUp MSPointerCancel"),i(M,x,{handler:function(a){var b=this.store,c=!1,d=a.type.toLowerCase().replace("ms",""),e=Va[d],f=Wa[a.pointerType]||a.pointerType,g=f==za,h=r(b,a.pointerId,"pointerId");e&Ea&&(0===a.button||g)?0>h&&(b.push(a),h=b.length-1):e&(Ga|Ha)&&(c=!0),0>h||(b[h]=a,this.callback(this.manager,e,{pointers:b,changedPointers:[a],pointerType:f,srcEvent:a}),c&&b.splice(h,1))}});var Za={touchstart:Ea,touchmove:Fa,touchend:Ga,touchcancel:Ha},$a="touchstart",_a="touchstart touchmove touchend touchcancel";i(N,x,{handler:function(a){var b=Za[a.type];if(b===Ea&&(this.started=!0),this.started){var c=O.call(this,a,b);b&(Ga|Ha)&&c[0].length-c[1].length===0&&(this.started=!1),this.callback(this.manager,b,{pointers:c[0],changedPointers:c[1],pointerType:za,srcEvent:a})}}});var ab={touchstart:Ea,touchmove:Fa,touchend:Ga,touchcancel:Ha},bb="touchstart touchmove touchend touchcancel";i(P,x,{handler:function(a){var b=ab[a.type],c=Q.call(this,a,b);c&&this.callback(this.manager,b,{pointers:c[0],changedPointers:c[1],pointerType:za,srcEvent:a})}});var cb=2500,db=25;i(R,x,{handler:function(a,b,c){var d=c.pointerType==za,e=c.pointerType==Ba;if(!(e&&c.sourceCapabilities&&c.sourceCapabilities.firesTouchEvents)){if(d)S.call(this,b,c);else if(e&&U.call(this,c))return;this.callback(a,b,c)}},destroy:function(){this.touch.destroy(),this.mouse.destroy()}});var eb=u(na.style,"touchAction"),fb=eb!==d,gb="compute",hb="auto",ib="manipulation",jb="none",kb="pan-x",lb="pan-y",mb=X();V.prototype={set:function(a){a==gb&&(a=this.compute()),fb&&this.manager.element.style&&mb[a]&&(this.manager.element.style[eb]=a),this.actions=a.toLowerCase().trim()},update:function(){this.set(this.manager.options.touchAction)},compute:function(){var a=[];return g(this.manager.recognizers,function(b){k(b.options.enable,[b])&&(a=a.concat(b.getTouchAction()))}),W(a.join(" "))},preventDefaults:function(a){var b=a.srcEvent,c=a.offsetDirection;if(this.manager.session.prevented)return void b.preventDefault();var d=this.actions,e=p(d,jb)&&!mb[jb],f=p(d,lb)&&!mb[lb],g=p(d,kb)&&!mb[kb];if(e){var h=1===a.pointers.length,i=a.distance<2,j=a.deltaTime<250;if(h&&i&&j)return}return g&&f?void 0:e||f&&c&Na||g&&c&Oa?this.preventSrc(b):void 0},preventSrc:function(a){this.manager.session.prevented=!0,a.preventDefault()}};var nb=1,ob=2,pb=4,qb=8,rb=qb,sb=16,tb=32;Y.prototype={defaults:{},set:function(a){return la(this.options,a),this.manager&&this.manager.touchAction.update(),this},recognizeWith:function(a){if(f(a,"recognizeWith",this))return this;var b=this.simultaneous;return a=_(a,this),b[a.id]||(b[a.id]=a,a.recognizeWith(this)),this},dropRecognizeWith:function(a){return f(a,"dropRecognizeWith",this)?this:(a=_(a,this),delete this.simultaneous[a.id],this)},requireFailure:function(a){if(f(a,"requireFailure",this))return this;var b=this.requireFail;return a=_(a,this),-1===r(b,a)&&(b.push(a),a.requireFailure(this)),this},dropRequireFailure:function(a){if(f(a,"dropRequireFailure",this))return this;a=_(a,this);var b=r(this.requireFail,a);return b>-1&&this.requireFail.splice(b,1),this},hasRequireFailures:function(){return this.requireFail.length>0},canRecognizeWith:function(a){return!!this.simultaneous[a.id]},emit:function(a){function b(b){c.manager.emit(b,a)}var c=this,d=this.state;qb>d&&b(c.options.event+Z(d)),b(c.options.event),a.additionalEvent&&b(a.additionalEvent),d>=qb&&b(c.options.event+Z(d))},tryEmit:function(a){return this.canEmit()?this.emit(a):void(this.state=tb)},canEmit:function(){for(var a=0;a<this.requireFail.length;){if(!(this.requireFail[a].state&(tb|nb)))return!1;a++}return!0},recognize:function(a){var b=la({},a);return k(this.options.enable,[this,b])?(this.state&(rb|sb|tb)&&(this.state=nb),this.state=this.process(b),void(this.state&(ob|pb|qb|sb)&&this.tryEmit(b))):(this.reset(),void(this.state=tb))},process:function(a){},getTouchAction:function(){},reset:function(){}},i(aa,Y,{defaults:{pointers:1},attrTest:function(a){var b=this.options.pointers;return 0===b||a.pointers.length===b},process:function(a){var b=this.state,c=a.eventType,d=b&(ob|pb),e=this.attrTest(a);return d&&(c&Ha||!e)?b|sb:d||e?c&Ga?b|qb:b&ob?b|pb:ob:tb}}),i(ba,aa,{defaults:{event:"pan",threshold:10,pointers:1,direction:Pa},getTouchAction:function(){var a=this.options.direction,b=[];return a&Na&&b.push(lb),a&Oa&&b.push(kb),b},directionTest:function(a){var b=this.options,c=!0,d=a.distance,e=a.direction,f=a.deltaX,g=a.deltaY;return e&b.direction||(b.direction&Na?(e=0===f?Ia:0>f?Ja:Ka,c=f!=this.pX,d=Math.abs(a.deltaX)):(e=0===g?Ia:0>g?La:Ma,c=g!=this.pY,d=Math.abs(a.deltaY))),a.direction=e,c&&d>b.threshold&&e&b.direction},attrTest:function(a){return aa.prototype.attrTest.call(this,a)&&(this.state&ob||!(this.state&ob)&&this.directionTest(a))},emit:function(a){this.pX=a.deltaX,this.pY=a.deltaY;var b=$(a.direction);b&&(a.additionalEvent=this.options.event+b),this._super.emit.call(this,a)}}),i(ca,aa,{defaults:{event:"pinch",threshold:0,pointers:2},getTouchAction:function(){return[jb]},attrTest:function(a){return this._super.attrTest.call(this,a)&&(Math.abs(a.scale-1)>this.options.threshold||this.state&ob)},emit:function(a){if(1!==a.scale){var b=a.scale<1?"in":"out";a.additionalEvent=this.options.event+b}this._super.emit.call(this,a)}}),i(da,Y,{defaults:{event:"press",pointers:1,time:251,threshold:9},getTouchAction:function(){return[hb]},process:function(a){var b=this.options,c=a.pointers.length===b.pointers,d=a.distance<b.threshold,f=a.deltaTime>b.time;if(this._input=a,!d||!c||a.eventType&(Ga|Ha)&&!f)this.reset();else if(a.eventType&Ea)this.reset(),this._timer=e(function(){this.state=rb,this.tryEmit()},b.time,this);else if(a.eventType&Ga)return rb;return tb},reset:function(){clearTimeout(this._timer)},emit:function(a){this.state===rb&&(a&&a.eventType&Ga?this.manager.emit(this.options.event+"up",a):(this._input.timeStamp=ra(),this.manager.emit(this.options.event,this._input)))}}),i(ea,aa,{defaults:{event:"rotate",threshold:0,pointers:2},getTouchAction:function(){return[jb]},attrTest:function(a){return this._super.attrTest.call(this,a)&&(Math.abs(a.rotation)>this.options.threshold||this.state&ob)}}),i(fa,aa,{defaults:{event:"swipe",threshold:10,velocity:.3,direction:Na|Oa,pointers:1},getTouchAction:function(){return ba.prototype.getTouchAction.call(this)},attrTest:function(a){var b,c=this.options.direction;return c&(Na|Oa)?b=a.overallVelocity:c&Na?b=a.overallVelocityX:c&Oa&&(b=a.overallVelocityY),this._super.attrTest.call(this,a)&&c&a.offsetDirection&&a.distance>this.options.threshold&&a.maxPointers==this.options.pointers&&qa(b)>this.options.velocity&&a.eventType&Ga},emit:function(a){var b=$(a.offsetDirection);b&&this.manager.emit(this.options.event+b,a),this.manager.emit(this.options.event,a)}}),i(ga,Y,{defaults:{event:"tap",pointers:1,taps:1,interval:300,time:250,threshold:9,posThreshold:10},getTouchAction:function(){return[ib]},process:function(a){var b=this.options,c=a.pointers.length===b.pointers,d=a.distance<b.threshold,f=a.deltaTime<b.time;if(this.reset(),a.eventType&Ea&&0===this.count)return this.failTimeout();if(d&&f&&c){if(a.eventType!=Ga)return this.failTimeout();var g=this.pTime?a.timeStamp-this.pTime<b.interval:!0,h=!this.pCenter||H(this.pCenter,a.center)<b.posThreshold;this.pTime=a.timeStamp,this.pCenter=a.center,h&&g?this.count+=1:this.count=1,this._input=a;var i=this.count%b.taps;if(0===i)return this.hasRequireFailures()?(this._timer=e(function(){this.state=rb,this.tryEmit()},b.interval,this),ob):rb}return tb},failTimeout:function(){return this._timer=e(function(){this.state=tb},this.options.interval,this),tb},reset:function(){clearTimeout(this._timer)},emit:function(){this.state==rb&&(this._input.tapCount=this.count,this.manager.emit(this.options.event,this._input))}}),ha.VERSION="2.0.7",ha.defaults={domEvents:!1,touchAction:gb,enable:!0,inputTarget:null,inputClass:null,preset:[[ea,{enable:!1}],[ca,{enable:!1},["rotate"]],[fa,{direction:Na}],[ba,{direction:Na},["swipe"]],[ga],[ga,{event:"doubletap",taps:2},["tap"]],[da]],cssProps:{userSelect:"none",touchSelect:"none",touchCallout:"none",contentZooming:"none",userDrag:"none",tapHighlightColor:"rgba(0,0,0,0)"}};var ub=1,vb=2;ia.prototype={set:function(a){return la(this.options,a),a.touchAction&&this.touchAction.update(),a.inputTarget&&(this.input.destroy(),this.input.target=a.inputTarget,this.input.init()),this},stop:function(a){this.session.stopped=a?vb:ub},recognize:function(a){var b=this.session;if(!b.stopped){this.touchAction.preventDefaults(a);var c,d=this.recognizers,e=b.curRecognizer;(!e||e&&e.state&rb)&&(e=b.curRecognizer=null);for(var f=0;f<d.length;)c=d[f],b.stopped===vb||e&&c!=e&&!c.canRecognizeWith(e)?c.reset():c.recognize(a),!e&&c.state&(ob|pb|qb)&&(e=b.curRecognizer=c),f++}},get:function(a){if(a instanceof Y)return a;for(var b=this.recognizers,c=0;c<b.length;c++)if(b[c].options.event==a)return b[c];return null},add:function(a){if(f(a,"add",this))return this;var b=this.get(a.options.event);return b&&this.remove(b),this.recognizers.push(a),a.manager=this,this.touchAction.update(),a},remove:function(a){if(f(a,"remove",this))return this;if(a=this.get(a)){var b=this.recognizers,c=r(b,a);-1!==c&&(b.splice(c,1),this.touchAction.update())}return this},on:function(a,b){if(a!==d&&b!==d){var c=this.handlers;return g(q(a),function(a){c[a]=c[a]||[],c[a].push(b)}),this}},off:function(a,b){if(a!==d){var c=this.handlers;return g(q(a),function(a){b?c[a]&&c[a].splice(r(c[a],b),1):delete c[a]}),this}},emit:function(a,b){this.options.domEvents&&ka(a,b);var c=this.handlers[a]&&this.handlers[a].slice();if(c&&c.length){b.type=a,b.preventDefault=function(){b.srcEvent.preventDefault()};for(var d=0;d<c.length;)c[d](b),d++}},destroy:function(){this.element&&ja(this,!1),this.handlers={},this.session={},this.input.destroy(),this.element=null}},la(ha,{INPUT_START:Ea,INPUT_MOVE:Fa,INPUT_END:Ga,INPUT_CANCEL:Ha,STATE_POSSIBLE:nb,STATE_BEGAN:ob,STATE_CHANGED:pb,STATE_ENDED:qb,STATE_RECOGNIZED:rb,STATE_CANCELLED:sb,STATE_FAILED:tb,DIRECTION_NONE:Ia,DIRECTION_LEFT:Ja,DIRECTION_RIGHT:Ka,DIRECTION_UP:La,DIRECTION_DOWN:Ma,DIRECTION_HORIZONTAL:Na,DIRECTION_VERTICAL:Oa,DIRECTION_ALL:Pa,Manager:ia,Input:x,TouchAction:V,TouchInput:P,MouseInput:L,PointerEventInput:M,TouchMouseInput:R,SingleTouchInput:N,Recognizer:Y,AttrRecognizer:aa,Tap:ga,Pan:ba,Swipe:fa,Pinch:ca,Rotate:ea,Press:da,on:m,off:n,each:g,merge:ta,extend:sa,assign:la,inherit:i,bindFn:j,prefixed:u});var wb="undefined"!=typeof a?a:"undefined"!=typeof self?self:{};wb.Hammer=ha,"function"==typeof define&&define.amd?define('Hammer',[],function(){return ha}):"undefined"!=typeof module&&module.exports?module.exports=ha:a[c]=ha}(window,document,"Hammer");
+//# sourceMappingURL=hammer.min.js.map;
 /*global require*/
 define('Core/KnockoutHammerBinding',[
     'KnockoutES5',
@@ -578,6 +578,8 @@ define('ViewModels/DistanceLegendViewModel',[
 
         this.distanceLabel = undefined;
         this.barWidth = undefined;
+        
+        this.enableDistanceLegend =  (defined(options.enableDistanceLegend))?options.enableDistanceLegend:true;
 
         Knockout.track(this, ['distanceLabel', 'barWidth']);
 
@@ -637,17 +639,27 @@ define('ViewModels/DistanceLegendViewModel',[
     };
 
     DistanceLegendViewModel.prototype.show = function (container) {
-        var testing = '<div class="distance-legend" data-bind="visible: distanceLabel && barWidth">' +
-            '<div class="distance-legend-label" data-bind="text: distanceLabel"></div>' +
-            '<div class="distance-legend-scale-bar" data-bind="style: { width: barWidth + \'px\', left: (5 + (125 - barWidth) / 2) + \'px\' }"></div>' +
-            '</div>';
+        var testing ;
+        if ( this.enableDistanceLegend)
+        {
+             testing = '<div class="distance-legend" data-bind="visible: distanceLabel && barWidth">' +
+                '<div class="distance-legend-label" data-bind="text: distanceLabel"></div>' +
+                '<div class="distance-legend-scale-bar" data-bind="style: { width: barWidth + \'px\', left: (5 + (125 - barWidth) / 2) + \'px\' }"></div>' +
+                '</div>';
+        }
+        else
+        {
+             testing = '<div class="distance-legend"  style="display: none;" data-bind="visible: distanceLabel && barWidth">' +
+                '<div class="distance-legend-label"  data-bind="text: distanceLabel"></div>' +
+                '<div class="distance-legend-scale-bar"  data-bind="style: { width: barWidth + \'px\', left: (5 + (125 - barWidth) / 2) + \'px\' }"></div>' +
+                '</div>';
+        }
         loadView(testing, container, this);
         // loadView(distanceLegendTemplate, container, this);
         //loadView(require('fs').readFileSync(__dirname + '/../Views/DistanceLegend.html', 'utf8'), container, this);
     };
 
     DistanceLegendViewModel.create = function (options) {
-
         var result = new DistanceLegendViewModel(options);
         result.show(options.container);
         return result;
@@ -666,7 +678,12 @@ define('ViewModels/DistanceLegendViewModel',[
         10000000, 20000000, 30000000, 50000000];
 
     function updateDistanceLegendCesium(viewModel, scene) {
-
+        if (!viewModel.enableDistanceLegend)
+        {
+             viewModel.barWidth = undefined;
+            viewModel.distanceLabel = undefined;
+            return;
+        }
         var now = getTimestamp();
         if (now < viewModel._lastLegendUpdate + 250) {
             return;
@@ -1245,46 +1262,54 @@ define('ViewModels/NavigationViewModel',[
     'SvgPaths/svgCompassRotationMarker',
     'Core/Utils'
 ], function (
-    defined,
-    CesiumMath,
-    getTimestamp,
-    EventHelper,
-    Transforms,
-    SceneMode,
-    Cartesian2,
-    Cartesian3,
-    Matrix4,
-    BoundingSphere,
-    HeadingPitchRange,
-    Knockout,
-    loadView,
-    ResetViewNavigationControl,
-    ZoomNavigationControl,
-    svgCompassOuterRing,
-    svgCompassGyro,
-    svgCompassRotationMarker,
-    Utils) {
+        defined,
+        CesiumMath,
+        getTimestamp,
+        EventHelper,
+        Transforms,
+        SceneMode,
+        Cartesian2,
+        Cartesian3,
+        Matrix4,
+        BoundingSphere,
+        HeadingPitchRange,
+        Knockout,
+        loadView,
+        ResetViewNavigationControl,
+        ZoomNavigationControl,
+        svgCompassOuterRing,
+        svgCompassGyro,
+        svgCompassRotationMarker,
+        Utils)
+{
     'use strict';
 
-    var NavigationViewModel = function (options) {
+    var NavigationViewModel = function (options)
+    {
 
         this.terria = options.terria;
         this.eventHelper = new EventHelper();
+        this.enableZoomControls =  (defined(options.enableZoomControls))?options.enableZoomControls:true;   
+        this.enableCompass = (defined(options.enableCompass))?options.enableCompass:true; 
 
-        this.controls = options.controls;
-        if (!defined(this.controls)) {
-            this.controls = [
-                new ZoomNavigationControl(this.terria, true),
-                new ResetViewNavigationControl(this.terria),
-                new ZoomNavigationControl(this.terria, false)
-            ];
-        }
+       // if (this.showZoomControls)
+     //   {
+            this.controls = options.controls;
+            if (!defined(this.controls))
+            {
+                this.controls = [
+                    new ZoomNavigationControl(this.terria, true),
+                    new ResetViewNavigationControl(this.terria),
+                    new ZoomNavigationControl(this.terria, false)
+                ];
+            }
+        //}
 
         this.svgCompassOuterRing = svgCompassOuterRing;
         this.svgCompassGyro = svgCompassGyro;
         this.svgCompassRotationMarker = svgCompassRotationMarker;
 
-        this.showCompass = defined(this.terria);
+        this.showCompass = defined(this.terria) && this.enableCompass;
         this.heading = this.showCompass ? this.terria.scene.camera.heading : 0.0;
 
         this.isOrbiting = false;
@@ -1309,20 +1334,27 @@ define('ViewModels/NavigationViewModel',[
 
         var that = this;
 
-        function widgetChange() {
-            if (defined(that.terria)) {
-                if (that._unsubcribeFromPostRender) {
+        function widgetChange()
+        {
+            if (defined(that.terria))
+            {
+                if (that._unsubcribeFromPostRender)
+                {
                     that._unsubcribeFromPostRender();
                     that._unsubcribeFromPostRender = undefined;
                 }
 
-                that.showCompass = true;
+                that.showCompass = true && that.enableCompass;
 
-                that._unsubcribeFromPostRender = that.terria.scene.postRender.addEventListener(function () {
+                that._unsubcribeFromPostRender = that.terria.scene.postRender.addEventListener(function ()
+                {
                     that.heading = that.terria.scene.camera.heading;
                 });
-            } else {
-                if (that._unsubcribeFromPostRender) {
+            }
+            else
+            {
+                if (that._unsubcribeFromPostRender)
+                {
                     that._unsubcribeFromPostRender();
                     that._unsubcribeFromPostRender = undefined;
                 }
@@ -1337,7 +1369,8 @@ define('ViewModels/NavigationViewModel',[
     };
 
 
-    NavigationViewModel.prototype.destroy = function () {
+    NavigationViewModel.prototype.destroy = function ()
+    {
 
         this.eventHelper.removeAll();
 
@@ -1345,29 +1378,109 @@ define('ViewModels/NavigationViewModel',[
 
     };
 
-    NavigationViewModel.prototype.show = function (container) {
-        var testing = '<div class="compass" title="Drag outer ring: rotate view. ' +
-            'Drag inner gyroscope: free orbit.' +
-            'Double-click: reset view.' +
-            'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
-            '<div class="compass-outer-ring-background"></div>' +
-            ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
-            ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
-            ' <div class="compass-gyro-background"></div>' +
-            ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
-            '</div>' +
-            '<div class="navigation-controls">' +
-            '<!-- ko foreach: controls -->' +
-            '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
-            '   <!-- ko if: $data.hasText -->' +
-            '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-            '   <!-- /ko -->' +
-            '  <!-- ko ifnot: $data.hasText -->' +
-            '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-            '  <!-- /ko -->' +
-            ' </div>' +
-            ' <!-- /ko -->' +
-            '</div>';
+    NavigationViewModel.prototype.show = function (container)
+    {
+        var testing;
+         if (this.enableZoomControls && this.enableCompass)
+        {
+             testing = '<div class="compass" title="Drag outer ring: rotate view. ' +
+                'Drag inner gyroscope: free orbit.' +
+                'Double-click: reset view.' +
+                'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
+                '<div class="compass-outer-ring-background"></div>' +
+                ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
+                ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
+                ' <div class="compass-gyro-background"></div>' +
+                ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
+                '</div>' +
+                '<div class="navigation-controls">' +
+                '<!-- ko foreach: controls -->' +
+                '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
+                '   <!-- ko if: $data.hasText -->' +
+                '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                '   <!-- /ko -->' +
+                '  <!-- ko ifnot: $data.hasText -->' +
+                '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                '  <!-- /ko -->' +
+                ' </div>' +
+                ' <!-- /ko -->' +
+                '</div>';
+    }
+    else   if (!this.enableZoomControls && this.enableCompass)
+    {
+         testing = '<div class="compass" title="Drag outer ring: rotate view. ' +
+                'Drag inner gyroscope: free orbit.' +
+                'Double-click: reset view.' +
+                'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
+                '<div class="compass-outer-ring-background"></div>' +
+                ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
+                ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
+                ' <div class="compass-gyro-background"></div>' +
+                ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
+                '</div>' +
+                '<div class="navigation-controls"  style="display: none;" >' +
+                '<!-- ko foreach: controls -->' +
+                '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
+                '   <!-- ko if: $data.hasText -->' +
+                '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                '   <!-- /ko -->' +
+                '  <!-- ko ifnot: $data.hasText -->' +
+                '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                '  <!-- /ko -->' +
+                ' </div>' +
+                ' <!-- /ko -->' +
+                '</div>';
+    }
+     else   if (this.enableZoomControls && !this.enableCompass)
+    {
+         testing = '<div class="compass"  style="display: none;" title="Drag outer ring: rotate view. ' +
+                'Drag inner gyroscope: free orbit.' +
+                'Double-click: reset view.' +
+                'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
+                '<div class="compass-outer-ring-background"></div>' +
+                ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
+                ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
+                ' <div class="compass-gyro-background"></div>' +
+                ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
+                '</div>' +
+                '<div class="navigation-controls"    >' +
+                '<!-- ko foreach: controls -->' +
+                '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
+                '   <!-- ko if: $data.hasText -->' +
+                '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                '   <!-- /ko -->' +
+                '  <!-- ko ifnot: $data.hasText -->' +
+                '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                '  <!-- /ko -->' +
+                ' </div>' +
+                ' <!-- /ko -->' +
+                '</div>';
+    }
+     else   if (!this.enableZoomControls && !this.enableCompass)
+    {
+         testing = '<div class="compass"  style="display: none;" title="Drag outer ring: rotate view. ' +
+                'Drag inner gyroscope: free orbit.' +
+                'Double-click: reset view.' +
+                'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
+                '<div class="compass-outer-ring-background"></div>' +
+                ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
+                ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
+                ' <div class="compass-gyro-background"></div>' +
+                ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
+                '</div>' +
+                '<div class="navigation-controls"   style="display: none;" >' +
+                '<!-- ko foreach: controls -->' +
+                '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
+                '   <!-- ko if: $data.hasText -->' +
+                '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                '   <!-- /ko -->' +
+                '  <!-- ko ifnot: $data.hasText -->' +
+                '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                '  <!-- /ko -->' +
+                ' </div>' +
+                ' <!-- /ko -->' +
+                '</div>';
+    }
         loadView(testing, container, this);
         // loadView(navigatorTemplate, container, this);
         //loadView(require('fs').readFileSync(baseURLEmpCesium + 'js-lib/terrajs/lib/Views/Navigation.html', 'utf8'), container, this);
@@ -1378,7 +1491,8 @@ define('ViewModels/NavigationViewModel',[
      * Adds a control to this toolbar.
      * @param {NavControl} control The control to add.
      */
-    NavigationViewModel.prototype.add = function (control) {
+    NavigationViewModel.prototype.add = function (control)
+    {
         this.controls.push(control);
     };
 
@@ -1386,7 +1500,8 @@ define('ViewModels/NavigationViewModel',[
      * Removes a control from this toolbar.
      * @param {NavControl} control The control to remove.
      */
-    NavigationViewModel.prototype.remove = function (control) {
+    NavigationViewModel.prototype.remove = function (control)
+    {
         this.controls.remove(control);
     };
 
@@ -1394,15 +1509,18 @@ define('ViewModels/NavigationViewModel',[
      * Checks if the control given is the last control in the control array.
      * @param {NavControl} control The control to remove.
      */
-    NavigationViewModel.prototype.isLastControl = function (control) {
+    NavigationViewModel.prototype.isLastControl = function (control)
+    {
         return (control === this.controls[this.controls.length - 1]);
     };
 
     var vectorScratch = new Cartesian2();
 
-    NavigationViewModel.prototype.handleMouseDown = function (viewModel, e) {
+    NavigationViewModel.prototype.handleMouseDown = function (viewModel, e)
+    {
         var scene = this.terria.scene;
-        if (scene.mode == SceneMode.MORPHING) {
+        if (scene.mode === SceneMode.MORPHING)
+        {
             return true;
         }
 
@@ -1419,13 +1537,18 @@ define('ViewModels/NavigationViewModel',[
         var nominalTotalRadius = 145;
         var norminalGyroRadius = 50;
 
-        if (distanceFraction < norminalGyroRadius / nominalTotalRadius) {
+        if (distanceFraction < norminalGyroRadius / nominalTotalRadius)
+        {
             orbit(this, compassElement, vector);
 //            return false;
-        } else if (distanceFraction < 1.0) {
+        }
+        else if (distanceFraction < 1.0)
+        {
             rotate(this, compassElement, vector);
 //            return false;
-        } else {
+        }
+        else
+        {
             return true;
         }
     };
@@ -1434,17 +1557,20 @@ define('ViewModels/NavigationViewModel',[
     var newTransformScratch = new Matrix4();
     var centerScratch = new Cartesian3();
 
-    NavigationViewModel.prototype.handleDoubleClick = function (viewModel, e) {
+    NavigationViewModel.prototype.handleDoubleClick = function (viewModel, e)
+    {
         var scene = this.terria.scene;
         var camera = scene.camera;
 
-        if (scene.mode == SceneMode.MORPHING || scene.mode == SceneMode.SCENE2D) {
+        if (scene.mode === SceneMode.MORPHING || scene.mode === SceneMode.SCENE2D)
+        {
             return true;
         }
 
         var center = Utils.getCameraFocus(scene, true, centerScratch);
 
-        if (!defined(center)) {
+        if (!defined(center))
+        {
             // Globe is barely visible, so reset to home view.
 
             this.controls[1].resetView();
@@ -1464,18 +1590,23 @@ define('ViewModels/NavigationViewModel',[
         });
     };
 
-    NavigationViewModel.create = function (options) {
+    NavigationViewModel.create = function (options)
+    {
+        //options.enableZoomControls = this.enableZoomControls;
+        //options.enableCompass = this.enableCompass;
         var result = new NavigationViewModel(options);
         result.show(options.container);
         return result;
     };
 
-    function orbit(viewModel, compassElement, cursorVector) {
+    function orbit(viewModel, compassElement, cursorVector)
+    {
         // Remove existing event handlers, if any.
         document.removeEventListener('mousemove', viewModel.orbitMouseMoveFunction, false);
         document.removeEventListener('mouseup', viewModel.orbitMouseUpFunction, false);
 
-        if (defined(viewModel.orbitTickFunction)) {
+        if (defined(viewModel.orbitTickFunction))
+        {
             viewModel.terria.clock.onTick.removeEventListener(viewModel.orbitTickFunction);
         }
 
@@ -1491,15 +1622,19 @@ define('ViewModels/NavigationViewModel',[
 
         var center = Utils.getCameraFocus(scene, true, centerScratch);
 
-        if (!defined(center)) {
+        if (!defined(center))
+        {
             viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
             viewModel.orbitIsLook = true;
-        } else {
+        }
+        else
+        {
             viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid, newTransformScratch);
             viewModel.orbitIsLook = false;
         }
 
-        viewModel.orbitTickFunction = function (e) {
+        viewModel.orbitTickFunction = function (e)
+        {
             var timestamp = getTimestamp();
             var deltaT = timestamp - viewModel.orbitLastTimestamp;
             var rate = (viewModel.orbitCursorOpacity - 0.5) * 2.5 / 1000;
@@ -1514,13 +1649,19 @@ define('ViewModels/NavigationViewModel',[
             camera.lookAtTransform(viewModel.orbitFrame);
 
             // do not look up/down or rotate in 2D mode
-            if (scene.mode == SceneMode.SCENE2D) {
+            if (scene.mode == SceneMode.SCENE2D)
+            {
                 camera.move(new Cartesian3(x, y, 0), Math.max(scene.canvas.clientWidth, scene.canvas.clientHeight) / 100 * camera.positionCartographic.height * distance);
-            } else {
-                if (viewModel.orbitIsLook) {
+            }
+            else
+            {
+                if (viewModel.orbitIsLook)
+                {
                     camera.look(Cartesian3.UNIT_Z, -x);
                     camera.look(camera.right, -y);
-                } else {
+                }
+                else
+                {
                     camera.rotateLeft(x);
                     camera.rotateUp(y);
                 }
@@ -1533,7 +1674,8 @@ define('ViewModels/NavigationViewModel',[
             viewModel.orbitLastTimestamp = timestamp;
         };
 
-        function updateAngleAndOpacity(vector, compassWidth) {
+        function updateAngleAndOpacity(vector, compassWidth)
+        {
             var angle = Math.atan2(-vector.y, vector.x);
             viewModel.orbitCursorAngle = CesiumMath.zeroToTwoPi(angle - CesiumMath.PI_OVER_TWO);
 
@@ -1546,7 +1688,8 @@ define('ViewModels/NavigationViewModel',[
             //viewModel.terria.cesium.notifyRepaintRequired();
         }
 
-        viewModel.orbitMouseMoveFunction = function (e) {
+        viewModel.orbitMouseMoveFunction = function (e)
+        {
             var compassRectangle = compassElement.getBoundingClientRect();
             var center = new Cartesian2((compassRectangle.right - compassRectangle.left) / 2.0, (compassRectangle.bottom - compassRectangle.top) / 2.0);
             var clickLocation = new Cartesian2(e.clientX - compassRectangle.left, e.clientY - compassRectangle.top);
@@ -1554,14 +1697,16 @@ define('ViewModels/NavigationViewModel',[
             updateAngleAndOpacity(vector, compassRectangle.width);
         };
 
-        viewModel.orbitMouseUpFunction = function (e) {
+        viewModel.orbitMouseUpFunction = function (e)
+        {
             // TODO: if mouse didn't move, reset view to looking down, north is up?
 
             viewModel.isOrbiting = false;
             document.removeEventListener('mousemove', viewModel.orbitMouseMoveFunction, false);
             document.removeEventListener('mouseup', viewModel.orbitMouseUpFunction, false);
 
-            if (defined(viewModel.orbitTickFunction)) {
+            if (defined(viewModel.orbitTickFunction))
+            {
                 viewModel.terria.clock.onTick.removeEventListener(viewModel.orbitTickFunction);
             }
 
@@ -1577,12 +1722,14 @@ define('ViewModels/NavigationViewModel',[
         updateAngleAndOpacity(cursorVector, compassElement.getBoundingClientRect().width);
     }
 
-    function rotate(viewModel, compassElement, cursorVector) {
+    function rotate(viewModel, compassElement, cursorVector)
+    {
         var scene = viewModel.terria.scene;
         var camera = scene.camera;
 
         // do not look rotate in 2D mode
-        if (scene.mode == SceneMode.SCENE2D) {
+        if (scene.mode === SceneMode.SCENE2D)
+        {
             return;
         }
 
@@ -1598,10 +1745,13 @@ define('ViewModels/NavigationViewModel',[
 
         var viewCenter = Utils.getCameraFocus(scene, true, centerScratch);
 
-        if (!defined(viewCenter)) {
+        if (!defined(viewCenter))
+        {
             viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
             viewModel.rotateIsLook = true;
-        } else {
+        }
+        else
+        {
             viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter, scene.globe.ellipsoid, newTransformScratch);
             viewModel.rotateIsLook = false;
         }
@@ -1612,7 +1762,8 @@ define('ViewModels/NavigationViewModel',[
         viewModel.rotateInitialCameraDistance = Cartesian3.magnitude(new Cartesian3(camera.position.x, camera.position.y, 0.0));
         camera.lookAtTransform(oldTransform);
 
-        viewModel.rotateMouseMoveFunction = function (e) {
+        viewModel.rotateMouseMoveFunction = function (e)
+        {
             var compassRectangle = compassElement.getBoundingClientRect();
             var center = new Cartesian2((compassRectangle.right - compassRectangle.left) / 2.0, (compassRectangle.bottom - compassRectangle.top) / 2.0);
             var clickLocation = new Cartesian2(e.clientX - compassRectangle.left, e.clientY - compassRectangle.top);
@@ -1633,7 +1784,8 @@ define('ViewModels/NavigationViewModel',[
             // viewModel.terria.cesium.notifyRepaintRequired();
         };
 
-        viewModel.rotateMouseUpFunction = function (e) {
+        viewModel.rotateMouseUpFunction = function (e)
+        {
             viewModel.isRotating = false;
             document.removeEventListener('mousemove', viewModel.rotateMouseMoveFunction, false);
             document.removeEventListener('mouseup', viewModel.rotateMouseUpFunction, false);
@@ -1660,14 +1812,15 @@ define('CesiumNavigation',[
     'ViewModels/DistanceLegendViewModel',
     'ViewModels/NavigationViewModel'
 ], function (
-    defined,
-    defineProperties,
+        defined,
+        defineProperties,
 //    defaultValue,
-    CesiumEvent,
-    Knockout,
-    registerKnockoutBindings,
-    DistanceLegendViewModel,
-    NavigationViewModel) {
+        CesiumEvent,
+        Knockout,
+        registerKnockoutBindings,
+        DistanceLegendViewModel,
+        NavigationViewModel)
+{
     'use strict';
 
     /**
@@ -1676,7 +1829,8 @@ define('CesiumNavigation',[
      *
      * @param {CesiumWidget} cesiumWidget The CesiumWidget instance
      */
-    var CesiumNavigation = function (cesiumWidget) {
+    var CesiumNavigation = function (cesiumWidget)
+    {
         initialize.apply(this, arguments);
 
         this._onDestroyListeners = [];
@@ -1690,42 +1844,53 @@ define('CesiumNavigation',[
     CesiumNavigation.prototype.container = undefined;
     CesiumNavigation.prototype._onDestroyListeners = undefined;
 
-    CesiumNavigation.prototype.destroy = function () {
-        if (defined(this.navigationViewModel)) {
+    CesiumNavigation.prototype.destroy = function ()
+    {
+        if (defined(this.navigationViewModel))
+        {
             this.navigationViewModel.destroy();
         }
-        if (defined(this.distanceLegendViewModel)) {
+        if (defined(this.distanceLegendViewModel))
+        {
             this.distanceLegendViewModel.destroy();
         }
 
-        if (defined(this.navigationDiv)) {
+        if (defined(this.navigationDiv))
+        {
             this.navigationDiv.parentNode.removeChild(this.navigationDiv);
         }
         delete this.navigationDiv;
 
-        if (defined(this.distanceLegendDiv)) {
+        if (defined(this.distanceLegendDiv))
+        {
             this.distanceLegendDiv.parentNode.removeChild(this.distanceLegendDiv);
         }
         delete this.distanceLegendDiv;
 
-        if (defined(this.container)) {
+        if (defined(this.container))
+        {
             this.container.parentNode.removeChild(this.container);
         }
         delete this.container;
 
-        for (var i = 0; i < this._onDestroyListeners.length; i++) {
+        for (var i = 0; i < this._onDestroyListeners.length; i++)
+        {
             this._onDestroyListeners[i]();
         }
     };
 
-    CesiumNavigation.prototype.addOnDestroyListener = function (callback) {
-        if (typeof callback === "function") {
+    CesiumNavigation.prototype.addOnDestroyListener = function (callback)
+    {
+        if (typeof callback === "function")
+        {
             this._onDestroyListeners.push(callback);
         }
     };
 
-    function initialize(cesiumWidget, options) {
-        if (!defined(cesiumWidget)) {
+    function initialize(cesiumWidget, options)
+    {
+        if (!defined(cesiumWidget))
+        {
             throw new DeveloperError('cesiumWidget is required.');
         }
 
@@ -1736,57 +1901,88 @@ define('CesiumNavigation',[
         cesiumWidget.container.appendChild(container);
 
         this.terria = cesiumWidget;
-        this.terria.options = options;
+        this.terria.options = (defined(options))?options :{};
         this.terria.afterWidgetChanged = new CesiumEvent();
         this.terria.beforeWidgetChanged = new CesiumEvent();
         this.container = container;
-        this.navigationDiv = document.createElement('div');
-        this.navigationDiv.setAttribute("id", "navigationDiv");
-//        this.navigationDiv.style.display = "inline-block";
-//        this.navigationDiv.style.margin = "2px";
-//        this.navigationDiv.style.position = "absolute";
-//        this.navigationDiv.style.right = "0px";
-//        this.navigationDiv.style.height = "45px";
-//        this.navigationDiv.style.top = "34px";
-//        this.navigationDiv.style.zIndex = "300";
-//        navigationDiv.style.border = "3px solid #8AC007";
-
-
-        this.distanceLegendDiv = document.createElement('div');
-        this.navigationDiv.setAttribute("id", "distanceLegendDiv");
-//        this.navigationDiv.style.display = "inline-block";
-//        this.navigationDiv.style.margin = "2px";
-//        this.navigationDiv.style.position = "absolute";
-//        this.navigationDiv.style.right = "57px";
-//        this.navigationDiv.style.top = "30px";
-//        this.navigationDiv.style.zIndex = "300";
-
-//        var mapContainer = document.getElementById(emp.map.container.get());
-        container.appendChild(this.navigationDiv);
-        container.appendChild(this.distanceLegendDiv);
-
-
-        // Register custom Knockout.js bindings.  If you're not using the TerriaJS user interface, you can remove this.
+        
+        //this.navigationDiv.setAttribute("id", "navigationDiv");
+        
+           
+          // Register custom Knockout.js bindings.  If you're not using the TerriaJS user interface, you can remove this.
         registerKnockoutBindings();
 
-        this.distanceLegendViewModel = DistanceLegendViewModel.create({
-            container: this.distanceLegendDiv,
-            terria: this.terria,
-            mapElement: container
-        });
+        if (!defined(this.terria.options.enableDistanceLegend) || this.terria.options.enableDistanceLegend)
+        {
+            this.distanceLegendDiv = document.createElement('div');
+             container.appendChild(this.distanceLegendDiv);
+            this.distanceLegendDiv.setAttribute("id", "distanceLegendDiv");
+            this.distanceLegendViewModel = DistanceLegendViewModel.create({
+                container: this.distanceLegendDiv,
+                terria: this.terria,
+                mapElement: container,
+                enableDistanceLegend: true
+            });
+           
+        }
+     
 
-        // Create the navigation controls.
-        this.navigationViewModel = NavigationViewModel.create({
-            container: this.navigationDiv,
-            terria: this.terria
-        });
+        if ((!defined(this.terria.options.enableZoomControls) || this.terria.options.enableZoomControls) && (!defined(this.terria.options.enableCompass) || this.terria.options.enableCompass))
+        {
+            this.navigationDiv = document.createElement('div');
+            this.navigationDiv.setAttribute("id", "navigationDiv");
+            container.appendChild(this.navigationDiv);
+            // Create the navigation controls.
+            this.navigationViewModel = NavigationViewModel.create({
+                container: this.navigationDiv,
+                terria: this.terria,
+                enableZoomControls: true,
+                enableCompass: true
+            });
+        }
+        else  if ((defined(this.terria.options.enableZoomControls) && !this.terria.options.enableZoomControls) && (!defined(this.terria.options.enableCompass) || this.terria.options.enableCompass))
+        {
+            this.navigationDiv = document.createElement('div');
+            this.navigationDiv.setAttribute("id", "navigationDiv");
+            container.appendChild(this.navigationDiv);
+            // Create the navigation controls.
+            this.navigationViewModel = NavigationViewModel.create({
+                container: this.navigationDiv,
+                terria: this.terria,
+                enableZoomControls: false,
+                enableCompass: true
+            });
+        }
+        else  if ((!defined(this.terria.options.enableZoomControls) || this.terria.options.enableZoomControls) && (defined(this.terria.options.enableCompass) && !this.terria.options.enableCompass))
+        {
+            this.navigationDiv = document.createElement('div');
+            this.navigationDiv.setAttribute("id", "navigationDiv");
+            container.appendChild(this.navigationDiv);
+            // Create the navigation controls.
+            this.navigationViewModel = NavigationViewModel.create({
+                container: this.navigationDiv,
+                terria: this.terria,
+                enableZoomControls: true,
+                enableCompass: false
+            });
+        }
+        else  if ((defined(this.terria.options.enableZoomControls) &&  !this.terria.options.enableZoomControls) && (defined(this.terria.options.enableCompass) &&  !this.terria.options.enableCompass))
+        {
+            //this.navigationDiv.setAttribute("id", "navigationDiv");
+           // container.appendChild(this.navigationDiv);
+            // Create the navigation controls.
+//            this.navigationViewModel = NavigationViewModel.create({
+//                container: this.navigationDiv,
+//                terria: this.terria,
+//                enableZoomControls: false,
+//                enableCompass: false
+//            });
+        }
+
     }
 
     return CesiumNavigation;
 });
-
-
-
 
 define('dummy/require-less/less/dummy',[],function(){});
 /**
@@ -1880,7 +2076,7 @@ define('viewerCesiumNavigationMixin',[
 });
 
 (function(c){var d=document,a='appendChild',i='styleSheet',s=d.createElement('style');s.type='text/css';d.getElementsByTagName('head')[0][a](s);s[i]?s[i].cssText=c:s[a](d.createTextNode(c));})
-('.full-window{position:absolute;top:0;left:0;right:0;bottom:0;margin:0;overflow:hidden;padding:0;-webkit-transition:left .25s ease-out;-moz-transition:left .25s ease-out;-ms-transition:left .25s ease-out;-o-transition:left .25s ease-out;transition:left .25s ease-out}.transparent-to-input{pointer-events:none}.opaque-to-input{pointer-events:auto}.clickable{cursor:pointer}a:hover{text-decoration:underline}.modal,.modal-background{top:0;left:0;bottom:0;right:0}.modal-background{pointer-events:auto;background-color:rgba(0,0,0,.5);z-index:1000;position:fixed}.modal{position:absolute;margin:auto;background-color:#2f353c;max-height:100%;max-width:100%;font-family:\'Roboto\',sans-serif;color:#fff}.modal-header{background-color:rgba(0,0,0,.2);border-bottom:1px solid rgba(100,100,100,.6);font-size:15px;line-height:40px;margin:0}.modal-header h1{font-size:15px;color:#fff;margin-left:15px}.modal-content{margin-left:15px;margin-right:15px;margin-bottom:15px;padding-top:15px;overflow:auto}.modal-close-button{position:absolute;right:15px;cursor:pointer;font-size:18px;color:#fff}#ui{z-index:2100}@media print{.full-window{position:initial}}.markdown img{max-width:100%}.markdown svg{max-height:100%}.markdown fieldset,.markdown input,.markdown select,.markdown textarea{font-family:inherit;font-size:1rem;box-sizing:border-box;margin-top:0;margin-bottom:0}.markdown label{vertical-align:middle}.markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{font-family:inherit;font-weight:700;line-height:1.25;margin-top:1em;margin-bottom:.5em}.markdown h1{font-size:2rem}.markdown h2{font-size:1.5rem}.markdown h3{font-size:1.25rem}.markdown h4{font-size:1rem}.markdown h5{font-size:.875rem}.markdown h6{font-size:.75rem}.markdown dl,.markdown ol,.markdown p,.markdown ul{margin-top:0;margin-bottom:1rem}.markdown strong{font-weight:700}.markdown em{font-style:italic}.markdown small{font-size:80%}.markdown mark{color:#000;background:#ff0}.markdown a:hover,.markdown u{text-decoration:underline}.markdown s{text-decoration:line-through}.markdown ol{list-style:decimal inside}.markdown ul{list-style:disc inside}.markdown code,.markdown pre,.markdown samp{font-family:monospace;font-size:inherit}.markdown pre{margin-top:0;margin-bottom:1rem;overflow-x:scroll}.markdown a{color:#68adfe;text-decoration:none}.markdown code,.markdown pre{background-color:transparent;border-radius:3px}.markdown hr{border:0;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:rgba(0,0,0,.125)}.markdown .left-align{text-align:left}.markdown .center{text-align:center}.markdown .right-align{text-align:right}.markdown .justify{text-align:justify}.markdown .truncate{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.markdown ol.upper-roman{list-style-type:upper-roman}.markdown ol.lower-alpha{list-style-type:lower-alpha}.markdown ul.circle{list-style-type:circle}.markdown ul.square{list-style-type:square}.markdown .list-reset{list-style:none;padding-left:0}.floating,.floating-horizontal,.floating-vertical{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8)}.floating-horizontal{padding-left:5px;padding-right:5px}.floating-vertical{padding-top:5px;padding-bottom:5px}@media print{.floating{display:none}}.distance-legend{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8);padding-left:5px;padding-right:5px;right:25px;bottom:30px;height:30px;width:125px;border:1px solid rgba(255,255,255,.1);box-sizing:content-box}.distance-legend-label{display:inline-block;font-family:\'Roboto\',sans-serif;font-size:14px;font-weight:lighter;line-height:30px;color:#fff;width:125px;text-align:center}.distance-legend-scale-bar{border-left:1px solid #fff;border-right:1px solid #fff;border-bottom:1px solid #fff;position:absolute;height:10px;top:15px}@media print{.distance-legend{display:none}}@media screen and (max-width:700px),screen and (max-height:420px){.distance-legend{display:none}}.navigation-controls{position:absolute;right:30px;top:210px;width:30px;border:1px solid rgba(255,255,255,.1);font-weight:300;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.navigation-control{cursor:pointer;border-bottom:1px solid #555}.naviagation-control:active{color:#fff}.navigation-control-last{cursor:pointer;border-bottom:0}.navigation-control-icon-zoom-in{padding-bottom:4px}.navigation-control-icon-zoom-in,.navigation-control-icon-zoom-out{position:relative;text-align:center;font-size:20px;color:#fff}.navigation-control-icon-reset{position:relative;left:10px;width:10px;height:10px;fill:rgba(255,255,255,.8);padding-top:6px;padding-bottom:6px;box-sizing:content-box}.compass,.compass-outer-ring{position:absolute;width:95px;height:95px}.compass{pointer-events:auto;right:0;overflow:hidden;top:100px}.compass-outer-ring{top:0;fill:rgba(255,255,255,.5)}.compass-outer-ring-background{position:absolute;top:14px;left:14px;width:44px;height:44px;border-radius:44px;border:12px solid rgba(47,53,60,.8);box-sizing:content-box}.compass-gyro{pointer-events:none;position:absolute;top:0;width:95px;height:95px;fill:#ccc}.compass-gyro-active,.compass-gyro-background:hover+.compass-gyro{fill:#68adfe}.compass-gyro-background{position:absolute;top:30px;left:30px;width:33px;height:33px;border-radius:33px;background-color:rgba(47,53,60,.8);border:1px solid rgba(255,255,255,.2);box-sizing:content-box}.compass-rotation-marker{position:absolute;top:0;width:95px;height:95px;fill:#68adfe}@media screen and (max-width:700px),screen and (max-height:420px){.compass,.navigation-controls{display:none}}@media print{.compass,.navigation-controls{display:none}}');
+('.full-window{position:absolute;top:0;left:0;right:0;bottom:0;margin:0;overflow:hidden;padding:0;-webkit-transition:left .25s ease-out;-moz-transition:left .25s ease-out;-ms-transition:left .25s ease-out;-o-transition:left .25s ease-out;transition:left .25s ease-out}.transparent-to-input{pointer-events:none}.opaque-to-input{pointer-events:auto}.clickable{cursor:pointer}.markdown a:hover,.markdown u,a:hover{text-decoration:underline}.modal,.modal-background{top:0;left:0;bottom:0;right:0}.modal-background{pointer-events:auto;background-color:rgba(0,0,0,.5);z-index:1000;position:fixed}.modal{position:absolute;margin:auto;background-color:#2f353c;max-height:100%;max-width:100%;font-family:\'Roboto\',sans-serif;color:#fff}.modal-header{background-color:rgba(0,0,0,.2);border-bottom:1px solid rgba(100,100,100,.6);font-size:15px;line-height:40px;margin:0}.modal-header h1{font-size:15px;color:#fff;margin-left:15px}.modal-content{margin-left:15px;margin-right:15px;margin-bottom:15px;padding-top:15px;overflow:auto}.modal-close-button{position:absolute;right:15px;cursor:pointer;font-size:18px;color:#fff}#ui{z-index:2100}@media print{.full-window{position:initial}}.markdown img{max-width:100%}.markdown svg{max-height:100%}.markdown fieldset,.markdown input,.markdown select,.markdown textarea{font-family:inherit;font-size:1rem;box-sizing:border-box;margin-top:0;margin-bottom:0}.markdown label{vertical-align:middle}.markdown h1,.markdown h2,.markdown h3,.markdown h4,.markdown h5,.markdown h6{font-family:inherit;font-weight:700;line-height:1.25;margin-top:1em;margin-bottom:.5em}.markdown h1{font-size:2rem}.markdown h2{font-size:1.5rem}.markdown h3{font-size:1.25rem}.markdown h4{font-size:1rem}.markdown h5{font-size:.875rem}.markdown h6{font-size:.75rem}.markdown dl,.markdown ol,.markdown p,.markdown ul{margin-top:0;margin-bottom:1rem}.markdown strong{font-weight:700}.markdown em{font-style:italic}.markdown small{font-size:80%}.markdown mark{color:#000;background:#ff0}.markdown s{text-decoration:line-through}.markdown ol{list-style:decimal inside}.markdown ul{list-style:disc inside}.markdown code,.markdown pre,.markdown samp{font-family:monospace;font-size:inherit}.markdown pre{margin-top:0;margin-bottom:1rem;overflow-x:scroll}.markdown a{color:#68adfe;text-decoration:none}.markdown code,.markdown pre{background-color:transparent;border-radius:3px}.markdown hr{border:0;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:rgba(0,0,0,.125)}.markdown .left-align{text-align:left}.markdown .center{text-align:center}.markdown .right-align{text-align:right}.markdown .justify{text-align:justify}.markdown .truncate{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.markdown ol.upper-roman{list-style-type:upper-roman}.markdown ol.lower-alpha{list-style-type:lower-alpha}.markdown ul.circle{list-style-type:circle}.markdown ul.square{list-style-type:square}.markdown .list-reset{list-style:none;padding-left:0}.floating,.floating-horizontal,.floating-vertical{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8)}.floating-horizontal{padding-left:5px;padding-right:5px}.floating-vertical{padding-top:5px;padding-bottom:5px}@media print{.floating{display:none}}.distance-legend{pointer-events:auto;position:absolute;border-radius:15px;background-color:rgba(47,53,60,.8);padding-left:5px;padding-right:5px;right:25px;bottom:30px;height:30px;width:125px;border:1px solid rgba(255,255,255,.1);box-sizing:content-box}.distance-legend-label{display:inline-block;font-family:\'Roboto\',sans-serif;font-size:14px;font-weight:lighter;line-height:30px;color:#fff;width:125px;text-align:center}.distance-legend-scale-bar{border-left:1px solid #fff;border-right:1px solid #fff;border-bottom:1px solid #fff;position:absolute;height:10px;top:15px}@media print{.distance-legend{display:none}}@media screen and (max-width:700px),screen and (max-height:420px){.distance-legend{display:none}}.navigation-controls{position:absolute;right:30px;top:210px;width:30px;border:1px solid rgba(255,255,255,.1);font-weight:300;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.navigation-control{cursor:pointer;border-bottom:1px solid #555}.naviagation-control:active{color:#fff}.navigation-control-last{cursor:pointer;border-bottom:0}.navigation-control-icon-zoom-in{padding-bottom:4px}.navigation-control-icon-zoom-in,.navigation-control-icon-zoom-out{position:relative;text-align:center;font-size:20px;color:#fff}.navigation-control-icon-reset{position:relative;left:10px;width:10px;height:10px;fill:rgba(255,255,255,.8);padding-top:6px;padding-bottom:6px;box-sizing:content-box}.compass,.compass-outer-ring{position:absolute;width:95px;height:95px}.compass{pointer-events:auto;right:0;overflow:hidden;top:100px}.compass-outer-ring{top:0;fill:rgba(255,255,255,.5)}.compass-outer-ring-background{position:absolute;top:14px;left:14px;width:44px;height:44px;border-radius:44px;border:12px solid rgba(47,53,60,.8);box-sizing:content-box}.compass-gyro{pointer-events:none;position:absolute;top:0;width:95px;height:95px;fill:#ccc}.compass-gyro-active,.compass-gyro-background:hover+.compass-gyro{fill:#68adfe}.compass-gyro-background{position:absolute;top:30px;left:30px;width:33px;height:33px;border-radius:33px;background-color:rgba(47,53,60,.8);border:1px solid rgba(255,255,255,.2);box-sizing:content-box}.compass-rotation-marker{position:absolute;top:0;width:95px;height:95px;fill:#68adfe}@media screen and (max-width:700px),screen and (max-height:420px){.compass,.navigation-controls{display:none}}@media print{.compass,.navigation-controls{display:none}}');
 
 
 
