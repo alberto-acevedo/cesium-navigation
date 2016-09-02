@@ -317,15 +317,30 @@ define([
 
     NavigationViewModel.prototype.handleDoubleClick = function (viewModel, e)
     {
-        var scene = this.terria.scene;
+        var scene = viewModel.terria.scene;
         var camera = scene.camera;
 
-        if (scene.mode === SceneMode.MORPHING || scene.mode === SceneMode.SCENE2D)
-        {
+        var sscc = scene.screenSpaceCameraController;
+
+        if (scene.mode == SceneMode.MORPHING || !sscc.enableInputs) {
             return true;
         }
+        if (scene.mode == SceneMode.COLUMBUS_VIEW && !sscc.enableTranslate) {
+            return;
+        }
+        if(scene.mode == SceneMode.SCENE3D || scene.mode == SceneMode.COLUMBUS_VIEW) {
+            if (!sscc.enableLook) {
+                return;
+            }
 
-        var center = Utils.getCameraFocus(scene, true, centerScratch);
+            if(scene.mode == SceneMode.SCENE3D) {
+                if(!sscc.enableRotate) {
+                    return
+                }
+            }
+        }
+
+        var center = Utils.getCameraFocus(viewModel.terria, true, centerScratch);
 
         if (!defined(center))
         {
@@ -335,15 +350,24 @@ define([
             return;
         }
 
-        // var rotateFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid);
-        //
         var cameraPosition = scene.globe.ellipsoid.cartographicToCartesian(camera.positionCartographic, new Cartesian3());
-        // var lookVector = Cartesian3.subtract(center, cameraPosition, new Cartesian3());
-        //
-        // var destination = Matrix4.multiplyByPoint(rotateFrame, new Cartesian3(0, 0, Cartesian3.magnitude(lookVector)), new Cartesian3());
 
-        camera.flyToBoundingSphere(new BoundingSphere(center, 0), {
-            offset: new HeadingPitchRange(0, camera.pitch, Cartesian3.distance(cameraPosition, center)),
+        var surfaceNormal = scene.globe.ellipsoid.geodeticSurfaceNormal(center);
+
+        var focusBoundingSphere = new BoundingSphere(center, 0);
+
+        camera.flyToBoundingSphere(focusBoundingSphere, {
+            offset: new HeadingPitchRange(0,
+                // do not use camera.pitch since the pitch at the center/target is required
+                CesiumMath.PI_OVER_TWO - Cartesian3.angleBetween(
+                    surfaceNormal,
+                    camera.directionWC
+                ),
+                // distanceToBoundingSphere returns wrong values when in 2D or Columbus view so do not use
+                // camera.distanceToBoundingSphere(focusBoundingSphere)
+                // instead calculate distance manually
+                Cartesian3.distance(cameraPosition, center)
+            ),
             duration: 1.5
         });
     };
@@ -357,8 +381,43 @@ define([
         return result;
     };
 
-    function orbit(viewModel, compassElement, cursorVector)
-    {
+    function orbit(viewModel, compassElement, cursorVector){
+        var scene = viewModel.terria.scene;
+    
+
+        var sscc = scene.screenSpaceCameraController;
+
+        // do not orbit if it is disabled
+        if(scene.mode == SceneMode.MORPHING || !sscc.enableInputs) {
+            return;
+        }
+
+        switch(scene.mode) {
+            case SceneMode.COLUMBUS_VIEW:
+                if(sscc.enableLook) {
+                    break;
+                }
+
+                if (!sscc.enableTranslate || !sscc.enableTilt) {
+                    return;
+                }
+                break;
+            case SceneMode.SCENE3D:
+                if(sscc.enableLook) {
+                    break;
+                }
+
+                if (!sscc.enableTilt || !sscc.enableRotate) {
+                    return;
+                }
+                break;
+            case SceneMode.SCENE2D:
+                if (!sscc.enableTranslate) {
+                    return;
+                }
+                break;
+        }
+
         // Remove existing event handlers, if any.
         document.removeEventListener('mousemove', viewModel.orbitMouseMoveFunction, false);
         document.removeEventListener('mouseup', viewModel.orbitMouseUpFunction, false);
@@ -375,20 +434,25 @@ define([
         viewModel.isOrbiting = true;
         viewModel.orbitLastTimestamp = getTimestamp();
 
-        var scene = viewModel.terria.scene;
         var camera = scene.camera;
 
-        var center = Utils.getCameraFocus(scene, true, centerScratch);
+        if (defined(viewModel.terria.trackedEntity)) {
+            // when tracking an entity simply use that reference frame
+            viewModel.orbitFrame = undefined;
+            viewModel.orbitIsLook = false;
+        } else {
+            var center = Utils.getCameraFocus(viewModel.terria, true, centerScratch);
 
-        if (!defined(center))
+            if (!defined(center))  
         {
-            viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
-            viewModel.orbitIsLook = true;
+                viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
+                viewModel.orbitIsLook = true;
         }
         else
         {
-            viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid, newTransformScratch);
-            viewModel.orbitIsLook = false;
+                viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid, newTransformScratch);
+                viewModel.orbitIsLook = false;
+            }
         }
 
         viewModel.orbitTickFunction = function (e)
@@ -402,9 +466,13 @@ define([
             var x = Math.cos(angle) * distance;
             var y = Math.sin(angle) * distance;
 
-            var oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
+            var oldTransform;
 
-            camera.lookAtTransform(viewModel.orbitFrame);
+            if (defined(viewModel.orbitFrame)) {
+                oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
+
+                camera.lookAtTransform(viewModel.orbitFrame);
+            }
 
             // do not look up/down or rotate in 2D mode
             if (scene.mode == SceneMode.SCENE2D)
@@ -425,7 +493,9 @@ define([
                 }
             }
 
-            camera.lookAtTransform(oldTransform);
+            if (defined(viewModel.orbitFrame)) {
+                camera.lookAtTransform(oldTransform);
+            }
 
             // viewModel.terria.cesium.notifyRepaintRequired();
 
@@ -485,9 +555,12 @@ define([
         var scene = viewModel.terria.scene;
         var camera = scene.camera;
 
-        // do not look rotate in 2D mode
-        if (scene.mode === SceneMode.SCENE2D)
-        {
+        var sscc = scene.screenSpaceCameraController;
+        // do not rotate in 2D mode or if rotating is disabled
+        if (scene.mode == SceneMode.MORPHING || scene.mode == SceneMode.SCENE2D || !sscc.enableInputs) {
+            return;
+        }
+        if(!sscc.enableLook && (scene.mode == SceneMode.COLUMBUS_VIEW || (scene.mode == SceneMode.SCENE3D && !sscc.enableRotate))) {
             return;
         }
 
@@ -501,24 +574,36 @@ define([
         viewModel.isRotating = true;
         viewModel.rotateInitialCursorAngle = Math.atan2(-cursorVector.y, cursorVector.x);
 
-        var viewCenter = Utils.getCameraFocus(scene, true, centerScratch);
+        if(defined(viewModel.terria.trackedEntity)) {
+            // when tracking an entity simply use that reference frame
+            viewModel.rotateFrame = undefined;
+            viewModel.rotateIsLook = false;
+        } else {
+            var viewCenter = Utils.getCameraFocus(viewModel.terria, true, centerScratch);
 
-        if (!defined(viewCenter))
+            if (!defined(viewCenter) || (scene.mode == SceneMode.COLUMBUS_VIEW && !sscc.enableLook && !sscc.enableTranslate)) 
         {
-            viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
-            viewModel.rotateIsLook = true;
+                viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
+                viewModel.rotateIsLook = true;
         }
         else
         {
-            viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter, scene.globe.ellipsoid, newTransformScratch);
-            viewModel.rotateIsLook = false;
+                viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter, scene.globe.ellipsoid, newTransformScratch);
+                viewModel.rotateIsLook = false;
+            }
         }
 
-        var oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
-        camera.lookAtTransform(viewModel.rotateFrame);
+        var oldTransform;
+        if(defined(viewModel.rotateFrame)) {
+            oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
+            camera.lookAtTransform(viewModel.rotateFrame);
+        }
+
         viewModel.rotateInitialCameraAngle = -camera.heading;
-        viewModel.rotateInitialCameraDistance = Cartesian3.magnitude(new Cartesian3(camera.position.x, camera.position.y, 0.0));
-        camera.lookAtTransform(oldTransform);
+
+        if(defined(viewModel.rotateFrame)) {
+            camera.lookAtTransform(oldTransform);
+        }
 
         viewModel.rotateMouseMoveFunction = function (e)
         {
@@ -533,11 +618,18 @@ define([
 
             var camera = viewModel.terria.scene.camera;
 
-            var oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
-            camera.lookAtTransform(viewModel.rotateFrame);
+            var oldTransform;
+            if(defined(viewModel.rotateFrame)) {
+                oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
+                camera.lookAtTransform(viewModel.rotateFrame);
+            }
+
             var currentCameraAngle = -camera.heading;
             camera.rotateRight(newCameraAngle - currentCameraAngle);
-            camera.lookAtTransform(oldTransform);
+
+            if(defined(viewModel.rotateFrame)) {
+                camera.lookAtTransform(oldTransform);
+            }
 
             // viewModel.terria.cesium.notifyRepaintRequired();
         };
