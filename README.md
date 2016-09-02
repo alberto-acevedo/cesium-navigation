@@ -160,6 +160,11 @@ Example of using the options when  loading Cesium without requirejs:
 ```JavaScript
 var options = {};
 options.defaultResetView = Cesium.Rectangle.fromDegrees(71, 3, 90, 14);
+// Only the compass will show on the map
+options.enableCompass= true;
+options.enableZoomControls= false;
+options.enableDistanceLegend= false;
+cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
 cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
 ```
 
