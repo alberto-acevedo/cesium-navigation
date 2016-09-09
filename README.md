@@ -164,6 +164,7 @@ options.defaultResetView = Cesium.Rectangle.fromDegrees(71, 3, 90, 14);
 options.enableCompass= true;
 options.enableZoomControls= false;
 options.enableDistanceLegend= false;
+options.enableCompassOuterRing= true;
 cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
 cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
 ```
