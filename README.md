@@ -148,11 +148,13 @@ require([
 defaultResetView --> option used to set a default view when resetting the map view with the reset navigation 
 control. Values accepted are of type Cesium.Cartographic and Cesium.Rectangle.
 
-enableCompass --> option used to enable or disable the compass. Values accepted are true for enabling and false to disable. The default is true.
+enableCompass --> option used to enable or disable the compass. Values accepted are true for enabling and false to disable. The default is true. The compass will not be added to the map if setting the option to false.
 
-enableZoomControls --> option used to enable or disable the zoom controls. Values accepted are true for enabling and false to disable. The default is true.
+enableZoomControls --> option used to enable or disable the zoom controls. Values accepted are true for enabling and false to disable. The default is true. The zoom controls  will not be added to the map if setting the option to false.
 
-enableDistanceLegend --> option used to enable or disable the distance legend. Values accepted are true for enabling and false to disable. The default is true.
+enableDistanceLegend --> option used to enable or disable the distance legend. Values accepted are true for enabling and false to disable. The default is true. The distance legend will not be added to the map if setting the option to false.
+
+enableCompassOuterRing --> option used to enable or disable the Compass Outer Ring. Values accepted are true for enabling and false to disable. The default is true. The ring will be visible but inactive if setting the option to false.
 
 More options will be set in future releases of the plugin.
 ```
