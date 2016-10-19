@@ -20,9 +20,9 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 
 **How to use it?**
 
-There are two edition, a standalone edition and an AMD compatible edition:
-
 *When to use which edition?*
+
+There are two edition, a standalone edition and an AMD compatible edition. If you want to load the mixin via requireJS then use the AMD compatible edition. Otherwise use the standalone edition which include almond to resolve dependencies. Below some examples are given for better understanding.
 
 - If you are loading Cesium without requirejs (i.e. you have a global variable Cesium) then use the standalone edition. This edition is also suitable if you use requirejs (but not for Cesium).
 ```HTML
@@ -87,8 +87,8 @@ Another example if your are using requirejs except for Cesium:
 and code
 ```JavaScript
   // IMPORTANT: be sure that Cesium.js has already been loaded, e.g. by loading requirejs AFTER Cesium
-  require(['path/to/standalone/viewerCesiumNavigationMixin'], function(viewerCesiumNavigationMixin) {
-    // like above code but additionally one can directly access
+  require(['path/to/amd/viewerCesiumNavigationMixin'], function(viewerCesiumNavigationMixin) {
+    // like above code but now one can directly access
     // viewerCesiumNavigationMixin
     // instead of
     // Cesium.viewerCesiumNavigationMixin
@@ -107,9 +107,15 @@ and code
         // your config...
 		paths: {
 		    // your paths...
-		    // IMPORTANT: this path has to be set because
-		    //  viewerCesiumNavigationMixin uses 'Cesium/...' for dependencies
+		    // IMPORTANT: Cesium must point to either
 			'Cesium': 'path/to/cesium/Source'
+		    //  or to
+			'Cesium': 'path/to/cesium/Source/Cesium.js'
+		    //  or to
+			'Cesium': 'path/to/cesium/Build/Cesium'
+		    //  or to
+			'Cesium': 'path/to/cesium/Build/Cesium/Cesium.js'
+		    //  because viewerCesiumNavigationMixin uses 'Cesium' for dependencies
 		}
     });
   </script>
@@ -120,7 +126,8 @@ and code
 and the code
 ```JavaScript
 require([
-  'Cesium/Cesium',
+  'Cesium/Cesium', // if Cesium points to Cesium directory
+  'Cesium', // if Cesium points to Cesium.js file
   'path/to/amd/viewerCesiumNavigationMixin'
 ], function(
   Cesium,
@@ -130,7 +137,7 @@ require([
   // but use just viewerCesiumNavigationMixin
 });
 ```
-or
+or if Cesium points to the Cesium directory
 ```JavaScript
 require([
   'Cesium/Core/Viewer',
@@ -143,7 +150,7 @@ require([
   // but use just viewerCesiumNavigationMixin
 });
 ```
-- Setting the options for the plugin:
+*Available options of the plugin*
 ```
 defaultResetView --> option used to set a default view when resetting the map view with the reset navigation 
 control. Values accepted are of type Cesium.Cartographic and Cesium.Rectangle.
@@ -156,23 +163,25 @@ enableDistanceLegend --> option used to enable or disable the distance legend. V
 
 More options will be set in future releases of the plugin.
 ```
-Example of using the options when  loading Cesium without requirejs: 
+Example of using the options when loading Cesium without requirejs: 
 ```JavaScript
 var options = {};
 options.defaultResetView = Cesium.Rectangle.fromDegrees(71, 3, 90, 14);
 // Only the compass will show on the map
-options.enableCompass= true;
-options.enableZoomControls= false;
-options.enableDistanceLegend= false;
+options.enableCompass = true;
+options.enableZoomControls = false;
+options.enableDistanceLegend = false;
 cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
 ```
 
-- if there are still open questions checkout the examples
+*Others*
 
 - To destroy the navigation object and release the resources later on use the following
 ```JavaScript
   viewer.cesiumNavigation.destroy();
 ```
+
+- if there are still open questions please checkout the examples
 
 
 **How to build it?**
@@ -187,7 +196,7 @@ cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
 For developing/debugging you should have a look at the "Source example". That example directly uses the source files and therefore it allows you to immediatley (only a page refresh is needed) see your changes without rebuilding anything. Furthermore due to working with the sources you can easily debug the project (e.g. via the developer console of the browser or via a debugger of your IDE like Webstorm)
 
 
-**Is there a demo using the plugin ?**
+**Is there a demo using the plugin?**
 
 This is the demo:
 
