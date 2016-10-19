@@ -13,16 +13,18 @@
 </head>
 <body>
 <h1>Cesium-Navigation Examples</h1>
-<p>Three examples are available, one demonstrating the standalone, one the AMD compatible edition and one the combination of using AMD but with a global Cesium access</p>
+<p>Five examples are available where the output is always the same concerning only the user interface but they differ in how they were created.</p>
 <dl>
   <dt><a href="sources.html">Sources Example</a></dt>
-  <dd>Using the sources without building anything. This is also great for developing/debugging the source since any changes are available on browser refresh.</dd>
+  <dd>Using the sources without building anything. This is also great for developing/debugging the sources since any changes are available on browser refresh.</dd>
   <dt><a href="standalone.html">Standalone Example</a></dt>
   <dd>No AMD loader is needed but Cesium has to be defined as global variable.</dd>
   <dt><a href="amd_except_cesium.html">Using AMD except for Cesium Example</a></dt>
-  <dd>Using AMD except for Cesium (so Cesium is not accessed via AMD but is a global variable). In this case, of course, no path to Cesium has to be set and so one can use the standalone edition.</dd>
-  <dt><a href="amd.html">Asynchronous Module Definition (AMD) with requirejs.optimize Example (needs to be built)</a></dt>
-  <dd>When using the AMD compatible version make sure to set 'Cesium' to point to the Cesium source directory.</dd>
+  <dd>Using AMD except for Cesium (so Cesium is not accessed via AMD but is a global variable). Since this mixin is accessed via AMD the AMD compatible version is used. The version automatically checks if Cesium is globally accessible and if so it does not try to load Cesium via AMD.</dd>
+  <dt><a href="amd_source.html">Asynchronous Module Definition (AMD) without requirejs.optimize Example</a></dt>
+  <dd>When using the AMD compatible version make sure to set 'Cesium' either to point to the Cesium source directory or to the built Cesium.js file.</dd>
+  <dt><a href="amd_build.html">Asynchronous Module Definition (AMD) with requirejs.optimize Example (needs to be built)</a></dt>
+  <dd>When using the AMD compatible version make sure to set 'Cesium' either to point to the Cesium source directory or to the built Cesium.js file.</dd>
 </dl>
 
   <script type="text/javascript">
