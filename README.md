@@ -4,17 +4,16 @@ distance scale graphical user interface.
 
 **Why did you build it?**
 
-First of all the Cesiumjs sdk does not includes a compass, navigator (zoom in/out), and distance scale. You can use the mouse to navigate on the map, but this navigation plugin offers more navigation control and capabilities to the user. Some of the capabilities are: reset the compass to point to north, reset the orbit, and
-reset the view to a default bound.
+First of all the Cesiumjs sdk does not include a compass, navigator (zoom in/out) nor distance scale. You can use the mouse to navigate on the map but this navigation plugin offers more navigation control and capabilities to the user.
+Some of the capabilities are:
+reset the compass to point to north, reset the orbit, and reset the view to a default bound.
 
 **How did you build it?**
 
-This plugin is based on the excellent compass, navigator (zoom in/out), and distance scale from the terriajs open source library (https://github.com/TerriaJS). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium uses CommonJS modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just copy the source files into Cesium and build.  My work consisted on adapting the code to work within Cesium as a plugin as follows:
+This plugin is based on the excellent compass, navigator (zoom in/out) and distance scale from the terriajs open source library (https://github.com/TerriaJS). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium uses CommonJS modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just copy the source files into Cesium and build.  My work consisted on adapting the code to work within Cesium as a plugin as follows:
 
-- extracted the minimum required modules from terriajs.
+- Extracted the minimum required modules from terriajs.
 - Converted all the modules from Browserify to requirejs.
-- Use gulpjs to compile and minify the less files, bundle and minify all the modules and open source dependencies
-  into just one file. As part of the build process I decided to replace requirejs with almondjs to reduce the footprint of the AMD loader used in the plugin. The almondjs library is also bundle inside the plugin to make the plugin as easy as plug and play within Cesium.
 - Using nodejs and the requirejs optimizer as well as almond the whole plugin is built and bundled in a single file even the CSS style
 - This plugin can be used as a standalone script or via an AMD loader (tested with requirejs). Even in the special case where you use AMD but not for Cesium the plugin can be easily used.
 
@@ -22,9 +21,9 @@ This plugin is based on the excellent compass, navigator (zoom in/out), and dist
 
 *When to use which edition?*
 
-There are two edition, a standalone edition and an AMD compatible edition. If you want to load the mixin via requireJS then use the AMD compatible edition. Otherwise use the standalone edition which include almond to resolve dependencies. Below some examples are given for better understanding.
+There are two editions, a standalone edition and an AMD compatible edition. If you want to load the mixin via requireJS then use the AMD compatible edition. Otherwise use the standalone edition which includes almond to resolve dependencies. Below some examples are given for better understanding.
 
-- If you are loading Cesium without requirejs (i.e. you have a global variable Cesium) then use the standalone edition. This edition is also suitable if you use requirejs (but not for Cesium).
+- If you are loading Cesium without requirejs (i.e. you have a global variable Cesium) then use the standalone edition. This edition is also suitable if you use requirejs but not for this mixin.
 ```HTML
 <head>
   <!-- other stuff -->
