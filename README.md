@@ -168,7 +168,6 @@ options.enableZoomControls= false;
 options.enableDistanceLegend= false;
 options.enableCompassOuterRing= true;
 cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
-cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
 ```
 
 - if there are still open questions checkout the examples
