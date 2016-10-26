@@ -7,8 +7,12 @@ var config = {
     baseUrl: '.',
     optimize: 'uglify2',
     mainConfigFile: 'Source/mainConfig.js',
-    name: "Source/amd/main",
+    name: "Source/amd/main-build",
     out: "Build/amd.min.js",
+    paths: {
+        // do not include Cesium in the build file but rather access it seperately from browser
+        Cesium: "empty:"
+    },
     logLevel: 0
 };
 
