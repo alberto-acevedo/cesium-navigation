@@ -10,7 +10,7 @@ reset the compass to point to north, reset the orbit, and reset the view to a de
 
 **How did you build it?**
 
-This plugin is based on the excellent compass, navigator (zoom in/out) and distance scale from the terriajs open source library (https://github.com/TerriaJS). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium uses CommonJS modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just copy the source files into Cesium and build.  My work consisted on adapting the code to work within Cesium as a plugin as follows:
+This plugin is based on the excellent compass, navigator (zoom in/out) and distance scale from the terriajs open source library (https://github.com/TerriaJS). The navigation UI from terriajs can not be used out of the box in Cesium because Cesium uses AMD modules with RequireJS, and the terriajs uses commonjs and Browserify, so you can't just copy the source files into Cesium and build.  My work consisted on adapting the code to work within Cesium as a plugin as follows:
 
 - Extracted the minimum required modules from terriajs.
 - Converted all the modules from Browserify to requirejs.
@@ -202,7 +202,7 @@ This is the demo:
 (http://larcius.github.io/cesium-navigation/)
 
 - The compass, navigator, and distance scale will appear on the right side of te map.
-- This plugin was successfully tested on Cesium version 1.15. It works great with Cesium in 3D mode. Recently Larcius (https://github.com/Larcius) made a lot of improvements and fixed some issues in Columbus and 2D modes.
+- This plugin was successfully tested on Cesium version 1.27. It works great with Cesium in 3D mode. Recently Larcius (https://github.com/Larcius) made a lot of improvements and fixed some issues in Columbus and 2D modes.
 
 **What about the license?**
  - The plugin is 100% based on open source libraries. The same license that applies to Cesiumjs and terriajs applies also to this plugin. Feel free to use it,  modify it, and improve it.
