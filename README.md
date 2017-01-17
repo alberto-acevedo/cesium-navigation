@@ -179,6 +179,11 @@ cesiumViewer.extend(Cesium.viewerCesiumNavigationMixin, options);
 ```JavaScript
   viewer.cesiumNavigation.destroy();
 ```
+- To lock the compass and navigation controls use the following. Use true to lock mode, 
+- false for unlocked mode. The default is false.
+```JavaScript
+  viewer.cesiumNavigation.setNavigationLocked(true/false);
+```
 
 - if there are still open questions please checkout the examples
 
