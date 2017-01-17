@@ -39,6 +39,19 @@ define([
     CesiumNavigation.prototype.terria = undefined;
     CesiumNavigation.prototype.container = undefined;
     CesiumNavigation.prototype._onDestroyListeners = undefined;
+    CesiumNavigation.prototype._navigationLocked = false;
+    
+     CesiumNavigation.prototype.setNavigationLocked = function ( locked)
+    {
+        this._navigationLocked = locked;
+        this.navigationViewModel.setNavigationLocked( this._navigationLocked );
+        
+    };
+    
+     CesiumNavigation.prototype.getNavigationLocked = function ()
+    {
+        return this._navigationLocked  ;
+    };
 
     CesiumNavigation.prototype.destroy = function ()
     {

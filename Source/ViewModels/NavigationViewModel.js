@@ -47,20 +47,21 @@ define([
 
         this.terria = options.terria;
         this.eventHelper = new EventHelper();
-        this.enableZoomControls =  (defined(options.enableZoomControls))?options.enableZoomControls:true;   
-        this.enableCompass = (defined(options.enableCompass))?options.enableCompass:true; 
+        this.enableZoomControls = (defined(options.enableZoomControls)) ? options.enableZoomControls : true;
+        this.enableCompass = (defined(options.enableCompass)) ? options.enableCompass : true;
+        this.navigationLocked = false;
 
-       // if (this.showZoomControls)
-     //   {
-            this.controls = options.controls;
-            if (!defined(this.controls))
-            {
-                this.controls = [
-                    new ZoomNavigationControl(this.terria, true),
-                    new ResetViewNavigationControl(this.terria),
-                    new ZoomNavigationControl(this.terria, false)
-                ];
-            }
+        // if (this.showZoomControls)
+        //   {
+        this.controls = options.controls;
+        if (!defined(this.controls))
+        {
+            this.controls = [
+                new ZoomNavigationControl(this.terria, true),
+                new ResetViewNavigationControl(this.terria),
+                new ZoomNavigationControl(this.terria, false)
+            ];
+        }
         //}
 
         this.svgCompassOuterRing = svgCompassOuterRing;
@@ -91,6 +92,16 @@ define([
         Knockout.track(this, ['controls', 'showCompass', 'heading', 'isOrbiting', 'orbitCursorAngle', 'isRotating']);
 
         var that = this;
+
+
+        NavigationViewModel.prototype.setNavigationLocked = function (locked)
+        {
+            this.navigationLocked = locked;
+            if (this.controls && this.controls.length > 1)
+            {
+                this.controls[1].setNavigationLocked(this.navigationLocked);
+            }
+        };
 
         function widgetChange()
         {
@@ -139,106 +150,106 @@ define([
     NavigationViewModel.prototype.show = function (container)
     {
         var testing;
-         if (this.enableZoomControls && this.enableCompass)
+        if (this.enableZoomControls && this.enableCompass)
         {
-             testing = '<div class="compass" title="Drag outer ring: rotate view. ' +
-                'Drag inner gyroscope: free orbit.' +
-                'Double-click: reset view.' +
-                'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
-                '<div class="compass-outer-ring-background"></div>' +
-                ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
-                ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
-                ' <div class="compass-gyro-background"></div>' +
-                ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
-                '</div>' +
-                '<div class="navigation-controls">' +
-                '<!-- ko foreach: controls -->' +
-                '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
-                '   <!-- ko if: $data.hasText -->' +
-                '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-                '   <!-- /ko -->' +
-                '  <!-- ko ifnot: $data.hasText -->' +
-                '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-                '  <!-- /ko -->' +
-                ' </div>' +
-                ' <!-- /ko -->' +
-                '</div>';
-    }
-    else   if (!this.enableZoomControls && this.enableCompass)
-    {
-         testing = '<div class="compass" title="Drag outer ring: rotate view. ' +
-                'Drag inner gyroscope: free orbit.' +
-                'Double-click: reset view.' +
-                'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
-                '<div class="compass-outer-ring-background"></div>' +
-                ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
-                ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
-                ' <div class="compass-gyro-background"></div>' +
-                ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
-                '</div>' +
-                '<div class="navigation-controls"  style="display: none;" >' +
-                '<!-- ko foreach: controls -->' +
-                '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
-                '   <!-- ko if: $data.hasText -->' +
-                '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-                '   <!-- /ko -->' +
-                '  <!-- ko ifnot: $data.hasText -->' +
-                '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-                '  <!-- /ko -->' +
-                ' </div>' +
-                ' <!-- /ko -->' +
-                '</div>';
-    }
-     else   if (this.enableZoomControls && !this.enableCompass)
-    {
-         testing = '<div class="compass"  style="display: none;" title="Drag outer ring: rotate view. ' +
-                'Drag inner gyroscope: free orbit.' +
-                'Double-click: reset view.' +
-                'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
-                '<div class="compass-outer-ring-background"></div>' +
-                ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
-                ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
-                ' <div class="compass-gyro-background"></div>' +
-                ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
-                '</div>' +
-                '<div class="navigation-controls"    >' +
-                '<!-- ko foreach: controls -->' +
-                '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
-                '   <!-- ko if: $data.hasText -->' +
-                '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-                '   <!-- /ko -->' +
-                '  <!-- ko ifnot: $data.hasText -->' +
-                '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-                '  <!-- /ko -->' +
-                ' </div>' +
-                ' <!-- /ko -->' +
-                '</div>';
-    }
-     else   if (!this.enableZoomControls && !this.enableCompass)
-    {
-         testing = '<div class="compass"  style="display: none;" title="Drag outer ring: rotate view. ' +
-                'Drag inner gyroscope: free orbit.' +
-                'Double-click: reset view.' +
-                'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
-                '<div class="compass-outer-ring-background"></div>' +
-                ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
-                ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
-                ' <div class="compass-gyro-background"></div>' +
-                ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
-                '</div>' +
-                '<div class="navigation-controls"   style="display: none;" >' +
-                '<!-- ko foreach: controls -->' +
-                '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
-                '   <!-- ko if: $data.hasText -->' +
-                '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-                '   <!-- /ko -->' +
-                '  <!-- ko ifnot: $data.hasText -->' +
-                '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
-                '  <!-- /ko -->' +
-                ' </div>' +
-                ' <!-- /ko -->' +
-                '</div>';
-    }
+            testing = '<div class="compass" title="Drag outer ring: rotate view. ' +
+                    'Drag inner gyroscope: free orbit.' +
+                    'Double-click: reset view.' +
+                    'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
+                    '<div class="compass-outer-ring-background"></div>' +
+                    ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
+                    ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
+                    ' <div class="compass-gyro-background"></div>' +
+                    ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
+                    '</div>' +
+                    '<div class="navigation-controls">' +
+                    '<!-- ko foreach: controls -->' +
+                    '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
+                    '   <!-- ko if: $data.hasText -->' +
+                    '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                    '   <!-- /ko -->' +
+                    '  <!-- ko ifnot: $data.hasText -->' +
+                    '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                    '  <!-- /ko -->' +
+                    ' </div>' +
+                    ' <!-- /ko -->' +
+                    '</div>';
+        }
+        else if (!this.enableZoomControls && this.enableCompass)
+        {
+            testing = '<div class="compass" title="Drag outer ring: rotate view. ' +
+                    'Drag inner gyroscope: free orbit.' +
+                    'Double-click: reset view.' +
+                    'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
+                    '<div class="compass-outer-ring-background"></div>' +
+                    ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
+                    ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
+                    ' <div class="compass-gyro-background"></div>' +
+                    ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
+                    '</div>' +
+                    '<div class="navigation-controls"  style="display: none;" >' +
+                    '<!-- ko foreach: controls -->' +
+                    '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
+                    '   <!-- ko if: $data.hasText -->' +
+                    '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                    '   <!-- /ko -->' +
+                    '  <!-- ko ifnot: $data.hasText -->' +
+                    '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                    '  <!-- /ko -->' +
+                    ' </div>' +
+                    ' <!-- /ko -->' +
+                    '</div>';
+        }
+        else if (this.enableZoomControls && !this.enableCompass)
+        {
+            testing = '<div class="compass"  style="display: none;" title="Drag outer ring: rotate view. ' +
+                    'Drag inner gyroscope: free orbit.' +
+                    'Double-click: reset view.' +
+                    'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
+                    '<div class="compass-outer-ring-background"></div>' +
+                    ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
+                    ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
+                    ' <div class="compass-gyro-background"></div>' +
+                    ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
+                    '</div>' +
+                    '<div class="navigation-controls"    >' +
+                    '<!-- ko foreach: controls -->' +
+                    '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
+                    '   <!-- ko if: $data.hasText -->' +
+                    '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                    '   <!-- /ko -->' +
+                    '  <!-- ko ifnot: $data.hasText -->' +
+                    '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                    '  <!-- /ko -->' +
+                    ' </div>' +
+                    ' <!-- /ko -->' +
+                    '</div>';
+        }
+        else if (!this.enableZoomControls && !this.enableCompass)
+        {
+            testing = '<div class="compass"  style="display: none;" title="Drag outer ring: rotate view. ' +
+                    'Drag inner gyroscope: free orbit.' +
+                    'Double-click: reset view.' +
+                    'TIP: You can also free orbit by holding the CTRL key and dragging the map." data-bind="visible: showCompass, event: { mousedown: handleMouseDown, dblclick: handleDoubleClick }">' +
+                    '<div class="compass-outer-ring-background"></div>' +
+                    ' <div class="compass-rotation-marker" data-bind="visible: isOrbiting, style: { transform: \'rotate(-\' + orbitCursorAngle + \'rad)\', \'-webkit-transform\': \'rotate(-\' + orbitCursorAngle + \'rad)\', opacity: orbitCursorOpacity }, cesiumSvgPath: { path: svgCompassRotationMarker, width: 145, height: 145 }"></div>' +
+                    ' <div class="compass-outer-ring" title="Click and drag to rotate the camera" data-bind="style: { transform: \'rotate(-\' + heading + \'rad)\', \'-webkit-transform\': \'rotate(-\' + heading + \'rad)\' }, cesiumSvgPath: { path: svgCompassOuterRing, width: 145, height: 145 }"></div>' +
+                    ' <div class="compass-gyro-background"></div>' +
+                    ' <div class="compass-gyro" data-bind="cesiumSvgPath: { path: svgCompassGyro, width: 145, height: 145 }, css: { \'compass-gyro-active\': isOrbiting }"></div>' +
+                    '</div>' +
+                    '<div class="navigation-controls"   style="display: none;" >' +
+                    '<!-- ko foreach: controls -->' +
+                    '<div data-bind="click: activate, attr: { title: $data.name }, css: $root.isLastControl($data) ? \'navigation-control-last\' : \'navigation-control\' ">' +
+                    '   <!-- ko if: $data.hasText -->' +
+                    '   <div data-bind="text: $data.text, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                    '   <!-- /ko -->' +
+                    '  <!-- ko ifnot: $data.hasText -->' +
+                    '  <div data-bind="cesiumSvgPath: { path: $data.svgIcon, width: $data.svgWidth, height: $data.svgHeight }, css: $data.isActive ?  \'navigation-control-icon-active \' + $data.cssClass : $data.cssClass"></div>' +
+                    '  <!-- /ko -->' +
+                    ' </div>' +
+                    ' <!-- /ko -->' +
+                    '</div>';
+        }
         loadView(testing, container, this);
         // loadView(navigatorTemplate, container, this);
         //loadView(require('fs').readFileSync(baseURLEmpCesium + 'js-lib/terrajs/lib/Views/Navigation.html', 'utf8'), container, this);
@@ -278,6 +289,10 @@ define([
     {
         var scene = this.terria.scene;
         if (scene.mode === SceneMode.MORPHING)
+        {
+            return true;
+        }
+        if (viewModel.navigationLocked)
         {
             return true;
         }
@@ -322,19 +337,29 @@ define([
 
         var sscc = scene.screenSpaceCameraController;
 
-        if (scene.mode == SceneMode.MORPHING || !sscc.enableInputs) {
+        if (scene.mode == SceneMode.MORPHING || !sscc.enableInputs)
+        {
             return true;
         }
-        if (scene.mode == SceneMode.COLUMBUS_VIEW && !sscc.enableTranslate) {
+        if (viewModel.navigationLocked)
+        {
+            return true;
+        }
+        if (scene.mode == SceneMode.COLUMBUS_VIEW && !sscc.enableTranslate)
+        {
             return;
         }
-        if(scene.mode == SceneMode.SCENE3D || scene.mode == SceneMode.COLUMBUS_VIEW) {
-            if (!sscc.enableLook) {
+        if (scene.mode == SceneMode.SCENE3D || scene.mode == SceneMode.COLUMBUS_VIEW)
+        {
+            if (!sscc.enableLook)
+            {
                 return;
             }
 
-            if(scene.mode == SceneMode.SCENE3D) {
-                if(!sscc.enableRotate) {
+            if (scene.mode == SceneMode.SCENE3D)
+            {
+                if (!sscc.enableRotate)
+                {
                     return
                 }
             }
@@ -358,16 +383,16 @@ define([
 
         camera.flyToBoundingSphere(focusBoundingSphere, {
             offset: new HeadingPitchRange(0,
-                // do not use camera.pitch since the pitch at the center/target is required
-                CesiumMath.PI_OVER_TWO - Cartesian3.angleBetween(
-                    surfaceNormal,
-                    camera.directionWC
-                ),
-                // distanceToBoundingSphere returns wrong values when in 2D or Columbus view so do not use
-                // camera.distanceToBoundingSphere(focusBoundingSphere)
-                // instead calculate distance manually
-                Cartesian3.distance(cameraPosition, center)
-            ),
+                    // do not use camera.pitch since the pitch at the center/target is required
+                    CesiumMath.PI_OVER_TWO - Cartesian3.angleBetween(
+                            surfaceNormal,
+                            camera.directionWC
+                            ),
+                    // distanceToBoundingSphere returns wrong values when in 2D or Columbus view so do not use
+                    // camera.distanceToBoundingSphere(focusBoundingSphere)
+                    // instead calculate distance manually
+                    Cartesian3.distance(cameraPosition, center)
+                    ),
             duration: 1.5
         });
     };
@@ -381,38 +406,50 @@ define([
         return result;
     };
 
-    function orbit(viewModel, compassElement, cursorVector){
+    function orbit(viewModel, compassElement, cursorVector)
+    {
         var scene = viewModel.terria.scene;
-    
+
 
         var sscc = scene.screenSpaceCameraController;
 
         // do not orbit if it is disabled
-        if(scene.mode == SceneMode.MORPHING || !sscc.enableInputs) {
+        if (scene.mode == SceneMode.MORPHING || !sscc.enableInputs)
+        {
             return;
         }
+        if (viewModel.navigationLocked)
+        {
+            return true;
+        }
 
-        switch(scene.mode) {
+        switch (scene.mode)
+        {
             case SceneMode.COLUMBUS_VIEW:
-                if(sscc.enableLook) {
+                if (sscc.enableLook)
+                {
                     break;
                 }
 
-                if (!sscc.enableTranslate || !sscc.enableTilt) {
+                if (!sscc.enableTranslate || !sscc.enableTilt)
+                {
                     return;
                 }
                 break;
             case SceneMode.SCENE3D:
-                if(sscc.enableLook) {
+                if (sscc.enableLook)
+                {
                     break;
                 }
 
-                if (!sscc.enableTilt || !sscc.enableRotate) {
+                if (!sscc.enableTilt || !sscc.enableRotate)
+                {
                     return;
                 }
                 break;
             case SceneMode.SCENE2D:
-                if (!sscc.enableTranslate) {
+                if (!sscc.enableTranslate)
+                {
                     return;
                 }
                 break;
@@ -436,20 +473,23 @@ define([
 
         var camera = scene.camera;
 
-        if (defined(viewModel.terria.trackedEntity)) {
+        if (defined(viewModel.terria.trackedEntity))
+        {
             // when tracking an entity simply use that reference frame
             viewModel.orbitFrame = undefined;
             viewModel.orbitIsLook = false;
-        } else {
-            var center = Utils.getCameraFocus(viewModel.terria, true, centerScratch);
-
-            if (!defined(center))  
-        {
-                viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
-                viewModel.orbitIsLook = true;
         }
         else
         {
+            var center = Utils.getCameraFocus(viewModel.terria, true, centerScratch);
+
+            if (!defined(center))
+            {
+                viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
+                viewModel.orbitIsLook = true;
+            }
+            else
+            {
                 viewModel.orbitFrame = Transforms.eastNorthUpToFixedFrame(center, scene.globe.ellipsoid, newTransformScratch);
                 viewModel.orbitIsLook = false;
             }
@@ -468,7 +508,13 @@ define([
 
             var oldTransform;
 
-            if (defined(viewModel.orbitFrame)) {
+            if (viewModel.navigationLocked)
+            {
+                return true;
+            }
+
+            if (defined(viewModel.orbitFrame))
+            {
                 oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
 
                 camera.lookAtTransform(viewModel.orbitFrame);
@@ -493,7 +539,8 @@ define([
                 }
             }
 
-            if (defined(viewModel.orbitFrame)) {
+            if (defined(viewModel.orbitFrame))
+            {
                 camera.lookAtTransform(oldTransform);
             }
 
@@ -557,10 +604,17 @@ define([
 
         var sscc = scene.screenSpaceCameraController;
         // do not rotate in 2D mode or if rotating is disabled
-        if (scene.mode == SceneMode.MORPHING || scene.mode == SceneMode.SCENE2D || !sscc.enableInputs) {
+        if (scene.mode == SceneMode.MORPHING || scene.mode == SceneMode.SCENE2D || !sscc.enableInputs)
+        {
             return;
         }
-        if(!sscc.enableLook && (scene.mode == SceneMode.COLUMBUS_VIEW || (scene.mode == SceneMode.SCENE3D && !sscc.enableRotate))) {
+        if (viewModel.navigationLocked)
+        {
+            return true;
+        }
+
+        if (!sscc.enableLook && (scene.mode == SceneMode.COLUMBUS_VIEW || (scene.mode == SceneMode.SCENE3D && !sscc.enableRotate)))
+        {
             return;
         }
 
@@ -574,34 +628,39 @@ define([
         viewModel.isRotating = true;
         viewModel.rotateInitialCursorAngle = Math.atan2(-cursorVector.y, cursorVector.x);
 
-        if(defined(viewModel.terria.trackedEntity)) {
+        if (defined(viewModel.terria.trackedEntity))
+        {
             // when tracking an entity simply use that reference frame
             viewModel.rotateFrame = undefined;
             viewModel.rotateIsLook = false;
-        } else {
-            var viewCenter = Utils.getCameraFocus(viewModel.terria, true, centerScratch);
-
-            if (!defined(viewCenter) || (scene.mode == SceneMode.COLUMBUS_VIEW && !sscc.enableLook && !sscc.enableTranslate)) 
-        {
-                viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
-                viewModel.rotateIsLook = true;
         }
         else
         {
+            var viewCenter = Utils.getCameraFocus(viewModel.terria, true, centerScratch);
+
+            if (!defined(viewCenter) || (scene.mode == SceneMode.COLUMBUS_VIEW && !sscc.enableLook && !sscc.enableTranslate))
+            {
+                viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(camera.positionWC, scene.globe.ellipsoid, newTransformScratch);
+                viewModel.rotateIsLook = true;
+            }
+            else
+            {
                 viewModel.rotateFrame = Transforms.eastNorthUpToFixedFrame(viewCenter, scene.globe.ellipsoid, newTransformScratch);
                 viewModel.rotateIsLook = false;
             }
         }
 
         var oldTransform;
-        if(defined(viewModel.rotateFrame)) {
+        if (defined(viewModel.rotateFrame))
+        {
             oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
             camera.lookAtTransform(viewModel.rotateFrame);
         }
 
         viewModel.rotateInitialCameraAngle = -camera.heading;
 
-        if(defined(viewModel.rotateFrame)) {
+        if (defined(viewModel.rotateFrame))
+        {
             camera.lookAtTransform(oldTransform);
         }
 
@@ -619,7 +678,8 @@ define([
             var camera = viewModel.terria.scene.camera;
 
             var oldTransform;
-            if(defined(viewModel.rotateFrame)) {
+            if (defined(viewModel.rotateFrame))
+            {
                 oldTransform = Matrix4.clone(camera.transform, oldTransformScratch);
                 camera.lookAtTransform(viewModel.rotateFrame);
             }
@@ -627,7 +687,8 @@ define([
             var currentCameraAngle = -camera.heading;
             camera.rotateRight(newCameraAngle - currentCameraAngle);
 
-            if(defined(viewModel.rotateFrame)) {
+            if (defined(viewModel.rotateFrame))
+            {
                 camera.lookAtTransform(oldTransform);
             }
 
