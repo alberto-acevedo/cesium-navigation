@@ -7,8 +7,7 @@ define([
     'Cesium/Core/getTimestamp',
     'Cesium/Core/EventHelper',
     'KnockoutES5',
-    'Core/loadView',
-    'leaflet'
+    'Core/loadView'
 ], function (
     defined,
     DeveloperError,
@@ -17,8 +16,7 @@ define([
     getTimestamp,
     EventHelper,
     Knockout,
-    loadView,
-    leaflet) {
+    loadView) {
     'use strict';
 
     var DistanceLegendViewModel = function (options) {
@@ -33,7 +31,7 @@ define([
 
         this.distanceLabel = undefined;
         this.barWidth = undefined;
-        
+
         this.enableDistanceLegend =  (defined(options.enableDistanceLegend))?options.enableDistanceLegend:true;
 
         Knockout.track(this, ['distanceLabel', 'barWidth']);
@@ -59,22 +57,6 @@ define([
                 that._removeSubscription = scene.postRender.addEventListener(function () {
                     updateDistanceLegendCesium(this, scene);
                 }, that);
-            } else if (defined(that.terria.leaflet)) {
-                var map = that.terria.leaflet.map;
-
-                var potentialChangeCallback = function potentialChangeCallback() {
-                    updateDistanceLegendLeaflet(that, map);
-                };
-
-                that._removeSubscription = function () {
-                    map.off('zoomend', potentialChangeCallback);
-                    map.off('moveend', potentialChangeCallback);
-                };
-
-                map.on('zoomend', potentialChangeCallback);
-                map.on('moveend', potentialChangeCallback);
-
-                updateDistanceLegendLeaflet(that, map);
             }
         }
 
@@ -194,18 +176,7 @@ define([
         }
     }
 
-    function updateDistanceLegendLeaflet(viewModel, map) {
-        var halfHeight = map.getSize().y / 2;
-        var maxPixelWidth = 100;
-        var maxMeters = map.containerPointToLatLng([0, halfHeight]).distanceTo(
-            map.containerPointToLatLng([maxPixelWidth, halfHeight]));
 
-        var meters = leaflet.control.scale()._getRoundNum(maxMeters);
-        var label = meters < 1000 ? meters + ' m' : (meters / 1000) + ' km';
-
-        viewModel.barWidth = (meters / maxMeters) * maxPixelWidth;
-        viewModel.distanceLabel = label;
-    }
 
     return DistanceLegendViewModel;
 });
