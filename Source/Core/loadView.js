@@ -1,15 +1,15 @@
 /*global require*/
 define([
     'Cesium/Widgets/getElement',
-    'KnockoutES5',
-    'Core/createFragmentFromTemplate'
-], function (
+    'knockout-es5',
+    './createFragmentFromTemplate'
+], function(
     getElement,
     Knockout,
     createFragmentFromTemplate) {
     'use strict';
 
-    var loadView = function (htmlString, container, viewModel) {
+    var loadView = function(htmlString, container, viewModel) {
         container = getElement(container);
 
         var fragment = createFragmentFromTemplate(htmlString);

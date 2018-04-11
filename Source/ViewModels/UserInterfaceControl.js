@@ -3,8 +3,8 @@ define([
     'Cesium/Core/defined',
     'Cesium/Core/defineProperties',
     'Cesium/Core/DeveloperError',
-    'KnockoutES5'
-], function (
+    'knockout-es5'
+], function(
     defined,
     defineProperties,
     DeveloperError,
@@ -20,7 +20,7 @@ define([
      *
      * @param {Terria} terria The Terria instance.
      */
-    var UserInterfaceControl = function (terria) {
+    var UserInterfaceControl = function(terria) {
 
         if (!defined(terria)) {
             throw new DeveloperError('terria is required');
@@ -83,7 +83,7 @@ define([
          * @type {Terria}
          */
         terria: {
-            get: function () {
+            get: function() {
                 return this._terria;
             }
         },
@@ -92,7 +92,7 @@ define([
          * @type {Object}
          */
         hasText: {
-            get: function () {
+            get: function() {
                 return defined(this.text) && typeof this.text === 'string';
             }
         }
@@ -105,7 +105,7 @@ define([
      * @abstract
      * @protected
      */
-    UserInterfaceControl.prototype.activate = function () {
+    UserInterfaceControl.prototype.activate = function() {
         throw new DeveloperError('activate must be implemented in the derived class.');
     };
 

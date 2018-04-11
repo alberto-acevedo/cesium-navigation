@@ -1,7 +1,7 @@
 /*global require*/
 define([
-    'ViewModels/UserInterfaceControl'
-], function (
+    './UserInterfaceControl'
+], function(
     UserInterfaceControl) {
     'use strict';
 
@@ -14,7 +14,7 @@ define([
      *
      * @param {Terria} terria The Terria instance.
      */
-    var NavigationControl = function (terria) {
+    var NavigationControl = function(terria) {
         UserInterfaceControl.apply(this, arguments);
     };
 

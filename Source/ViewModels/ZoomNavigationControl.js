@@ -5,9 +5,9 @@ define([
     'Cesium/Core/IntersectionTests',
     'Cesium/Core/Cartesian3',
     'Cesium/Scene/SceneMode',
-    'ViewModels/NavigationControl',
-    'Core/Utils'
-], function (
+    './NavigationControl',
+    '../Core/Utils'
+], function(
     defined,
     Ray,
     IntersectionTests,
@@ -27,7 +27,7 @@ define([
      * @param {Terria} terria The Terria instance.
      * @param {boolean} zoomIn is used for zooming in (true) or out (false)
      */
-    var ZoomNavigationControl = function (terria, zoomIn) {
+    var ZoomNavigationControl = function(terria, zoomIn) {
         NavigationControl.apply(this, arguments);
 
         /**
@@ -70,13 +70,13 @@ define([
      * @abstract
      * @protected
      */
-    ZoomNavigationControl.prototype.activate = function () {
+    ZoomNavigationControl.prototype.activate = function() {
         this.zoom(this.relativeAmount);
     };
 
     var cartesian3Scratch = new Cartesian3();
 
-    ZoomNavigationControl.prototype.zoom = function (relativeAmount) {
+    ZoomNavigationControl.prototype.zoom = function(relativeAmount) {
         // this.terria.analytics.logEvent('navigation', 'click', 'zoomIn');
 
         this.isActive = true;
@@ -90,9 +90,9 @@ define([
                 return;
             }
             // TODO
-//            if(scene.mode == SceneMode.COLUMBUS_VIEW && !sscc.enableTranslate) {
-//                return;
-//            }
+            //            if(scene.mode == SceneMode.COLUMBUS_VIEW && !sscc.enableTranslate) {
+            //                return;
+            //            }
 
             var camera = scene.camera;
             var orientation;
@@ -106,7 +106,7 @@ define([
                 default:
                     var focus;
 
-                    if(defined(this.terria.trackedEntity)) {
+                    if (defined(this.terria.trackedEntity)) {
                         focus = new Cartesian3();
                     } else {
                         focus = Utils.getCameraFocus(this.terria, false);

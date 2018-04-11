@@ -6,8 +6,8 @@ define([
     'Cesium/Core/defined',
     'Cesium/Core/defineProperties',
     'Cesium/Core/DeveloperError',
-    'CesiumNavigation',
-    'require-less/less!Styles/cesium-navigation'
+    './CesiumNavigation',
+    './Styles/cesium-navigation.less'
 ], function(
     defined,
     defineProperties,
@@ -39,8 +39,8 @@ define([
 
         var cesiumNavigation = init(viewer, options);
 
-        cesiumNavigation.addOnDestroyListener((function (viewer) {
-            return function () {
+        cesiumNavigation.addOnDestroyListener((function(viewer) {
+            return function() {
                 delete viewer.cesiumNavigation;
             };
         })(viewer));
@@ -48,7 +48,7 @@ define([
         defineProperties(viewer, {
             cesiumNavigation: {
                 configurable: true,
-                get: function () {
+                get: function() {
                     return viewer.cesiumWidget.cesiumNavigation;
                 }
             }
@@ -60,7 +60,7 @@ define([
      * @param {CesiumWidget} cesiumWidget The cesium widget instance.
      * @param {{}} options The options.
      */
-    viewerCesiumNavigationMixin.mixinWidget = function (cesiumWidget, options) {
+    viewerCesiumNavigationMixin.mixinWidget = function(cesiumWidget, options) {
         return init.apply(undefined, arguments);
     };
 
@@ -68,7 +68,7 @@ define([
      * @param {Viewer|CesiumWidget} viewerCesiumWidget The Viewer or CesiumWidget instance
      * @param {{}} options the options
      */
-    var init = function (viewerCesiumWidget, options) {
+    var init = function(viewerCesiumWidget, options) {
         var cesiumNavigation = new CesiumNavigation(viewerCesiumWidget, options);
 
         var cesiumWidget = defined(viewerCesiumWidget.cesiumWidget) ? viewerCesiumWidget.cesiumWidget : viewerCesiumWidget;
@@ -76,14 +76,14 @@ define([
         defineProperties(cesiumWidget, {
             cesiumNavigation: {
                 configurable: true,
-                get: function () {
+                get: function() {
                     return cesiumNavigation;
                 }
             }
         });
 
-        cesiumNavigation.addOnDestroyListener((function (cesiumWidget) {
-            return function () {
+        cesiumNavigation.addOnDestroyListener((function(cesiumWidget) {
+            return function() {
                 delete cesiumWidget.cesiumNavigation;
             };
         })(cesiumWidget));
