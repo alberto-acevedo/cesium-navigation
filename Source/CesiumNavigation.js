@@ -1,7 +1,6 @@
 /*global define*/
 define([
     'Cesium/Core/defined',
-    'Cesium/Core/defineProperties',
 //    'Cesium/Core/defaultValue',
     'Cesium/Core/Event',
     'KnockoutES5',
@@ -10,7 +9,6 @@ define([
     'ViewModels/NavigationViewModel'
 ], function (
         defined,
-        defineProperties,
 //    defaultValue,
         CesiumEvent,
         Knockout,

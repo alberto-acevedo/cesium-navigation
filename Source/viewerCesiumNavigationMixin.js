@@ -4,13 +4,11 @@
 /*global define*/
 define([
     'Cesium/Core/defined',
-    'Cesium/Core/defineProperties',
     'Cesium/Core/DeveloperError',
     'CesiumNavigation',
     'require-less/less!Styles/cesium-navigation'
 ], function(
     defined,
-    defineProperties,
     DeveloperError,
     CesiumNavigation) {
     'use strict';
@@ -45,7 +43,7 @@ define([
             };
         })(viewer));
 
-        defineProperties(viewer, {
+        Object.defineProperties(viewer, {
             cesiumNavigation: {
                 configurable: true,
                 get: function () {
@@ -73,7 +71,7 @@ define([
 
         var cesiumWidget = defined(viewerCesiumWidget.cesiumWidget) ? viewerCesiumWidget.cesiumWidget : viewerCesiumWidget;
 
-        defineProperties(cesiumWidget, {
+        Object.defineProperties(cesiumWidget, {
             cesiumNavigation: {
                 configurable: true,
                 get: function () {

@@ -1,12 +1,10 @@
 /*global require*/
 define([
     'Cesium/Core/defined',
-    'Cesium/Core/defineProperties',
     'Cesium/Core/DeveloperError',
     'KnockoutES5'
 ], function (
     defined,
-    defineProperties,
     DeveloperError,
     Knockout) {
     'use strict';
@@ -76,7 +74,7 @@ define([
         Knockout.track(this, ['name', 'svgIcon', 'svgHeight', 'svgWidth', 'cssClass', 'isActive']);
     };
 
-    defineProperties(UserInterfaceControl.prototype, {
+    Object.defineProperties(UserInterfaceControl.prototype, {
         /**
          * Gets the Terria instance.
          * @memberOf UserInterfaceControl.prototype
