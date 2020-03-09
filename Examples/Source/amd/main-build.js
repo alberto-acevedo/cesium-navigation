@@ -1,6 +1,6 @@
 require([
-    'Cesium/Cesium',
-    'Source/SpirographPositionProperty_amd',
+    'Cesium',
+    'Source/SpirographPositionProperty_amd-build',
     'viewerCesiumNavigationMixin'
 ], function(
     Cesium,

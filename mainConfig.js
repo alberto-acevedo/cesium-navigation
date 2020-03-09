@@ -12,7 +12,6 @@ requirejs.config({
         'KnockoutES5': '../bower_components/knockout-es5/dist/knockout-es5.min',
         'knockout': '../bower_components/knockout/dist/knockout',
         'Hammer': '../bower_components/hammerjs/hammer.min',
-        'leaflet': '../bower_components/leaflet/dist/leaflet',
         'markdown-it': '../bower_components/markdown-it/dist/markdown-it.min',
         'markdown-it-sanitizer': '../bower_components/markdown-it-sanitizer/dist/markdown-it-sanitizer.min',
 

@@ -34,7 +34,8 @@
         });
     };
 
-    var shims = {};
+    var shimsGlobal = {},
+        shimsBuild = {};
     var licenseComments = [];
 
     var findAllCesiumReferences = function (absPath) {
@@ -55,14 +56,15 @@
             // Search for Cesium modules and add shim
             // modules that pull from the Cesium global
 
-            var cesiumRequireRegex = /'Cesium\/\w*\/(\w*)'/g;
+            var cesiumRequireRegex = /['"](Cesium\/\w*\/(\w*))['"]/g;
             var match;
             while ((match = cesiumRequireRegex.exec(contents)) !== null) {
-                if (match[0] in shims) {
-                    continue;
+                if (!(match[1] in shimsGlobal)) {
+                    shimsGlobal[match[1]] = 'define(\'' + match[1] + '\', function() { return Cesium[\'' + match[2] + '\']; });';
                 }
-
-                shims[match[0]] = 'define(' + match[0] + ', function() { return Cesium["' + match[1] + '"]; });';
+                if (!(match[1] in shimsBuild)) {
+                    shimsBuild[match[1]] = 'define(\'' + match[1] + '\', [\'Cesium\'],  function(Cesium) { return Cesium[\'' + match[2] + '\']; });';
+                }
             }
         } else if (/\.glsl$/.test(absPath)) {
             var newContents = [];
@@ -113,8 +115,11 @@
 
     findAllCesiumReferences(sourceDir);
 
-    shims = Object.keys(shims).map(function (key) {
-        return shims[key];
+    shimsGlobal = Object.keys(shimsGlobal).map(function (key) {
+        return shimsGlobal[key];
+    }).join('\n');
+    shimsBuild = Object.keys(shimsBuild).map(function (key) {
+        return shimsBuild[key];
     }).join('\n');
 
     var copyrightHeader = fs.readFileSync(sourceDir + '/copyrightHeader.js').toString();
@@ -127,26 +132,34 @@
             start: copyrightHeader + '\n' +
                 "(function (root, factory) {\n" +
                 "    'use strict';\n" +
-                "    /*jshint sub:true*/\n" +
-                "    \n" +
+                "    /*jshint sub:true*/\n\n" +
                 "    if (typeof define === 'function' && define.amd) {\n" +
-                "        define([], factory);\n" +
+                "        if(require.specified('Cesium/Cesium')) {\n" +
+                "            define(['Cesium/Cesium'], factory);\n" +
+                "        } else if(require.specified('Cesium')) {\n" +
+                "            define(['Cesium'], factory);\n" +
+                "        } else {\n" +
+                "            define([], factory);\n" +
+                "        }\n" +
+                "    } else {\n" +
+                "        factory();\n" +
                 "    }\n" +
-                "    \n" +
-                "    Cesium['" + buildName + "'] = factory();\n" +
-//                "    \n" +
-//                "    if(root !== undefined) {\n" +
-//                "        root['" + buildName + "'] = Cesium['" + buildName + "'];\n" +
-//                "    }\n" +
-                "}(typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : this, function () {\n\n" +
+                "}(typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : this, function (C) {\n\n" +
+                "    if (typeof C === 'object' && C !== null) {\n" +
+                "        Cesium = C;\n" +
+                "    }\n\n" +
                 "// <-- actual code\n\n\n",
             end: "\n\n" +
                 "// actual code -->\n\n" +
                 "    /*global define,require,self,Cesium*/\n" +
                 "    " + licenseComments.join('\n        ') + "\n" +
-                "    " + shims + "\n" +
+                shimsGlobal + "\n" +
                 "    \n" +
-                "    return require('viewerCesiumNavigationMixin');\n" +
+                "    var mixin = require('viewerCesiumNavigationMixin');\n" +
+                "    if (typeof Cesium === 'object' && Cesium !== null) {\n" +
+                "        Cesium['" + buildName + "'] = mixin;\n" +
+                "    }\n\n" +
+                "    return mixin;" +
                 "}));"
         },
         name: 'almond',
@@ -174,7 +187,16 @@
         name: 'viewerCesiumNavigationMixin',
         wrap: {
             start: copyrightHeader + '\n\n',
-            end: '\n\n\ndefine([\'viewerCesiumNavigationMixin\'], function(viewerCesiumNavigationMixin) {\n' +
+            end: '\n\n\n'+
+                "/*global define,require*/\n" +
+                "if(!require.specified('Cesium/Cesium')) {\n" +
+                "    if(typeof Cesium === 'object' && Cesium !== null) {\n" +
+                shimsGlobal + "\n"+
+                "    } else {\n" +
+                shimsBuild + "\n"+
+                "    }\n" +
+                "}\n\n" +
+                'define([\'viewerCesiumNavigationMixin\'], function(viewerCesiumNavigationMixin) {\n' +
                 '    return viewerCesiumNavigationMixin;\n' +
                 '});'
         },
