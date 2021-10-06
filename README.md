@@ -154,6 +154,8 @@ require([
 defaultResetView --> option used to set a default view when resetting the map view with the reset navigation 
 control. Values accepted are of type Cesium.Cartographic and Cesium.Rectangle.
 
+options.defaultResetViewOrientation --> option used to set the camera orientation of the above default view.  Value accepted is an object containing heading, pitch, and roll properties.
+
 enableCompass --> option used to enable or disable the compass. Values accepted are true for enabling and false to disable. The default is true. The compass will not be added to the map if setting the option to false.
 
 enableZoomControls --> option used to enable or disable the zoom controls. Values accepted are true for enabling and false to disable. The default is true. The zoom controls  will not be added to the map if setting the option to false.
@@ -168,6 +170,11 @@ Example of using the options when loading Cesium without requirejs:
 ```JavaScript
 var options = {};
 options.defaultResetView = Cesium.Rectangle.fromDegrees(71, 3, 90, 14);
+options.defaultResetViewOrientation = {
+        heading: Cesium.Math.toRadians(276),
+        pitch:   Cesium.Math.toRadians(-18),
+        roll:    Cesium.Math.toRadians(0),
+    }
 // Only the compass will show on the map
 options.enableCompass = true;
 options.enableZoomControls = false;

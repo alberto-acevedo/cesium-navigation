@@ -99,12 +99,20 @@ define([
         else
         {
             // reset to a default position or view defined in the options
+
+			var orientation;
+			if (this.terria.options.defaultResetViewOrientation)
+			{
+				orientation = this.terria.options.defaultResetViewOrientation;
+			}
+			
             if (this.terria.options.defaultResetView)
             {
                 if (this.terria.options.defaultResetView && this.terria.options.defaultResetView instanceof Cartographic)
                 {
                     camera.flyTo({
-                        destination: scene.globe.ellipsoid.cartographicToCartesian(this.terria.options.defaultResetView)
+                        destination: scene.globe.ellipsoid.cartographicToCartesian(this.terria.options.defaultResetView),
+						orientation: orientation
                     });
                 }
                 else if (this.terria.options.defaultResetView && this.terria.options.defaultResetView instanceof Rectangle)
@@ -113,7 +121,8 @@ define([
                     {
                         Rectangle.validate(this.terria.options.defaultResetView);
                         camera.flyTo({
-                            destination: this.terria.options.defaultResetView
+                            destination: this.terria.options.defaultResetView,
+						    orientation: orientation
                         });
                     }
                     catch (e)
